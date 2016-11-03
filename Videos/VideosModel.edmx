@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="VideosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Artista">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="artista" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tipo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tipo" Type="varchar" MaxLength="15" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Video">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="titulo" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="caminho" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="data" Type="date" />
+          <Property Name="tipo" Type="int" Nullable="false" />
+          <Property Name="artista" Type="int" Nullable="false" />
+          <Property Name="extensao" Type="varchar" MaxLength="5" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Video_ToArtista">
+          <End Role="Artista" Type="Self.Artista" Multiplicity="1" />
+          <End Role="Video" Type="Self.Video" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artista">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Video">
+              <PropertyRef Name="artista" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Video_ToTipo">
+          <End Role="Tipo" Type="Self.Tipo" Multiplicity="1" />
+          <End Role="Video" Type="Self.Video" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tipo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Video">
+              <PropertyRef Name="tipo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="VideosModelStoreContainer">
+          <EntitySet Name="Artista" EntityType="Self.Artista" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tipo" EntityType="Self.Tipo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Video" EntityType="Self.Video" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Video_ToArtista" Association="Self.FK_Video_ToArtista">
+            <End Role="Artista" EntitySet="Artista" />
+            <End Role="Video" EntitySet="Video" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Video_ToTipo" Association="Self.FK_Video_ToTipo">
+            <End Role="Tipo" EntitySet="Tipo" />
+            <End Role="Video" EntitySet="Video" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="VideosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ArtistaEntity">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="artista" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Video" Relationship="VideosModel.FK_Video_ToArtista" FromRole="ArtistaEntity" ToRole="Video" />
+        </EntityType>
+        <EntityType Name="TipoEntity">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tipo" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Video" Relationship="VideosModel.FK_Video_ToTipo" FromRole="TipoEntity" ToRole="Video" />
+        </EntityType>
+        <EntityContainer Name="VideosEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Artista" EntityType="VideosModel.ArtistaEntity" />
+          <EntitySet Name="Tipo" EntityType="VideosModel.TipoEntity" />
+          <EntitySet Name="Video" EntityType="VideosModel.VideoEntity" />
+          <AssociationSet Name="FK_Video_ToArtista" Association="VideosModel.FK_Video_ToArtista">
+            <End Role="ArtistaEntity" EntitySet="Artista" />
+            <End Role="Video" EntitySet="Video" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Video_ToTipo" Association="VideosModel.FK_Video_ToTipo">
+            <End Role="TipoEntity" EntitySet="Tipo" />
+            <End Role="Video" EntitySet="Video" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="VideoEntity">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="titulo" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="caminho" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="data" Type="DateTime" Precision="0" />
+          <Property Name="tipo" Type="Int32" Nullable="false" />
+          <Property Name="artista" Type="Int32" Nullable="false" />
+          <Property Name="extensao" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Artista1" Relationship="VideosModel.FK_Video_ToArtista" FromRole="Video" ToRole="ArtistaEntity" />
+          <NavigationProperty Name="Tipo1" Relationship="VideosModel.FK_Video_ToTipo" FromRole="Video" ToRole="TipoEntity" />
+        </EntityType>
+        <Association Name="FK_Video_ToArtista">
+          <End Type="VideosModel.ArtistaEntity" Role="ArtistaEntity" Multiplicity="1" />
+          <End Type="VideosModel.VideoEntity" Role="Video" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ArtistaEntity">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Video">
+              <PropertyRef Name="artista" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Video_ToTipo">
+          <End Type="VideosModel.TipoEntity" Role="TipoEntity" Multiplicity="1" />
+          <End Type="VideosModel.VideoEntity" Role="Video" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoEntity">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Video">
+              <PropertyRef Name="tipo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="VideosModelStoreContainer" CdmEntityContainer="VideosEntities">
+          <EntitySetMapping Name="Artista">
+            <EntityTypeMapping TypeName="VideosModel.ArtistaEntity">
+              <MappingFragment StoreEntitySet="Artista">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="artista" ColumnName="artista" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tipo">
+            <EntityTypeMapping TypeName="VideosModel.TipoEntity">
+              <MappingFragment StoreEntitySet="Tipo">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Video">
+            <EntityTypeMapping TypeName="VideosModel.VideoEntity">
+              <MappingFragment StoreEntitySet="Video">
+                <ScalarProperty Name="extensao" ColumnName="extensao" />
+                <ScalarProperty Name="artista" ColumnName="artista" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="data" ColumnName="data" />
+                <ScalarProperty Name="caminho" ColumnName="caminho" />
+                <ScalarProperty Name="titulo" ColumnName="titulo" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
