@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Web;
+using Videos.Models.Entity;
 
-namespace Videos.Services {
-    public class ArtistaService {
+namespace Videos.Models.Repository {
+    public class ArtistaRepository : BaseRepository {
 
         public List<String> listarPastasArtistas() {
             List<String> listaPastas = new List<string>();
@@ -19,9 +21,8 @@ namespace Videos.Services {
             return listaPastas;
         }
 
-        public Dictionary<int,string> listarArtistas() {
-            var db = new VideosEntities();
-            Dictionary<int,string> ListaArtista;
+        public Dictionary<int, string> listarArtistas() {
+            Dictionary<int, string> ListaArtista;
             ListaArtista = db.Artista.Select(a => new { a.id, a.artista }).OrderBy(a => a.artista)
                    .ToDictionary(a => a.id, a => a.artista);
             return ListaArtista;
@@ -42,5 +43,4 @@ namespace Videos.Services {
         }
 
     }
-
 }

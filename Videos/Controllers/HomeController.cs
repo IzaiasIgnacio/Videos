@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
-using Videos.Services;
+using Videos.Models.Entity;
+using Videos.Models.Repository;
+using Videos.Models.ViewModel;
 
 namespace Videos.Controllers {
     public class HomeController : Controller {
@@ -10,28 +12,28 @@ namespace Videos.Controllers {
         }
 
         public ActionResult Artistas(string id) {
-            ArtistaService artistaService = new ArtistaService();
+            ArtistaRepository artistaRepository = new ArtistaRepository();
 
             if (id == "Atualizar") {
-                List<string> pastasArtistas = artistaService.listarPastasArtistas();
+                List<string> pastasArtistas = artistaRepository.listarPastasArtistas();
                 foreach (string pasta in pastasArtistas) {
-                    artistaService.inserirArtista(pasta);
+                    artistaRepository.inserirArtista(pasta);
                 }
             }
 
-            Dictionary<int, string> listaArtistas = artistaService.listarArtistas();
-            ViewBag.artistas = listaArtistas;
+            ArtistasView artistasView = new ArtistasView();
+            artistasView.listaArtistas = artistaRepository.listarArtistas();
 
-            return View();
+            return View(artistasView);
         }
 
         public ActionResult Videos() {
-            VideoService videoService = new VideoService();
+            VideoRepository videoRepository = new VideoRepository();
 
-            List<VideoEntity> listaVideos = videoService.listarVideos();
-            ViewBag.videos = listaVideos;
+            VideosView videosView = new VideosView();
+            videosView.listaVideos = videoRepository.listarVideos();
 
-            return View();
+            return View(videosView);
         }
     }
 }

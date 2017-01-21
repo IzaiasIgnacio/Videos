@@ -156,9 +156,6 @@
     <Reference Include="Microsoft.AspNet.Identity.Core">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.Owin">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
       <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
     </Reference>
@@ -168,73 +165,52 @@
     <Reference Include="Microsoft.Owin">
       <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Host.SystemWeb">
-      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Owin.Security">
       <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Security.Facebook">
-      <HintPath>..\packages\Microsoft.Owin.Security.Facebook.3.0.1\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Security.Cookies">
-      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin.Security.OAuth">
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.Google">
-      <HintPath>..\packages\Microsoft.Owin.Security.Google.3.0.1\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Owin.Security.Twitter">
       <HintPath>..\packages\Microsoft.Owin.Security.Twitter.3.0.1\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount">
-      <HintPath>..\packages\Microsoft.Owin.Security.MicrosoftAccount.3.0.1\lib\net45\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="ArtistaEntity.cs">
+    <Compile Include="Models\Artista.cs" />
+    <Compile Include="Models\Entity\ArtistaEntity.cs">
       <DependentUpon>VideosModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Artista.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Repository\ArtistaRepository.cs" />
+    <Compile Include="Models\Repository\BaseRepository.cs" />
     <Compile Include="Models\TipoVideo.cs" />
     <Compile Include="Models\Video.cs" />
+    <Compile Include="Models\ViewModel\ArtistasView.cs" />
+    <Compile Include="Models\ViewModel\VideosView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\ArtistaService.cs" />
-    <Compile Include="Services\VideoService.cs" />
-    <Compile Include="Startup.cs" />
+    <Compile Include="Models\Repository\VideoRepository.cs" />
     <Compile Include="Tests\VideoTest.cs" />
-    <Compile Include="TipoEntity.cs">
+    <Compile Include="Models\Entity\TipoEntity.cs">
       <DependentUpon>VideosModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="VideoEntity.cs">
+    <Compile Include="Models\Entity\VideoEntity.cs">
       <DependentUpon>VideosModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="VideosModel.Context.cs">
+    <Compile Include="Models\Entity\VideosModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>VideosModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="VideosModel.cs">
+    <Compile Include="Models\Entity\VideosModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>VideosModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="VideosModel.Designer.cs">
+    <Compile Include="Models\Entity\VideosModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>VideosModel.edmx</DependentUpon>
@@ -247,8 +223,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Scripts\ai.0.22.19-build00125.js" />
-    <Content Include="Scripts\ai.0.22.19-build00125.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -262,16 +236,12 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\respond.js" />
-    <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\_references.js" />
-    <Content Include="VideosModel.Context.tt">
+    <Content Include="Models\Entity\VideosModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>VideosModel.edmx</DependentUpon>
       <LastGenOutput>VideosModel.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="VideosModel.tt">
+    <Content Include="Models\Entity\VideosModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>VideosModel.edmx</DependentUpon>
       <LastGenOutput>VideosModel.cs</LastGenOutput>
@@ -285,36 +255,15 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Videos.cshtml" />
     <Content Include="Views\Home\Artistas.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Account\ConfirmEmail.cshtml" />
-    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\SendCode.cshtml" />
-    <Content Include="Views\Account\VerifyCode.cshtml" />
-    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
-    <Content Include="Views\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Manage\Index.cshtml" />
-    <Content Include="Views\Manage\ManageLogins.cshtml" />
-    <Content Include="Views\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
-    <Content Include="Views\Shared\Lockout.cshtml" />
-    <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <EntityDeploy Include="VideosModel.edmx">
+    <EntityDeploy Include="Models\Entity\VideosModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>VideosModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="VideosModel.edmx.diagram">
+    <Content Include="Models\Entity\VideosModel.edmx.diagram">
       <DependentUpon>VideosModel.edmx</DependentUpon>
     </Content>
   </ItemGroup>

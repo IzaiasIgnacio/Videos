@@ -1,4 +1,5 @@
-﻿@foreach (KeyValuePair<int, string> artista in ViewBag.artistas) {
+﻿@model Videos.Models.ViewModel.ArtistasView
+@foreach (KeyValuePair<int, string> artista in Model.listaArtistas) {
     <h3><a href="Home/Videos/@artista.Key">@artista.Value</a></h3>
 }
 <button class="btn btn-default" onclick="window.location='Artistas/Atualizar'">Atualizar</button>

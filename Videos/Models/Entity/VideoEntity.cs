@@ -7,23 +7,22 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Videos
+namespace Videos.Models.Entity
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class TipoEntity
+    public partial class VideoEntity
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public TipoEntity()
-        {
-            this.Video = new HashSet<VideoEntity>();
-        }
-    
         public int id { get; set; }
-        public string tipo { get; set; }
+        public string titulo { get; set; }
+        public string caminho { get; set; }
+        public Nullable<System.DateTime> data { get; set; }
+        public int tipo { get; set; }
+        public int artista { get; set; }
+        public string extensao { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<VideoEntity> Video { get; set; }
+        public virtual ArtistaEntity Artista1 { get; set; }
+        public virtual TipoEntity Tipo1 { get; set; }
     }
 }

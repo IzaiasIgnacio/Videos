@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Videos.Models;
+using Videos.Models.Entity;
 
-namespace Videos.Services {
-    public class VideoService {
+namespace Videos.Models.Repository {
+    public class VideoRepository : BaseRepository {
         List<Video> listaArquivos;
         string caminho;
         string artista;
@@ -83,7 +84,6 @@ namespace Videos.Services {
         }
 
         public List<VideoEntity> listarVideos() {
-            VideosEntities db = new VideosEntities();
             List<VideoEntity> listaVideos;
 
             listaVideos = (from video in db.Video

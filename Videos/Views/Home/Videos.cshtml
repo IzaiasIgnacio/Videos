@@ -1,4 +1,5 @@
-﻿<table class="table table-striped table-hover table-condensed table-bordered">
+﻿@model Videos.Models.ViewModel.VideosView
+<table class="table table-striped table-hover table-condensed table-bordered">
     <thead>
         <tr>
             <th>Artista</th>
@@ -8,7 +9,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (VideoEntity video in ViewBag.videos) {
+        @foreach (var video in Model.listaVideos) {
             <tr>
                 <td>@video.Artista1.artista</td>
                 <td>@video.titulo</td>

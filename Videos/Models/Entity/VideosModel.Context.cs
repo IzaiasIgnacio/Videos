@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Videos
+namespace Videos.Models.Entity
 {
     using System;
     using System.Data.Entity;

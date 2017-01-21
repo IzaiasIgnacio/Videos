@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Videos.Services;
 using Videos.Models;
 using System.IO;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Text;
+using Videos.Models.Entity;
+using Videos.Models.Repository;
 
 namespace Videos.Tests {
 
@@ -17,7 +18,7 @@ namespace Videos.Tests {
 
         [TestMethod]
         public void testeListaArquivos() {
-            VideoService video = new VideoService();
+            VideoRepository video = new VideoRepository();
             List<Video> listaArquivos = new List<Video>();
             string caminho = @"K:\ICI\Vídeos\kpop";
             string[] pastas = Directory.GetDirectories(caminho, "*", System.IO.SearchOption.AllDirectories);
@@ -42,7 +43,7 @@ namespace Videos.Tests {
 
         [TestMethod]
         public void testeAtualizarVideos() {
-            VideoService video = new VideoService();
+            VideoRepository video = new VideoRepository();
             List<Video> listaArquivos = new List<Video>();
             string caminho = @"K:\ICI\Vídeos\kpop";
             string[] pastas = Directory.GetDirectories(caminho, "*", System.IO.SearchOption.AllDirectories);
@@ -88,7 +89,7 @@ namespace Videos.Tests {
                         }
                     }
                     catch (Exception ex) {
-                        //TODO
+                        Console.Write(ex.Message);
                     }
                 }
             }
@@ -96,7 +97,7 @@ namespace Videos.Tests {
 
         [TestMethod]
         public void testeArtistaCaminho() {
-            VideoService video = new VideoService();
+            VideoRepository video = new VideoRepository();
             video.Caminho = @"K:\ICI\Vídeos\kpop\red velvet\MVs";
             string artista = video.Artista;
             Assert.IsInstanceOfType(artista,typeof(string));
@@ -104,7 +105,7 @@ namespace Videos.Tests {
 
         [TestMethod]
         public void testeTipoCaminho() {
-            VideoService video = new VideoService();
+            VideoRepository video = new VideoRepository();
             video.Caminho = @"K:\ICI\Vídeos\kpop\red velvet\MVs";
             string tipo = video.Tipo;
             Assert.IsInstanceOfType(tipo, typeof(string));
@@ -112,7 +113,7 @@ namespace Videos.Tests {
 
         [TestMethod]
         public void testeInserirArtista() {
-            VideoService video = new VideoService();
+            VideoRepository video = new VideoRepository();
             video.Caminho = @"K:\ICI\Vídeos\kpop\red velvet\MVs";
             string nomeArtista = video.Artista;
             ArtistaEntity artistaEntity;
@@ -129,7 +130,7 @@ namespace Videos.Tests {
 
         [TestMethod]
         public void testeGerarPlaylist() {
-            VideoService videoService = new VideoService();
+            VideoRepository videoService = new VideoRepository();
             List<VideoEntity> listaVideos = videoService.listarVideos();
 
             using (FileStream file = new FileStream("playlist.m3u", FileMode.Create)) {

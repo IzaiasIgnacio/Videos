@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Videos.Models
-{
-    public class Video
-    {
+namespace Videos.Models {
+    public class Video {
         string caminho;
         string titulo;
         string extensao;
