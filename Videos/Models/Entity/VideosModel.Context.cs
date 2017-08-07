@@ -25,8 +25,13 @@ namespace Videos.Models.Entity
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<ArtistaEntity> Artista { get; set; }
-        public virtual DbSet<TipoEntity> Tipo { get; set; }
-        public virtual DbSet<VideoEntity> Video { get; set; }
+        public virtual DbSet<artista> artista { get; set; }
+        public virtual DbSet<musica> musica { get; set; }
+        public virtual DbSet<tag> tag { get; set; }
+        public virtual DbSet<tipo> tipo { get; set; }
+        public virtual DbSet<video> video { get; set; }
+        public virtual DbSet<video_artista> video_artista { get; set; }
+        public virtual DbSet<video_musica> video_musica { get; set; }
+        public virtual DbSet<video_tag> video_tag { get; set; }
     }
 }

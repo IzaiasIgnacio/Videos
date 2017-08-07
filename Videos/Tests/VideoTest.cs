@@ -1,30 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Videos.Models;
 using System.IO;
-using System.Data.Entity.Validation;
-using System.Diagnostics;
-using System.Text;
 using Videos.Models.Entity;
+using Videos.Models.ViewModel;
 using Videos.Models.Repository;
+using System.Linq;
+using System.Text;
+using MediaToolkit.Model;
+using MediaToolkit;
+using MediaToolkit.Options;
 
 namespace Videos.Tests {
 
     [TestClass]
-    public class VideoServiceTest {
+    public class VideoTest {
 
         [TestMethod]
         public void testeListaArquivos() {
-            VideoRepository video = new VideoRepository();
-            List<Video> listaArquivos = new List<Video>();
+            VideosView videoView = new VideosView();
+            List<video> listaArquivos = new List<video>();
             string caminho = @"K:\ICI\Vídeos\kpop";
             string[] pastas = Directory.GetDirectories(caminho, "*", System.IO.SearchOption.AllDirectories);
             foreach (string pasta in pastas) {
-                video.Caminho = pasta;
-                listaArquivos.AddRange(video.ListaArquivos);
+                string[] arquivos = Directory.GetFiles(pasta);
+                foreach (string arquivo in arquivos) {
+                    FileInfo dados = new FileInfo(arquivo);
+                    listaArquivos.Add(new video {
+                        titulo = dados.Name,
+                        caminho = dados.FullName,
+                        data = dados.LastWriteTime,
+                        extensao = dados.Extension,
+                        tipo = videoView.getTipoByCaminho(arquivo)
+                    });
+                }
             }
             Assert.IsNotNull(listaArquivos);
         }
@@ -43,59 +52,30 @@ namespace Videos.Tests {
 
         [TestMethod]
         public void testeAtualizarVideos() {
-            VideoRepository video = new VideoRepository();
-            List<Video> listaArquivos = new List<Video>();
+            VideosView videoView = new VideosView();
+            List<string> listaArquivos = new List<string>();
             string caminho = @"K:\ICI\Vídeos\kpop";
             string[] pastas = Directory.GetDirectories(caminho, "*", System.IO.SearchOption.AllDirectories);
             foreach (string pasta in pastas) {
-                video.Caminho = pasta;
-                listaArquivos.AddRange(video.ListaArquivos);
+                string[] arquivos = Directory.GetFiles(pasta);
+                foreach (string arquivo in arquivos) {
+                    FileInfo dados = new FileInfo(arquivo);
+                    string[] extensoes = { ".mp4", ".mkv", ".ts", ".tp", ".avi"  };
+                    if (extensoes.Contains(dados.Extension)) {
+                        listaArquivos.Add(arquivo);
+                    }
+                }
             }
-            VideoEntity videoEntity;
-            ArtistaEntity artistaEntity;
-            TipoEntity tipoEntity;
 
-            var db = new VideosEntities();
+            VideoRepository videoRepository = new VideoRepository();
             foreach (var arquivo in listaArquivos) {
-                video.Caminho = arquivo.Caminho;
-                string nomeArtista = video.Artista;
-                string tipo = video.Tipo;
-
-                videoEntity = db.Video.FirstOrDefault(a => a.caminho == arquivo.Caminho);
-                if (videoEntity == null) {
-                    videoEntity = new VideoEntity();
-                    artistaEntity = new ArtistaEntity();
-                    tipoEntity = new TipoEntity();
-                    db.Video.Add(videoEntity);
-
-                    artistaEntity = db.Artista.First(a => a.artista == nomeArtista);
-                    tipoEntity = db.Tipo.First(a => a.tipo == tipo);
-
-                    videoEntity.titulo = arquivo.Titulo;
-                    videoEntity.caminho = video.Caminho;
-                    videoEntity.artista = artistaEntity.id;
-                    videoEntity.tipo = tipoEntity.id;
-                    videoEntity.extensao = arquivo.Extensao;
-                    videoEntity.data = arquivo.Data;
-                    try {
-                        db.SaveChanges();
-                    }
-                    catch(DbEntityValidationException ex) {
-                        foreach (var validationErrors in ex.EntityValidationErrors) {
-                            foreach (var validationError in validationErrors.ValidationErrors) {
-                                string a = validationError.PropertyName;
-                                string b = validationError.ErrorMessage;
-                            }
-                        }
-                    }
-                    catch (Exception ex) {
-                        Console.Write(ex.Message);
-                    }
+                if (!videoRepository.findByCaminho(arquivo)) {
+                    videoRepository.salvar(arquivo);
                 }
             }
         }
 
-        [TestMethod]
+        /*[TestMethod]
         public void testeArtistaCaminho() {
             VideoRepository video = new VideoRepository();
             video.Caminho = @"K:\ICI\Vídeos\kpop\red velvet\MVs";
@@ -126,22 +106,44 @@ namespace Videos.Tests {
                 artistaEntity.artista = nomeArtista;
                 db.SaveChanges();
             }
-        }
+        }*/
 
         [TestMethod]
         public void testeGerarPlaylist() {
-            VideoRepository videoService = new VideoRepository();
-            List<VideoEntity> listaVideos = videoService.listarVideos();
+            VideoRepository videoRepository = new VideoRepository();
+            List<video> listaVideos = videoRepository.VideosPlaylist(new int[] { 2013, 2009 }, new int[] { 1 }, new int[] { 1 });
 
             using (FileStream file = new FileStream("playlist.m3u", FileMode.Create)) {
                 byte[] linha = Encoding.UTF8.GetBytes(Environment.NewLine);
-                foreach (VideoEntity video in listaVideos) {
+                foreach (video video in listaVideos) {
                     byte[] bytes = Encoding.UTF8.GetBytes(video.caminho);
                     file.Write(bytes, 0, bytes.Length);
                     file.Write(linha,0,linha.Length);
                 }
             }
         }
-        
+
+        [TestMethod]
+        public void testeMediaInfo() {
+            VideoRepository videorepository = new VideoRepository();
+            video video = videorepository.getVideoById(862);
+            var inputFile = new MediaFile { Filename = video.caminho };
+            
+            using (var engine = new Engine()) {
+                engine.GetMetadata(inputFile);
+                video.duracao = inputFile.Metadata.Duration.ToString().Substring(0,8);
+                video.formato_audio = inputFile.Metadata.AudioData.Format;
+                video.resolucao = inputFile.Metadata.VideoData.FrameSize;
+
+                double seconds = TimeSpan.Parse(video.duracao).TotalSeconds;
+                seconds = seconds * 90 / 100;
+                for (int i = 1; i <= 6; i++) {
+                    var outputFile = new MediaFile { Filename = video.id+@"_captura_"+ seconds/i+".jpg" };
+                    var options = new ConversionOptions { Seek = TimeSpan.FromSeconds(seconds/i) };
+                    engine.GetThumbnail(inputFile, outputFile, options);
+                }
+            }
+        }
+
     }
 }

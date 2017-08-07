@@ -11,9 +11,9 @@
     <tbody>
         @foreach (var video in Model.listaVideos) {
             <tr>
-                <td>@video.Artista1.artista</td>
+                <td>@video.video_artista.FirstOrDefault().artista.nome</td>
                 <td>@video.titulo</td>
-                <td>@video.Tipo1.tipo</td>
+                <td>@video.tipo.descricao</td>
                 <td>@video.data</td>
             </tr>
         }

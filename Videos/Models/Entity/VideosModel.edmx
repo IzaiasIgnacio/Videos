@@ -5,21 +5,35 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="VideosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="Artista">
+        <EntityType Name="artista">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="artista" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="nome" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <EntityType Name="Tipo">
+        <EntityType Name="musica">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="tipo" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="titulo" Type="varchar" MaxLength="100" />
         </EntityType>
-        <EntityType Name="Video">
+        <EntityType Name="tag">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tipo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="descricao" Type="nvarchar" MaxLength="15" Nullable="false" />
+        </EntityType>
+        <EntityType Name="video">
           <Key>
             <PropertyRef Name="id" />
           </Key>
@@ -27,81 +41,249 @@
           <Property Name="titulo" Type="nvarchar(max)" Nullable="false" />
           <Property Name="caminho" Type="nvarchar(max)" Nullable="false" />
           <Property Name="data" Type="date" />
-          <Property Name="tipo" Type="int" Nullable="false" />
-          <Property Name="artista" Type="int" Nullable="false" />
           <Property Name="extensao" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="duracao" Type="nvarchar" MaxLength="20" />
+          <Property Name="resolucao" Type="nvarchar" MaxLength="20" />
+          <Property Name="formato_video" Type="nvarchar" MaxLength="100" />
+          <Property Name="fps" Type="nvarchar" MaxLength="20" />
+          <Property Name="canais_audio" Type="nvarchar" MaxLength="20" />
+          <Property Name="formato_audio" Type="nvarchar" MaxLength="100" />
+          <Property Name="id_tipo" Type="int" Nullable="false" />
         </EntityType>
-        <Association Name="FK_Video_ToArtista">
-          <End Role="Artista" Type="Self.Artista" Multiplicity="1" />
-          <End Role="Video" Type="Self.Video" Multiplicity="*" />
+        <EntityType Name="video_artista">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_video" Type="int" Nullable="false" />
+          <Property Name="id_artista" Type="int" Nullable="false" />
+          <Property Name="principal" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="video_musica">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_video" Type="int" Nullable="false" />
+          <Property Name="id_musica" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="video_tag">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_video" Type="int" Nullable="false" />
+          <Property Name="id_tag" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_video_artista_artista">
+          <End Role="artista" Type="Self.artista" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="video_artista" Type="Self.video_artista" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Artista">
+            <Principal Role="artista">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="Video">
-              <PropertyRef Name="artista" />
+            <Dependent Role="video_artista">
+              <PropertyRef Name="id_artista" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_video_artista_video">
+          <End Role="video" Type="Self.video" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="video_artista" Type="Self.video_artista" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="video">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="video_artista">
+              <PropertyRef Name="id_video" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_video_musica_musica">
+          <End Role="musica" Type="Self.musica" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="video_musica" Type="Self.video_musica" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="musica">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="video_musica">
+              <PropertyRef Name="id_musica" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_video_musica_video">
+          <End Role="video" Type="Self.video" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="video_musica" Type="Self.video_musica" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="video">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="video_musica">
+              <PropertyRef Name="id_video" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_video_tag_tag">
+          <End Role="tag" Type="Self.tag" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="video_tag" Type="Self.video_tag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tag">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="video_tag">
+              <PropertyRef Name="id_tag" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_video_tag_video">
+          <End Role="video" Type="Self.video" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="video_tag" Type="Self.video_tag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="video">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="video_tag">
+              <PropertyRef Name="id_video" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Video_ToTipo">
-          <End Role="Tipo" Type="Self.Tipo" Multiplicity="1" />
-          <End Role="Video" Type="Self.Video" Multiplicity="*" />
+          <End Role="tipo" Type="Self.tipo" Multiplicity="1" />
+          <End Role="video" Type="Self.video" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Tipo">
+            <Principal Role="tipo">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="Video">
-              <PropertyRef Name="tipo" />
+            <Dependent Role="video">
+              <PropertyRef Name="id_tipo" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="VideosModelStoreContainer">
-          <EntitySet Name="Artista" EntityType="Self.Artista" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Tipo" EntityType="Self.Tipo" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Video" EntityType="Self.Video" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_Video_ToArtista" Association="Self.FK_Video_ToArtista">
-            <End Role="Artista" EntitySet="Artista" />
-            <End Role="Video" EntitySet="Video" />
+          <EntitySet Name="artista" EntityType="Self.artista" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="musica" EntityType="Self.musica" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tag" EntityType="Self.tag" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tipo" EntityType="Self.tipo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="video" EntityType="Self.video" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="video_artista" EntityType="Self.video_artista" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="video_musica" EntityType="Self.video_musica" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="video_tag" EntityType="Self.video_tag" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_video_artista_artista" Association="Self.FK_video_artista_artista">
+            <End Role="artista" EntitySet="artista" />
+            <End Role="video_artista" EntitySet="video_artista" />
+          </AssociationSet>
+          <AssociationSet Name="FK_video_artista_video" Association="Self.FK_video_artista_video">
+            <End Role="video" EntitySet="video" />
+            <End Role="video_artista" EntitySet="video_artista" />
+          </AssociationSet>
+          <AssociationSet Name="FK_video_musica_musica" Association="Self.FK_video_musica_musica">
+            <End Role="musica" EntitySet="musica" />
+            <End Role="video_musica" EntitySet="video_musica" />
+          </AssociationSet>
+          <AssociationSet Name="FK_video_musica_video" Association="Self.FK_video_musica_video">
+            <End Role="video" EntitySet="video" />
+            <End Role="video_musica" EntitySet="video_musica" />
+          </AssociationSet>
+          <AssociationSet Name="FK_video_tag_tag" Association="Self.FK_video_tag_tag">
+            <End Role="tag" EntitySet="tag" />
+            <End Role="video_tag" EntitySet="video_tag" />
+          </AssociationSet>
+          <AssociationSet Name="FK_video_tag_video" Association="Self.FK_video_tag_video">
+            <End Role="video" EntitySet="video" />
+            <End Role="video_tag" EntitySet="video_tag" />
           </AssociationSet>
           <AssociationSet Name="FK_Video_ToTipo" Association="Self.FK_Video_ToTipo">
-            <End Role="Tipo" EntitySet="Tipo" />
-            <End Role="Video" EntitySet="Video" />
+            <End Role="tipo" EntitySet="tipo" />
+            <End Role="video" EntitySet="video" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="VideosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="ArtistaEntity">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="artista" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Video" Relationship="VideosModel.FK_Video_ToArtista" FromRole="ArtistaEntity" ToRole="Video" />
-        </EntityType>
-        <EntityType Name="TipoEntity">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="tipo" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Video" Relationship="VideosModel.FK_Video_ToTipo" FromRole="TipoEntity" ToRole="Video" />
-        </EntityType>
         <EntityContainer Name="VideosEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Artista" EntityType="VideosModel.ArtistaEntity" />
-          <EntitySet Name="Tipo" EntityType="VideosModel.TipoEntity" />
-          <EntitySet Name="Video" EntityType="VideosModel.VideoEntity" />
-          <AssociationSet Name="FK_Video_ToArtista" Association="VideosModel.FK_Video_ToArtista">
-            <End Role="ArtistaEntity" EntitySet="Artista" />
-            <End Role="Video" EntitySet="Video" />
+          <EntitySet Name="artista1" EntityType="VideosModel.artista" />
+          <EntitySet Name="musica" EntityType="VideosModel.musica" />
+          <EntitySet Name="tag" EntityType="VideosModel.tag" />
+          <EntitySet Name="tipo1" EntityType="VideosModel.tipo" />
+          <EntitySet Name="video1" EntityType="VideosModel.video" />
+          <EntitySet Name="video_artista" EntityType="VideosModel.video_artista" />
+          <EntitySet Name="video_musica" EntityType="VideosModel.video_musica" />
+          <EntitySet Name="video_tag" EntityType="VideosModel.video_tag" />
+          <AssociationSet Name="FK_video_artista_artista" Association="VideosModel.FK_video_artista_artista">
+            <End Role="artista" EntitySet="artista1" />
+            <End Role="video_artista" EntitySet="video_artista" />
           </AssociationSet>
-          <AssociationSet Name="FK_Video_ToTipo" Association="VideosModel.FK_Video_ToTipo">
-            <End Role="TipoEntity" EntitySet="Tipo" />
-            <End Role="Video" EntitySet="Video" />
+          <AssociationSet Name="FK_video_musica_musica" Association="VideosModel.FK_video_musica_musica">
+            <End Role="musica" EntitySet="musica" />
+            <End Role="video_musica" EntitySet="video_musica" />
+          </AssociationSet>
+          <AssociationSet Name="FK_video_tag_tag" Association="VideosModel.FK_video_tag_tag">
+            <End Role="tag" EntitySet="tag" />
+            <End Role="video_tag" EntitySet="video_tag" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Video_ToTipo1" Association="VideosModel.FK_Video_ToTipo1">
+            <End Role="tipo" EntitySet="tipo1" />
+            <End Role="video" EntitySet="video1" />
+          </AssociationSet>
+          <AssociationSet Name="FK_video_artista_video" Association="VideosModel.FK_video_artista_video">
+            <End Role="video" EntitySet="video1" />
+            <End Role="video_artista" EntitySet="video_artista" />
+          </AssociationSet>
+          <AssociationSet Name="FK_video_musica_video" Association="VideosModel.FK_video_musica_video">
+            <End Role="video" EntitySet="video1" />
+            <End Role="video_musica" EntitySet="video_musica" />
+          </AssociationSet>
+          <AssociationSet Name="FK_video_tag_video" Association="VideosModel.FK_video_tag_video">
+            <End Role="video" EntitySet="video1" />
+            <End Role="video_tag" EntitySet="video_tag" />
           </AssociationSet>
           </EntityContainer>
-        <EntityType Name="VideoEntity">
+        <EntityType Name="artista">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nome" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="video_artista" Relationship="VideosModel.FK_video_artista_artista" FromRole="artista" ToRole="video_artista" />
+        </EntityType>
+        <EntityType Name="musica">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="titulo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="video_musica" Relationship="VideosModel.FK_video_musica_musica" FromRole="musica" ToRole="video_musica" />
+        </EntityType>
+        <EntityType Name="tag">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="video_tag" Relationship="VideosModel.FK_video_tag_tag" FromRole="tag" ToRole="video_tag" />
+        </EntityType>
+        <EntityType Name="tipo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="descricao" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="video" Relationship="VideosModel.FK_Video_ToTipo1" FromRole="tipo" ToRole="video" />
+        </EntityType>
+        <EntityType Name="video">
           <Key>
             <PropertyRef Name="id" />
           </Key>
@@ -109,33 +291,143 @@
           <Property Name="titulo" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="caminho" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="data" Type="DateTime" Precision="0" />
-          <Property Name="tipo" Type="Int32" Nullable="false" />
-          <Property Name="artista" Type="Int32" Nullable="false" />
-          <Property Name="extensao" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Artista1" Relationship="VideosModel.FK_Video_ToArtista" FromRole="Video" ToRole="ArtistaEntity" />
-          <NavigationProperty Name="Tipo1" Relationship="VideosModel.FK_Video_ToTipo" FromRole="Video" ToRole="TipoEntity" />
+          <Property Name="extensao" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="id_tipo" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tipo" Relationship="VideosModel.FK_Video_ToTipo1" FromRole="video" ToRole="tipo" />
+          <NavigationProperty Name="video_artista" Relationship="VideosModel.FK_video_artista_video" FromRole="video" ToRole="video_artista" />
+          <NavigationProperty Name="video_musica" Relationship="VideosModel.FK_video_musica_video" FromRole="video" ToRole="video_musica" />
+          <NavigationProperty Name="video_tag" Relationship="VideosModel.FK_video_tag_video" FromRole="video" ToRole="video_tag" />
+          <Property Name="duracao" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="resolucao" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="formato_video" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="fps" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="canais_audio" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="formato_audio" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
-        <Association Name="FK_Video_ToArtista">
-          <End Type="VideosModel.ArtistaEntity" Role="ArtistaEntity" Multiplicity="1" />
-          <End Type="VideosModel.VideoEntity" Role="Video" Multiplicity="*" />
+        <EntityType Name="video_artista">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_video" Type="Int32" Nullable="false" />
+          <Property Name="id_artista" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="artista" Relationship="VideosModel.FK_video_artista_artista" FromRole="video_artista" ToRole="artista" />
+          <NavigationProperty Name="video" Relationship="VideosModel.FK_video_artista_video" FromRole="video_artista" ToRole="video" />
+          <Property Name="principal" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="video_musica">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_video" Type="Int32" Nullable="false" />
+          <Property Name="id_musica" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="musica" Relationship="VideosModel.FK_video_musica_musica" FromRole="video_musica" ToRole="musica" />
+          <NavigationProperty Name="video" Relationship="VideosModel.FK_video_musica_video" FromRole="video_musica" ToRole="video" />
+        </EntityType>
+        <EntityType Name="video_tag">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_video" Type="Int32" Nullable="false" />
+          <Property Name="id_tag" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tag" Relationship="VideosModel.FK_video_tag_tag" FromRole="video_tag" ToRole="tag" />
+          <NavigationProperty Name="video" Relationship="VideosModel.FK_video_tag_video" FromRole="video_tag" ToRole="video" />
+        </EntityType>
+        <Association Name="FK_video_artista_artista">
+          <End Type="VideosModel.artista" Role="artista" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="VideosModel.video_artista" Role="video_artista" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="ArtistaEntity">
+            <Principal Role="artista">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="Video">
-              <PropertyRef Name="artista" />
+            <Dependent Role="video_artista">
+              <PropertyRef Name="id_artista" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Video_ToTipo">
-          <End Type="VideosModel.TipoEntity" Role="TipoEntity" Multiplicity="1" />
-          <End Type="VideosModel.VideoEntity" Role="Video" Multiplicity="*" />
+        <Association Name="FK_video_musica_musica">
+          <End Type="VideosModel.musica" Role="musica" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="VideosModel.video_musica" Role="video_musica" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="TipoEntity">
+            <Principal Role="musica">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="Video">
-              <PropertyRef Name="tipo" />
+            <Dependent Role="video_musica">
+              <PropertyRef Name="id_musica" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_video_tag_tag">
+          <End Type="VideosModel.tag" Role="tag" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="VideosModel.video_tag" Role="video_tag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tag">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="video_tag">
+              <PropertyRef Name="id_tag" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Video_ToTipo1">
+          <End Type="VideosModel.tipo" Role="tipo" Multiplicity="1" />
+          <End Type="VideosModel.video" Role="video" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="video">
+              <PropertyRef Name="id_tipo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_video_artista_video">
+          <End Type="VideosModel.video" Role="video" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="VideosModel.video_artista" Role="video_artista" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="video">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="video_artista">
+              <PropertyRef Name="id_video" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_video_musica_video">
+          <End Type="VideosModel.video" Role="video" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="VideosModel.video_musica" Role="video_musica" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="video">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="video_musica">
+              <PropertyRef Name="id_video" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_video_tag_video">
+          <End Type="VideosModel.video" Role="video" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="VideosModel.video_tag" Role="video_tag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="video">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="video_tag">
+              <PropertyRef Name="id_video" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -145,31 +437,80 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="VideosModelStoreContainer" CdmEntityContainer="VideosEntities">
-          <EntitySetMapping Name="Artista">
-            <EntityTypeMapping TypeName="VideosModel.ArtistaEntity">
-              <MappingFragment StoreEntitySet="Artista">
+          <EntitySetMapping Name="artista1">
+            <EntityTypeMapping TypeName="VideosModel.artista">
+              <MappingFragment StoreEntitySet="artista">
+                <ScalarProperty Name="nome" ColumnName="nome" />
                 <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="artista" ColumnName="artista" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Tipo">
-            <EntityTypeMapping TypeName="VideosModel.TipoEntity">
-              <MappingFragment StoreEntitySet="Tipo">
+          <EntitySetMapping Name="musica">
+            <EntityTypeMapping TypeName="VideosModel.musica">
+              <MappingFragment StoreEntitySet="musica">
+                <ScalarProperty Name="titulo" ColumnName="titulo" />
                 <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="tipo" ColumnName="tipo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Video">
-            <EntityTypeMapping TypeName="VideosModel.VideoEntity">
-              <MappingFragment StoreEntitySet="Video">
+          <EntitySetMapping Name="tag">
+            <EntityTypeMapping TypeName="VideosModel.tag">
+              <MappingFragment StoreEntitySet="tag">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tipo1">
+            <EntityTypeMapping TypeName="VideosModel.tipo">
+              <MappingFragment StoreEntitySet="tipo">
+                <ScalarProperty Name="descricao" ColumnName="descricao" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="video1">
+            <EntityTypeMapping TypeName="VideosModel.video">
+              <MappingFragment StoreEntitySet="video">
+                <ScalarProperty Name="formato_audio" ColumnName="formato_audio" />
+                <ScalarProperty Name="canais_audio" ColumnName="canais_audio" />
+                <ScalarProperty Name="fps" ColumnName="fps" />
+                <ScalarProperty Name="formato_video" ColumnName="formato_video" />
+                <ScalarProperty Name="resolucao" ColumnName="resolucao" />
+                <ScalarProperty Name="duracao" ColumnName="duracao" />
+                <ScalarProperty Name="id_tipo" ColumnName="id_tipo" />
                 <ScalarProperty Name="extensao" ColumnName="extensao" />
-                <ScalarProperty Name="artista" ColumnName="artista" />
-                <ScalarProperty Name="tipo" ColumnName="tipo" />
                 <ScalarProperty Name="data" ColumnName="data" />
                 <ScalarProperty Name="caminho" ColumnName="caminho" />
                 <ScalarProperty Name="titulo" ColumnName="titulo" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="video_artista">
+            <EntityTypeMapping TypeName="VideosModel.video_artista">
+              <MappingFragment StoreEntitySet="video_artista">
+                <ScalarProperty Name="principal" ColumnName="principal" />
+                <ScalarProperty Name="id_artista" ColumnName="id_artista" />
+                <ScalarProperty Name="id_video" ColumnName="id_video" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="video_musica">
+            <EntityTypeMapping TypeName="VideosModel.video_musica">
+              <MappingFragment StoreEntitySet="video_musica">
+                <ScalarProperty Name="id_musica" ColumnName="id_musica" />
+                <ScalarProperty Name="id_video" ColumnName="id_video" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="video_tag">
+            <EntityTypeMapping TypeName="VideosModel.video_tag">
+              <MappingFragment StoreEntitySet="video_tag">
+                <ScalarProperty Name="id_tag" ColumnName="id_tag" />
+                <ScalarProperty Name="id_video" ColumnName="id_video" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

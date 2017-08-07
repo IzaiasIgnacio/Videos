@@ -12,17 +12,13 @@ namespace Videos.Models.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class VideoEntity
+    public partial class video_musica
     {
         public int id { get; set; }
-        public string titulo { get; set; }
-        public string caminho { get; set; }
-        public Nullable<System.DateTime> data { get; set; }
-        public int tipo { get; set; }
-        public int artista { get; set; }
-        public string extensao { get; set; }
+        public int id_video { get; set; }
+        public int id_musica { get; set; }
     
-        public virtual ArtistaEntity Artista1 { get; set; }
-        public virtual TipoEntity Tipo1 { get; set; }
+        public virtual musica musica { get; set; }
+        public virtual video video { get; set; }
     }
 }

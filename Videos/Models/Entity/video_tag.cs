@@ -12,18 +12,13 @@ namespace Videos.Models.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class ArtistaEntity
+    public partial class video_tag
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ArtistaEntity()
-        {
-            this.Video = new HashSet<VideoEntity>();
-        }
-    
         public int id { get; set; }
-        public string artista { get; set; }
+        public int id_video { get; set; }
+        public int id_tag { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<VideoEntity> Video { get; set; }
+        public virtual tag tag { get; set; }
+        public virtual video video { get; set; }
     }
 }
