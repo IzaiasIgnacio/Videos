@@ -22,3 +22,25 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.coluna_titulo {
+    cursor: pointer;
+}
+
+#modal_form_video .modal-dialog {
+    width: 80%;
+}
+
+#modal_form_video .modal-body {
+    padding-top: 5px;
+}
+
+.input_titulo {
+    max-width: 49%;
+}
+
+.form_thumb {
+    max-width: 235px;
+    float: left;
+    margin-right: 5px;
+}

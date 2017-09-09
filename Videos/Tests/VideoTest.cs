@@ -76,6 +76,36 @@ namespace Videos.Tests {
         }
 
         /*[TestMethod]
+        public void testeMusicas() {
+            VideosView videoView = new VideosView();
+            List<string> listaArquivos = new List<string>();
+            string caminho = @"K:\ICI\Vídeos\kpop";
+            string[] pastas = Directory.GetDirectories(caminho, "*", System.IO.SearchOption.AllDirectories);
+            foreach (string pasta in pastas) {
+                DirectoryInfo info = new DirectoryInfo(pasta);
+                if (info.Name == "MVs") {
+                    string[] arquivos = Directory.GetFiles(pasta);
+                    foreach (string arquivo in arquivos) {
+                        FileInfo dados = new FileInfo(arquivo);
+                        string[] extensoes = { ".mp4", ".mkv", ".ts", ".tp", ".avi" };
+                        if (extensoes.Contains(dados.Extension)) {
+                            listaArquivos.Add(arquivo);
+                        }
+                    }
+                }
+            }
+
+            using (FileStream file = new FileStream("musicas.txt", FileMode.Create)) {
+                byte[] linha = Encoding.UTF8.GetBytes(Environment.NewLine);
+                foreach (string video in listaArquivos) {
+                    byte[] bytes = Encoding.UTF8.GetBytes(Path.GetFileNameWithoutExtension(video));
+                    file.Write(bytes, 0, bytes.Length);
+                    file.Write(linha, 0, linha.Length);
+                }
+            }
+        }*/
+
+        /*[TestMethod]
         public void testeArtistaCaminho() {
             VideoRepository video = new VideoRepository();
             video.Caminho = @"K:\ICI\Vídeos\kpop\red velvet\MVs";
@@ -125,22 +155,44 @@ namespace Videos.Tests {
 
         [TestMethod]
         public void testeMediaInfo() {
-            VideoRepository videorepository = new VideoRepository();
-            video video = videorepository.getVideoById(862);
-            var inputFile = new MediaFile { Filename = video.caminho };
-            
-            using (var engine = new Engine()) {
-                engine.GetMetadata(inputFile);
-                video.duracao = inputFile.Metadata.Duration.ToString().Substring(0,8);
-                video.formato_audio = inputFile.Metadata.AudioData.Format;
-                video.resolucao = inputFile.Metadata.VideoData.FrameSize;
+            VideoRepository videoRepository = new VideoRepository();
+            VideosView view = new VideosView();
 
-                double seconds = TimeSpan.Parse(video.duracao).TotalSeconds;
-                seconds = seconds * 90 / 100;
-                for (int i = 1; i <= 6; i++) {
-                    var outputFile = new MediaFile { Filename = video.id+@"_captura_"+ seconds/i+".jpg" };
-                    var options = new ConversionOptions { Seek = TimeSpan.FromSeconds(seconds/i) };
-                    engine.GetThumbnail(inputFile, outputFile, options);
+            List<video> lista = videoRepository.listarVideos();
+            foreach (video video in lista) {
+                var inputFile = new MediaFile { Filename = video.caminho };
+
+                using (var engine = new Engine()) {
+                    engine.GetMetadata(inputFile);
+                    video.duracao = inputFile.Metadata.Duration.ToString().Substring(0, 8);
+                    video.formato_audio = inputFile.Metadata.AudioData.Format;
+                    video.resolucao = inputFile.Metadata.VideoData.FrameSize;
+
+                    double seconds = TimeSpan.Parse(video.duracao).TotalSeconds;
+                    seconds = seconds * 90 / 100;
+                    for (int i = 1; i <= 6; i++) {
+                        var outputFile = new MediaFile { Filename = view.pastaCapturas + video.id + @"_captura_" + seconds / i + ".jpg" };
+                        var options = new ConversionOptions { Seek = TimeSpan.FromSeconds(seconds / i) };
+                        engine.GetThumbnail(inputFile, outputFile, options);
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
+        public void testeMusicas() {
+            VideoRepository videoRepository = new VideoRepository();
+            MusicaRepository musicaRepository = new MusicaRepository();
+            VideosView view = new VideosView();
+
+            List<musica> musicas = musicaRepository.Listar<musica>().Where(m => m.titulo.Length > 2).ToList();
+            List<video> lista = videoRepository.listarVideos();
+            foreach (video video in lista) {
+                List<musica> resultado = musicas.Where(m => video.titulo.ToLower().Contains(m.titulo.ToLower())).ToList();
+                if (resultado != null) {
+                    foreach (musica m in resultado) {
+                        System.Diagnostics.Debug.WriteLine(video.caminho + " " + m.titulo);
+                    }
                 }
             }
         }

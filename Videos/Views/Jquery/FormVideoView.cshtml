@@ -1,0 +1,23 @@
+﻿@model Videos.Models.ViewModel.VideoDataView
+<script>
+    $(function () {
+    });
+</script>
+@Html.HiddenFor(model => Model.Id, new { @Value = Model.Id })
+<div class="modal-body row">
+    <div class="col-md-12">
+        @foreach (string thumb in Model.Thumbs) {
+            <img class="img-rounded img-responsive form_thumb" src="~/capturas/@thumb">
+        }
+    </div>
+    <div style="clear:both;margin-bottom:10px"></div>
+    <div class="col-md-12">
+        Artista: @Model.ArtistaPrincipal, Duração: @Model.Duracao, Resolução: @Model.Resolucao, Formato Vídeo: @Model.FormatoVideo, FPS: @Model.Fps, Canais: @Model.CanaisAudio, Formato Áudio: @Model.FormatoAudio
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Titulo, new { @style = "display:block" })
+            @Html.TextBoxFor(model => model.Titulo, new { @class = "form-control input_titulo", @placeholder = "Título", @Value = Model.Titulo })
+        </div>
+    </div>
+</div>
