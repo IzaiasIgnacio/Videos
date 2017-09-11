@@ -39,6 +39,12 @@ textarea {
     max-width: 49%;
 }
 
+.datalist {
+    max-width: 80%;
+    float:left;
+    margin-right:2px;
+}
+
 .form_thumb {
     max-width: 235px;
     float: left;

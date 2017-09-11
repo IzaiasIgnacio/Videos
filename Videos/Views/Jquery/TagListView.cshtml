@@ -1,0 +1,7 @@
+﻿@model Videos.Models.ViewModel.VideoDataView
+@for (int i = 0; i < Model.Tags.Count; i++) {
+    <div>
+        @Html.HiddenFor(model => Model.Tags[i].id, new { @Value = Model.Tags[i].id })
+        <label>@Model.Tags[i].nome</label>
+    </div>
+}

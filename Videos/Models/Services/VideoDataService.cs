@@ -19,28 +19,28 @@ namespace Videos.Models.Services {
             view = new VideoDataView();
         }
 
-        public VideoDataView getMetadata(int id) {
+        public VideoDataView getVideoMetaData(int id) {
             VideoRepository videoRepository = new VideoRepository();
             video video = videoRepository.getVideoById(id);
+
             var inputFile = new MediaFile { Filename = video.caminho };
 
             using (var engine = new Engine()) {
                 engine.GetMetadata(inputFile);
-                view.Titulo = video.titulo;
-                view.ArtistaPrincipal = video.video_artista.Where(a => a.principal == true).FirstOrDefault().artista.nome;
+                view.Id = id;
+                view.ArtistaPrincipal = video.video_artista.Where(a => a.principal = true).FirstOrDefault().artista.nome;
                 view.Duracao = inputFile.Metadata.Duration.ToString().Substring(0, 8);
                 view.Resolucao = inputFile.Metadata.VideoData.FrameSize;
                 view.FormatoVideo = inputFile.Metadata.VideoData.Format;
                 view.Fps = inputFile.Metadata.VideoData.Fps.ToString();
                 view.CanaisAudio = inputFile.Metadata.AudioData.ChannelOutput;
                 view.FormatoAudio = inputFile.Metadata.AudioData.Format;
-                view.Thumbs = getThumbs(video.id);
             }
 
             return view;
         }
 
-        private List<string> getThumbs(int id) {
+        public List<string> getThumbs(int id) {
             thumbs = new List<string>();
             string[] arquivos = Directory.GetFiles(view.pastaCapturas,id+"_*");
 

@@ -1,0 +1,12 @@
+﻿@model Videos.Models.ViewModel.VideoDataView
+@Html.HiddenFor(model => Model.Id, new { @Value = Model.Id })
+@Html.HiddenFor(model => Model.Duracao, new { @Value = Model.Duracao })
+@Html.HiddenFor(model => Model.Resolucao, new { @Value = Model.Resolucao })
+@Html.HiddenFor(model => Model.FormatoVideo, new { @Value = Model.FormatoVideo })
+@Html.HiddenFor(model => Model.Fps, new { @Value = Model.Fps })
+@Html.HiddenFor(model => Model.CanaisAudio, new { @Value = Model.CanaisAudio })
+@Html.HiddenFor(model => Model.FormatoAudio, new { @Value = Model.FormatoAudio })
+Artista: @Model.ArtistaPrincipal, Duração: @Model.Duracao, Resolução: @Model.Resolucao, Formato Vídeo: @Model.FormatoVideo, FPS: @Model.Fps, Canais: @Model.CanaisAudio, Formato Áudio: @Model.FormatoAudio
+<button type="button" class="btn btn-default atualizar_metadata" aria-label="Atualizar">
+    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+</button>

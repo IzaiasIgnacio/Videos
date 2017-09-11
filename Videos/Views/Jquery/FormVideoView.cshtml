@@ -1,9 +1,51 @@
 ﻿@model Videos.Models.ViewModel.VideoDataView
 <script>
-    $(function () {
+    $(function() {
+        $("#modal_form_video").on("click", ".add_artista", function() {
+            $.post('@Url.Action("AdicionarArtistaJquery", "Jquery")', { id: $("#ListaArtistas").val(), nome_artista: $("#ListaArtistas option:selected").text() },
+            function(resposta) {
+                $("#lista_artistas").html(resposta);
+            });
+        });
+        $("#modal_form_video").on("click", ".add_musica", function () {
+            $.post('@Url.Action("AdicionarMusicaJquery", "Jquery")', { titulo_musica: $(this).closest('div').find("input[name=musica]").val() },
+            function(resposta) {
+                $("#lista_musicas").html(resposta);
+            });
+        });
+        $("#modal_form_video").on("click", ".add_tag", function() {
+            $.post('@Url.Action("AdicionarTagJquery", "Jquery")', { nome_tag: $(this).closest('div').find("input[name=tag]").val() },
+            function(resposta) {
+                $("#lista_tags").html(resposta);
+            });
+        });
+        $("#modal_form_video").on("click", ".salvar", function() {
+            var array = $("#form_video").serializeArray();
+            var json = {};
+
+            jQuery.each(array, function() {
+                json[this.name] = this.value || '';
+            });
+
+            $.ajax({
+                url: '@Url.Action("SalvarVideoJquery", "Jquery")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(json),
+                success: function (resposta) {
+                    $("#modal_form_video").modal('hide');
+                }
+            });
+        });
+
+        $("#modal_form_video").on("click", ".atualizar_metadata", function() {
+            $.post('@Url.Action("AtualizarMetadataJquery", "Jquery")', { id: $(this).closest('div').find("#Id").val() },
+            function(resposta) {
+                $("#video_metadata").html(resposta);
+            });
+        });
     });
 </script>
-@Html.HiddenFor(model => Model.Id, new { @Value = Model.Id })
 <div class="modal-body row">
     <div class="col-md-12">
         @foreach (string thumb in Model.Thumbs) {
@@ -11,13 +53,73 @@
         }
     </div>
     <div style="clear:both;margin-bottom:10px"></div>
-    <div class="col-md-12">
-        Artista: @Model.ArtistaPrincipal, Duração: @Model.Duracao, Resolução: @Model.Resolucao, Formato Vídeo: @Model.FormatoVideo, FPS: @Model.Fps, Canais: @Model.CanaisAudio, Formato Áudio: @Model.FormatoAudio
-    </div>
-    <div class="col-md-12">
-        <div class="form-group">
-            @Html.LabelFor(model => model.Titulo, new { @style = "display:block" })
-            @Html.TextBoxFor(model => model.Titulo, new { @class = "form-control input_titulo", @placeholder = "Título", @Value = Model.Titulo })
+    <form id="form_video">
+        <div class="col-md-12" id="video_metadata">
+            @Html.HiddenFor(model => Model.Id, new { @Value = Model.Id })
+            @Html.HiddenFor(model => Model.Duracao, new { @Value = Model.Duracao })
+            @Html.HiddenFor(model => Model.Resolucao, new { @Value = Model.Resolucao })
+            @Html.HiddenFor(model => Model.FormatoVideo, new { @Value = Model.FormatoVideo })
+            @Html.HiddenFor(model => Model.Fps, new { @Value = Model.Fps })
+            @Html.HiddenFor(model => Model.CanaisAudio, new { @Value = Model.CanaisAudio })
+            @Html.HiddenFor(model => Model.FormatoAudio, new { @Value = Model.FormatoAudio })
+            Artista: @Model.ArtistaPrincipal, Duração: @Model.Duracao, Resolução: @Model.Resolucao, Formato Vídeo: @Model.FormatoVideo, FPS: @Model.Fps, Canais: @Model.CanaisAudio, Formato Áudio: @Model.FormatoAudio
+            <button type="button" class="btn btn-default atualizar_metadata" aria-label="Atualizar">
+                <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+            </button>
         </div>
-    </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Titulo, new { @style = "display:block" })
+                @Html.TextBoxFor(model => model.Titulo, new { @class = "form-control input_titulo", @placeholder = "Título", @Value = Model.Titulo })
+            </div>
+        </div>
+        <div class="col-md-2">
+            <label for="artistas" style="display:block">Artistas</label>
+            @Html.DropDownListFor(model => Model.ListaArtistas, new SelectList(Model.ListaArtistas, "id", "nome", Model.ListaArtistas), "Artista", new { @class = "form-control datalist" })
+            <button type="button" class="btn btn-default add_artista" aria-label="Adicionar">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </button>
+            <div id="lista_artistas"></div>
+        </div>
+        <div class="col-md-2">
+            <label for="musicas" style="display:block">Musicas</label>
+            <input type="text" name="musica" list="musicas" class="form-control datalist" placeholder="Música">
+            <datalist id="musicas">
+                @foreach (var musica in Model.ListaMusicas) {
+                    <option value="@musica.titulo">@musica.titulo</option>
+                }
+            </datalist>
+            <button type="button" class="btn btn-default add_musica" aria-label="Adicionar">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </button>
+            <div id="lista_musicas">
+                @for (int i = 0; i < Model.Musicas.Count; i++) {
+                    <div>
+                        @Html.HiddenFor(model => Model.Musicas[i].id, new { @Value = Model.Musicas[i].id })
+                        <label>@Model.Musicas[i].titulo</label>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-md-2">
+            <label for="tags" style="display:block">Tags</label>
+            <input type="text" name="tag" list="tags" class="form-control datalist" placeholder="Tag">
+            <datalist id="tags">
+                @foreach (var tag in Model.ListaTags) {
+                    <option value="@tag.nome">@tag.nome</option>
+                }
+            </datalist>
+            <button type="button" class="btn btn-default add_tag" aria-label="Adicionar">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </button>
+            <div id="lista_tags">
+                @for (int i = 0; i < Model.Tags.Count; i++) {
+                    <div>
+                        @Html.HiddenFor(model => Model.Tags[i].id, new { @Value = Model.Tags[i].id })
+                        <label>@Model.Tags[i].nome</label>
+                    </div>
+                }
+            </div>
+        </div>
+    </form>
 </div>

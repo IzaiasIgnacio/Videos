@@ -212,9 +212,10 @@
     </Compile>
     <Compile Include="Models\Repository\ArtistaRepository.cs" />
     <Compile Include="Models\Repository\BaseRepository.cs" />
+    <Compile Include="Models\Repository\TagRepository.cs" />
     <Compile Include="Models\Repository\MusicaRepository.cs" />
     <Compile Include="Models\Repository\TipoRepository.cs" />
-    <Compile Include="Models\Services\ThumbService.cs" />
+    <Compile Include="Models\Services\VideoDataService.cs" />
     <Compile Include="Models\ViewModel\ArtistasView.cs" />
     <Compile Include="Models\ViewModel\VideosView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -291,6 +292,10 @@
       <DependentUpon>VideosModel.edmx</DependentUpon>
     </Content>
     <Content Include="Views\Jquery\FormVideoView.cshtml" />
+    <Content Include="Views\Jquery\TagListView.cshtml" />
+    <Content Include="Views\Jquery\MusicaListView.cshtml" />
+    <Content Include="Views\Jquery\ArtistaListView.cshtml" />
+    <Content Include="Views\Jquery\VideoMetaDataView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

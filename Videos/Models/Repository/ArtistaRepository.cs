@@ -10,7 +10,6 @@ namespace Videos.Models.Repository {
 
         public artista GetArtistaByNome(string nome) {
             artista artista = db.artista.Where(n => n.nome == nome).FirstOrDefault();
-
             return artista;
         }
 

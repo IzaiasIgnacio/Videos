@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using Videos.Models.Entity;
+using Videos.Models.ViewModel;
 
 namespace Videos.Models.Repository {
     public class VideoRepository : BaseRepository {
@@ -11,39 +13,6 @@ namespace Videos.Models.Repository {
             return db.video.Where(v => v.id == id).FirstOrDefault();
         }
         
-        /*private List<video> listarArquivos(string caminho) {
-            List<video> listaArquivos = new List<video>();
-            try {
-                string[] arquivos = Directory.GetFiles(caminho);
-                foreach (string arquivo in arquivos) {
-                    FileInfo info = new FileInfo(arquivo);
-
-                    if (!info.Extension.Equals(".nfo") && !info.Extension.Equals(".srt")) {
-                        video video = new video();
-
-                        tipo tipo = new tipo();
-                        tipo.descricao = tipoCaminho();
-
-                        artista artista = new artista(artistaCaminho());
-
-                        video.Caminho = info.FullName;
-                        video.Titulo = Path.GetFileNameWithoutExtension(info.Name);
-                        video.Data = info.LastWriteTime;
-                        video.Tipo = tipo;
-                        video.Artista = artista;
-                        video.Extensao = info.Extension;
-
-                        listaArquivos.Add(video);
-                    }
-                }
-                return listaArquivos;
-            }
-            catch (Exception ex) {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
-        }*/
-
         public List<video> listarVideos() {
             List<video> listaVideos;
 
@@ -92,6 +61,77 @@ namespace Videos.Models.Repository {
             listaVideos = listaVideos.OrderByDescending(video => video.data).ToList();
 
             return listaVideos;
+        }
+        
+        public void salvarVideo(VideoDataView dados) {
+            video video = db.video.Find(dados.Id);
+
+            if (video.titulo != dados.Titulo) {
+                FileInfo file = new FileInfo(video.caminho);
+                File.Move(video.caminho, file.DirectoryName +"\\"+ dados.Titulo+video.extensao);
+                video.titulo = dados.Titulo;
+            }
+            video.duracao = dados.Duracao;
+            video.resolucao = dados.Resolucao;
+            video.formato_video = dados.FormatoVideo;
+            video.fps = dados.Fps;
+            video.canais_audio = dados.CanaisAudio;
+            video.formato_audio = dados.FormatoAudio;
+
+            db.Entry(video).State = EntityState.Modified;
+
+            foreach (artista artista in dados.Artistas) {
+                db.video_artista.Add(new video_artista { id_artista = artista.id, id_video = video.id, principal = false });
+            }
+
+            int[] artistas = dados.Artistas.Select(v => v.id).ToArray();
+            List<video_artista> excluirArtistas = db.video_artista.
+                Where(v => !artistas.Contains(v.id)).
+                Where(v => v.id_video == video.id).
+                Where(v => v.principal == false).
+                ToList();
+
+            foreach (video_artista va in excluirArtistas) {
+                db.video_artista.Remove(va);
+            }
+
+            MusicaRepository musicaRepository = new MusicaRepository();
+            foreach (musica musica in dados.Musicas) {
+                db.video_musica.Add(new video_musica {
+                    id_musica = musica.id,
+                    id_video = video.id
+                });
+            }
+
+            int[] musicas = dados.Musicas.Select(m => m.id).ToArray();
+            List<video_musica> excluirMusicas = db.video_musica.
+                Where(v => !musicas.Contains(v.id)).
+                Where(v => v.id_video == video.id).
+                ToList();
+
+            foreach (video_musica vm in excluirMusicas) {
+                db.video_musica.Remove(vm);
+            }
+
+            TagRepository tagRepository = new TagRepository();
+            foreach (tag tag in dados.Tags) {
+                db.video_tag.Add(new video_tag {
+                    id_tag = tag.id,
+                    id_video = video.id
+                });
+            }
+
+            int[] tags = dados.Tags.Select(t => t.id).ToArray();
+            List<video_tag> excluirTags = db.video_tag.
+                Where(v => !tags.Contains(v.id)).
+                Where(v => v.id_video == video.id).
+                ToList();
+
+            foreach (video_tag vt in excluirTags) {
+                db.video_tag.Remove(vt);
+            }
+
+            db.SaveChanges();
         }
 
         public void salvar(string arquivo) {
