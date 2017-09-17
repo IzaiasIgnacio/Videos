@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Web;
 using Videos.Models.Entity;
@@ -89,25 +90,75 @@ namespace Videos.Models.ViewModel {
     }
 
     public class VideosView : BaseVideoView {
-        public List<video> listaVideos;
-        
-        public tipo getTipoByCaminho(string caminho) {
-            string[] split = caminho.Split('\\');
-            string[] tipos = { "Lives", "MVs" };
-            TipoRepository tipo = new TipoRepository();
-            if (split.Length > 5) {
-                if (tipos.Contains(split[5])) {
-                    return tipo.GetTipoByDescricao(split[5]);
-                }
+        private static VideosView view;
+
+        public static VideosView GetVideosView() {
+            if (view == null) {
+                view = new VideosView();
             }
-            return tipo.GetTipoByDescricao("misc"); 
+            return view;
         }
 
-        public artista getArtistaByCaminho(string caminho) {
-            ArtistaRepository artista = new ArtistaRepository();
-            string[] split = caminho.Split('\\');
-            return artista.GetArtistaByNome(split[4]);
+        public static VideosView init() {
+            view = new VideosView();
+
+            return view;
         }
 
+        public List<video> ListaVideos { get; set; }
+        public List<artista> ListaArtistas { get; set; }
+        public List<musica> ListaMusicas { get; set; }
+        public List<tipo> ListaTipos { get; set; }
+        public List<tag> ListaTags { get; set; }
+
+        private List<artista> artistas { get; set; }
+        public List<artista> Artistas {
+            get {
+                if (artistas == null) {
+                    artistas = new List<artista>();
+                }
+                return artistas;
+            }
+            set {
+                artistas = value;
+            }
+        }
+        private List<musica> musicas { get; set; }
+        public List<musica> Musicas {
+            get {
+                if (musicas == null) {
+                    musicas = new List<musica>();
+                }
+                return musicas;
+            }
+            set {
+                musicas = value;
+            }
+        }
+        private List<tag> tags { get; set; }
+        public List<tag> Tags {
+            get {
+                if (tags == null) {
+                    tags = new List<tag>();
+                }
+                return tags;
+            }
+            set {
+                tags = value;
+            }
+        }
+        private List<tipo> tipos { get; set; }
+        public List<tipo> Tipos {
+            get {
+                if (tipos == null) {
+                    tipos = new List<tipo>();
+                }
+                return tipos;
+            }
+            set {
+                tipos = value;
+            }
+        }
+        public int ArtistaPrincipal { get; set; }
     }
 }

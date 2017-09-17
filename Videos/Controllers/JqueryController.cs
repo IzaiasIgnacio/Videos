@@ -4,6 +4,9 @@ using Videos.Models.ViewModel;
 using Videos.Models.Entity;
 using Videos.Models.Services;
 using System.Linq;
+using System.Collections.Generic;
+using System.IO;
+using System;
 
 namespace Videos.Controllers {
     public class JqueryController : Controller {
@@ -74,16 +77,103 @@ namespace Videos.Controllers {
             return PartialView("TagListView", videoDataView);
         }
 
+        public ActionResult AdicionarTipoJquery(int id, string descricao) {
+            VideosView videosView = VideosView.GetVideosView();
+            videosView.Tipos.Add(new tipo { id = id, descricao = descricao });
+
+            return PartialView("TipoListView", videosView);
+        }
+
         public void SalvarVideoJquery(VideoDataView dados) {
             VideoRepository videoRepository = new VideoRepository();
             videoRepository.salvarVideo(dados);
         }
+
         public ActionResult AtualizarMetadataJquery(int id) {
             VideoDataService videoDataService = new VideoDataService();
             VideoDataView videoDataView = videoDataService.getVideoMetaData(id);
 
             return PartialView("VideoMetaDataView", videoDataView);
         }
-    }   
+
+        public ActionResult FiltrarVideosJquery(VideosView view) {
+            VideoRepository videoRepository = new VideoRepository();
+            VideosView videosView = new VideosView();
+            var lista = new List<video>();
+
+            lista = videoRepository.listarVideos();
+            if (!view.ArtistaPrincipal.Equals(0)) {
+                lista = lista.Where(v => v.video_artista.FirstOrDefault().id_artista == view.ArtistaPrincipal).ToList();
+            }
+            if (view.Artistas.Count > 0) {
+                lista = lista.Where(v => v.video_artista.Any(va => view.Artistas.Select(t => t.id).ToArray().Contains(va.id_artista))).ToList();
+            }
+            if (view.Musicas.Count > 0) {
+                lista = lista.Where(v => v.video_musica.Any(vm => view.Musicas.Select(t => t.id).ToArray().Contains(vm.id_musica))).ToList();
+            }
+            if (view.Tags.Count > 0) {
+                lista = lista.Where(v => v.video_tag.Any(vt => view.Tags.Select(t => t.id).ToArray().Contains(vt.id_tag))).ToList();
+            }
+            if (view.Tipos.Count > 0) {
+                lista = lista.Where(v => view.Tipos.Select(t=>t.id).ToArray().Contains(v.id_tipo)).ToList();
+            }
+
+            videosView.ListaVideos = lista.Distinct().ToList();
+
+            return PartialView("VideoListView", videosView);
+        }
+
+        public void GerarPlaylistJquery(VideosView view) {
+            VideoRepository videoRepository = new VideoRepository();
+            VideosView videosView = new VideosView();
+            var lista = new List<video>();
+
+            lista = videoRepository.listarVideos();
+            if (!view.ArtistaPrincipal.Equals(0)) {
+                lista = lista.Where(v => v.video_artista.FirstOrDefault().id_artista == view.ArtistaPrincipal).ToList();
+            }
+            if (view.Artistas.Count > 0) {
+                lista = lista.Where(v => v.video_artista.Any(va => view.Artistas.Select(t => t.id).ToArray().Contains(va.id_artista))).ToList();
+            }
+            if (view.Musicas.Count > 0) {
+                lista = lista.Where(v => v.video_musica.Any(vm => view.Musicas.Select(t => t.id).ToArray().Contains(vm.id_musica))).ToList();
+            }
+            if (view.Tags.Count > 0) {
+                lista = lista.Where(v => v.video_tag.Any(vt => view.Tags.Select(t => t.id).ToArray().Contains(vt.id_tag))).ToList();
+            }
+            if (view.Tipos.Count > 0) {
+                lista = lista.Where(v => view.Tipos.Select(t => t.id).ToArray().Contains(v.id_tipo)).ToList();
+            }
+            
+            Random rnd = new Random();
+            lista = lista.Distinct().OrderBy(item => rnd.Next()).ToList();
+
+            System.IO.File.WriteAllLines(@"K:\\ICI\\Vídeos\\kpop\\playlist.m3u", lista.Select(l=>l.caminho).ToArray());
+        }
+
+        public void AtualizarVideosJquery() {
+            List<string> listaArquivos = new List<string>();
+            string caminho = @"K:\ICI\Vídeos\kpop";
+            string[] pastas = Directory.GetDirectories(caminho, "*", System.IO.SearchOption.AllDirectories);
+            foreach (string pasta in pastas) {
+                string[] arquivos = Directory.GetFiles(pasta);
+                foreach (string arquivo in arquivos) {
+                    FileInfo dados = new FileInfo(arquivo);
+                    string[] extensoes = { ".mp4", ".mkv", ".ts", ".tp", ".avi" };
+                    if (extensoes.Contains(dados.Extension)) {
+                        listaArquivos.Add(arquivo);
+                    }
+                }
+            }
+
+            VideoRepository videoRepository = new VideoRepository();
+            foreach (var arquivo in listaArquivos) {
+                video video = videoRepository.findByCaminho(arquivo);
+                if (video == null) {
+                    videoRepository.salvar(arquivo);
+                }
+            }
+        }
+
+    }
 }
- 

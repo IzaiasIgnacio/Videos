@@ -50,3 +50,25 @@ textarea {
     float: left;
     margin-right: 5px;
 }
+
+.campo_filtro {
+    max-width: 70%;
+    float: left;
+    margin-right: 2px;
+}
+
+#div_filtros {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 0;
+    width: 100%;
+}
+
+#div_filtros .col-md-2 {
+    margin-bottom: 10px;
+}
+
+.topo {
+    float: right;
+    margin-bottom: 5px;
+}

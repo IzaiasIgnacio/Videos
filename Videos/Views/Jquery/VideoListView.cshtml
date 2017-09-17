@@ -1,0 +1,30 @@
+﻿@model Videos.Models.ViewModel.VideosView
+<div class="topo">
+    <label>@Model.ListaVideos.Count Vídeos</label>
+    <button type="button" class="btn btn-default atualizar_videos" aria-label="Atualizar">
+        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+    </button>
+</div>
+<table class="table table-striped table-hover table-condensed table-bordered">
+    <thead>
+        <tr>
+            <th>Artista</th>
+            <th>Título</th>
+            <th>Tipo</th>
+            <th>Data</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var video in Model.ListaVideos) {
+            <tr>
+                <td>@video.video_artista.FirstOrDefault().artista.nome</td>
+                <td class="coluna_titulo">
+                    <input type="hidden" class="id" value="@video.id" />
+                    @video.titulo
+                </td>
+                <td>@video.tipo.descricao</td>
+                <td>@video.data.Value.ToShortDateString()</td>
+            </tr>
+        }
+    </tbody>
+</table>

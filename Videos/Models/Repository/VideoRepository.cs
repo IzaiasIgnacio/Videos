@@ -20,7 +20,6 @@ namespace Videos.Models.Repository {
                            join video_artista in db.video_artista on video.id equals video_artista.id_video
                            join artista in db.artista on video_artista.id_artista equals artista.id
                            join tipo in db.tipo on video.id_tipo equals tipo.id
-                           where video_artista.principal == true
                            select video).OrderByDescending(video=>video.data).ToList();
                                 
             return listaVideos;
@@ -134,7 +133,7 @@ namespace Videos.Models.Repository {
             db.SaveChanges();
         }
 
-        public void salvar(string arquivo) {
+        public video salvar(string arquivo) {
             FileInfo dados = new FileInfo(arquivo);
             video video = new video();
 
@@ -148,6 +147,8 @@ namespace Videos.Models.Repository {
 
             db.video.Add(video);
             db.SaveChanges();
+
+            return video;
         }
 
         private tipo getTipoByCaminho(string caminho) {
@@ -167,8 +168,16 @@ namespace Videos.Models.Repository {
             return db.artista.Where(n => n.nome == split).FirstOrDefault();
         }
 
-        public bool findByCaminho(string caminho) {
-            return db.video.Where(v => v.caminho == caminho).Any();
+        public video findByCaminho(string caminho) {
+            return db.video.Where(v => v.caminho == caminho).FirstOrDefault();
+        }
+
+        public void adicionarVideoMusica(int id_video, int id_musica) {
+            if (!db.video_musica.Any(v => v.id_musica == id_musica && v.id_video == id_video)) {
+                video_musica vm = new video_musica { id_video = id_video, id_musica = id_musica };
+                db.video_musica.Add(vm);
+                db.SaveChanges();
+            }
         }
         
     }

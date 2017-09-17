@@ -296,6 +296,8 @@
     <Content Include="Views\Jquery\MusicaListView.cshtml" />
     <Content Include="Views\Jquery\ArtistaListView.cshtml" />
     <Content Include="Views\Jquery\VideoMetaDataView.cshtml" />
+    <Content Include="Views\Jquery\VideoListView.cshtml" />
+    <Content Include="Views\Jquery\TipoListView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

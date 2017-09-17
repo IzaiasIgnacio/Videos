@@ -10,13 +10,14 @@ using System.Text;
 using MediaToolkit.Model;
 using MediaToolkit;
 using MediaToolkit.Options;
+using Videos.Models.Services;
 
 namespace Videos.Tests {
 
     [TestClass]
     public class VideoTest {
 
-        [TestMethod]
+        /*[TestMethod]
         public void testeListaArquivos() {
             VideosView videoView = new VideosView();
             List<video> listaArquivos = new List<video>();
@@ -36,7 +37,7 @@ namespace Videos.Tests {
                 }
             }
             Assert.IsNotNull(listaArquivos);
-        }
+        }*/
 
         [TestMethod]
         public void testeListaPastasArtistas() {
@@ -52,7 +53,6 @@ namespace Videos.Tests {
 
         [TestMethod]
         public void testeAtualizarVideos() {
-            VideosView videoView = new VideosView();
             List<string> listaArquivos = new List<string>();
             string caminho = @"K:\ICI\Vídeos\kpop";
             string[] pastas = Directory.GetDirectories(caminho, "*", System.IO.SearchOption.AllDirectories);
@@ -69,7 +69,8 @@ namespace Videos.Tests {
 
             VideoRepository videoRepository = new VideoRepository();
             foreach (var arquivo in listaArquivos) {
-                if (!videoRepository.findByCaminho(arquivo)) {
+                video video = videoRepository.findByCaminho(arquivo);
+                if (video == null) {
                     videoRepository.salvar(arquivo);
                 }
             }
@@ -187,10 +188,11 @@ namespace Videos.Tests {
 
             List<musica> musicas = musicaRepository.Listar<musica>().Where(m => m.titulo.Length > 2).ToList();
             List<video> lista = videoRepository.listarVideos();
-            foreach (video video in lista) {
+            foreach (video video in lista.Distinct().ToList()) {
                 List<musica> resultado = musicas.Where(m => video.titulo.ToLower().Contains(m.titulo.ToLower())).ToList();
                 if (resultado != null) {
                     foreach (musica m in resultado) {
+                        videoRepository.adicionarVideoMusica(video.id, m.id);
                         System.Diagnostics.Debug.WriteLine(video.caminho + " " + m.titulo);
                     }
                 }

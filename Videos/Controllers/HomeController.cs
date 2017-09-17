@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Videos.Models.Entity;
 using Videos.Models.Repository;
@@ -28,11 +29,18 @@ namespace Videos.Controllers {
         }
 
         public ActionResult Videos() {
+            VideoDataView.init();
             VideoRepository videoRepository = new VideoRepository();
 
-            VideosView videosView = new VideosView();
-            videosView.listaVideos = videoRepository.listarVideos();
-
+            VideosView videosView = VideosView.init();
+            
+            List<video> lista = videoRepository.listarVideos();
+            videosView.ListaVideos = lista.Distinct().ToList();
+            videosView.ListaArtistas = videoRepository.Listar<artista>().OrderBy(a => a.nome).ToList();
+            videosView.ListaMusicas = videoRepository.Listar<musica>().OrderBy(a => a.titulo).ToList();
+            videosView.ListaTipos = videoRepository.Listar<tipo>().OrderBy(a => a.descricao).ToList();
+            videosView.ListaTags = videoRepository.Listar<tag>().OrderBy(a => a.nome).ToList();
+            
             return View(videosView);
         }
     }
