@@ -69,6 +69,7 @@ namespace Videos.Models.Repository {
                 FileInfo file = new FileInfo(video.caminho);
                 File.Move(video.caminho, file.DirectoryName +"\\"+ dados.Titulo+video.extensao);
                 video.titulo = dados.Titulo;
+                video.caminho = file.DirectoryName + "\\" + dados.Titulo + video.extensao;
             }
             video.duracao = dados.Duracao;
             video.resolucao = dados.Resolucao;

@@ -118,7 +118,7 @@ namespace Videos.Controllers {
                 lista = lista.Where(v => view.Tipos.Select(t=>t.id).ToArray().Contains(v.id_tipo)).ToList();
             }
 
-            videosView.ListaVideos = lista.Distinct().ToList();
+            videosView.ListaVideos = lista.Distinct().OrderBy(v => v.titulo).ToList();
 
             return PartialView("VideoListView", videosView);
         }
@@ -146,7 +146,7 @@ namespace Videos.Controllers {
             }
             
             Random rnd = new Random();
-            lista = lista.Distinct().OrderBy(item => rnd.Next()).ToList();
+            lista = lista.Distinct().OrderBy(v => rnd.Next()).ToList();
 
             System.IO.File.WriteAllLines(@"K:\\ICI\\Vídeos\\kpop\\playlist.m3u", lista.Select(l=>l.caminho).ToArray());
         }
@@ -159,8 +159,8 @@ namespace Videos.Controllers {
                 string[] arquivos = Directory.GetFiles(pasta);
                 foreach (string arquivo in arquivos) {
                     FileInfo dados = new FileInfo(arquivo);
-                    string[] extensoes = { ".mp4", ".mkv", ".ts", ".tp", ".avi" };
-                    if (extensoes.Contains(dados.Extension)) {
+                    string[] extensoes = { ".mp4", ".mkv", ".ts", ".tp", ".avi", ".vob" };
+                    if (extensoes.Contains(dados.Extension.ToLower())) {
                         listaArquivos.Add(arquivo);
                     }
                 }
@@ -173,6 +173,12 @@ namespace Videos.Controllers {
                     videoRepository.salvar(arquivo);
                 }
             }
+        }
+
+        public void PlayVideo(int id) {
+            VideoRepository videoRepository = new VideoRepository();
+            video video = videoRepository.getVideoById(id);
+            System.Diagnostics.Process.Start(video.caminho);
         }
 
     }

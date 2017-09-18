@@ -9,6 +9,10 @@
                 $("#modal_form_video").modal('show');
             });
         });
+        $("#tabela_videos").on("click", ".play", function() {
+            var id = $(this).closest('td').find('.id_play').val();
+            $.post('@Url.Action("PlayVideo", "Jquery")', { id: id });
+        });
         $("#div_filtros").on("click", ".add_artista", function() {
             $.post('@Url.Action("AdicionarArtistaJquery", "Jquery")', {id: $("#select_artistas").val(),
                 nome_artista: $("#select_artistas option:selected").text()

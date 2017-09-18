@@ -12,18 +12,31 @@
             <th>Título</th>
             <th>Tipo</th>
             <th>Data</th>
+            <th>Play</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var video in Model.ListaVideos) {
             <tr>
-                <td>@video.video_artista.FirstOrDefault().artista.nome</td>
+                <td width="12%">@video.video_artista.FirstOrDefault().artista.nome</td>
                 <td class="coluna_titulo">
                     <input type="hidden" class="id" value="@video.id" />
                     @video.titulo
+                    @if (video.video_tag.Count == 0) {
+                        <span class="glyphicon glyphicon-tag" style="font-size: 10px" aria-hidden="true"></span>
+                    }
+                    @if (video.video_musica.Count == 0) {
+                        <span class="glyphicon glyphicon-headphones" style="font-size: 10px" aria-hidden="true"></span>
+                    }
                 </td>
                 <td>@video.tipo.descricao</td>
                 <td>@video.data.Value.ToShortDateString()</td>
+                <td>
+                    <input type="hidden" class="id_play" value="@video.id" />
+                    <button type="button" class="btn btn-xs play" aria-label="Play">
+                        <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                    </button>
+                </td>
             </tr>
         }
     </tbody>

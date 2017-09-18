@@ -7,16 +7,20 @@
                 $("#lista_artistas").html(resposta);
             });
         });
-        $("#modal_form_video").on("click", ".add_musica", function () {
+        $("#modal_form_video").on("click", ".add_musica", function() {
+            var element = $(this).closest('div').find("input[name=musica]");
             $.post('@Url.Action("AdicionarMusicaJquery", "Jquery")', { titulo_musica: $(this).closest('div').find("input[name=musica]").val() },
             function(resposta) {
                 $("#lista_musicas").html(resposta);
+                element.val('');
             });
         });
         $("#modal_form_video").on("click", ".add_tag", function() {
-            $.post('@Url.Action("AdicionarTagJquery", "Jquery")', { nome_tag: $(this).closest('div').find("input[name=tag]").val() },
+            var element = $(this).closest('div').find("input[name=tag]");
+            $.post('@Url.Action("AdicionarTagJquery", "Jquery")', { nome_tag: element.val() },
             function(resposta) {
                 $("#lista_tags").html(resposta);
+                element.val('');
             });
         });
         $("#modal_form_video").on("click", ".salvar", function() {
