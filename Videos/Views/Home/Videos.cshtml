@@ -106,65 +106,70 @@
     </div>
 </div>
 <div class="col-md-12" id="div_filtros">
-    <form id="filtro">
-        <div class="col-md-2">
-            <label style="display:block">Artista principal</label>
-            @Html.DropDownListFor(model => Model.ArtistaPrincipal,
-           new SelectList(Model.ListaArtistas, "id", "nome", Model.ListaArtistas), "Artista", new { @class = "form-control" })
+    <div class="panel panel-default">
+        <div class="panel-heading">Filtros</div>
+        <div class="panel-body">
+            <form id="filtro">
+                <div class="col-md-2">
+                    <label style="display:block">Artista principal</label>
+                    @Html.DropDownListFor(model => Model.ArtistaPrincipal,
+                    new SelectList(Model.ListaArtistas, "id", "nome", Model.ListaArtistas), "Artista", new { @class = "form-control" })
+                </div>
+                <div class="col-md-2">
+                    <label style="display:block">Artistas</label>
+                    @Html.DropDownListFor(model => Model.ListaArtistas,
+                    new SelectList(Model.ListaArtistas, "id", "nome", Model.ListaArtistas), "Artista", new { @id = "select_artistas", @class = "form-control campo_filtro" })
+                    <button type="button" class="btn btn-default add_artista" aria-label="Adicionar">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    </button>
+                    <div id="lista_artistas"></div>
+                </div>
+                <div class="col-md-2">
+                    <label style="display:block">Músicas</label>
+                    <input type="text" name="musica" list="musicas" class="form-control campo_filtro" placeholder="Música">
+                    <datalist id="musicas">
+                        @foreach (var musica in Model.ListaMusicas) {
+                            <option value="@musica.titulo">@musica.titulo</option>
+                        }
+                    </datalist>
+                    <button type="button" class="btn btn-default add_musica" aria-label="Adicionar">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    </button>
+                    <div id="lista_musicas"></div>
+                </div>
+                <div class="col-md-2">
+                    <label style="display:block">Tags</label>
+                    <input type="text" name="tag" list="tags" class="form-control campo_filtro" placeholder="Tag">
+                    <datalist id="tags">
+                        @foreach (var tag in Model.ListaTags) {
+                            <option value="@tag.nome">@tag.nome</option>
+                        }
+                    </datalist>
+                    <button type="button" class="btn btn-default add_tag" aria-label="Adicionar">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    </button>
+                    <div id="lista_tags"></div>
+                </div>
+                <div class="col-md-2">
+                    <label style="display:block">Tipos</label>
+                    @Html.DropDownListFor(model => Model.ListaTipos,
+                    new SelectList(Model.ListaTipos, "id", "descricao", Model.ListaTipos), "Tipo", new { @id = "select_tipos", @class = "form-control campo_filtro" })
+                    <button type="button" class="btn btn-default add_tipo" aria-label="Adicionar">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    </button>
+                    <div id="lista_tipos"></div>
+                </div>
+                <div class="col-md-2" style="margin-top: 25px">
+                    <button type="button" class="btn btn-default filtrar" aria-label="Filtrar">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+                    <button type="button" class="btn btn-default playlist" aria-label="Gerar playlist">
+                        <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </form>
         </div>
-        <div class="col-md-2">
-            <label style="display:block">Artistas</label>
-            @Html.DropDownListFor(model => Model.ListaArtistas,
-           new SelectList(Model.ListaArtistas, "id", "nome", Model.ListaArtistas), "Artista", new { @id = "select_artistas", @class = "form-control campo_filtro" })
-            <button type="button" class="btn btn-default add_artista" aria-label="Adicionar">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-            </button>
-            <div id="lista_artistas"></div>
-        </div>
-        <div class="col-md-2">
-            <label style="display:block">Músicas</label>
-            <input type="text" name="musica" list="musicas" class="form-control campo_filtro" placeholder="Música">
-            <datalist id="musicas">
-                @foreach (var musica in Model.ListaMusicas) {
-                    <option value="@musica.titulo">@musica.titulo</option>
-                }
-            </datalist>
-            <button type="button" class="btn btn-default add_musica" aria-label="Adicionar">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-            </button>
-            <div id="lista_musicas"></div>
-        </div>
-        <div class="col-md-2">
-            <label style="display:block">Tags</label>
-            <input type="text" name="tag" list="tags" class="form-control campo_filtro" placeholder="Tag">
-            <datalist id="tags">
-                @foreach (var tag in Model.ListaTags) {
-                    <option value="@tag.nome">@tag.nome</option>
-                }
-            </datalist>
-            <button type="button" class="btn btn-default add_tag" aria-label="Adicionar">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-            </button>
-            <div id="lista_tags"></div>
-        </div>
-        <div class="col-md-2">
-            <label style="display:block">Tipos</label>
-            @Html.DropDownListFor(model => Model.ListaTipos,
-            new SelectList(Model.ListaTipos, "id", "descricao", Model.ListaTipos), "Tipo", new { @id = "select_tipos", @class = "form-control campo_filtro" })
-            <button type="button" class="btn btn-default add_tipo" aria-label="Adicionar">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-            </button>
-            <div id="lista_tipos"></div>
-        </div>
-        <div class="col-md-2" style="margin-top: 25px">
-            <button type="button" class="btn btn-default filtrar" aria-label="Filtrar">
-                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-            </button>
-            <button type="button" class="btn btn-default playlist" aria-label="Gerar playlist">
-                <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-            </button>
-        </div>
-    </form>
+    </div>
 </div>
 <br />
 <div id="tabela_videos">
