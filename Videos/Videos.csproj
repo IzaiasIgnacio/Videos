@@ -240,6 +240,7 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\tokenize2.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -271,6 +272,7 @@
       <DependentUpon>VideosModel.edmx</DependentUpon>
       <LastGenOutput>VideosModel.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\tokenize2.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

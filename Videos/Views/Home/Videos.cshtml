@@ -88,6 +88,44 @@
                 }
             });
         });
+        $('#select_artistas').tokenize2({
+            // specify if Tokenize2 will search from the begining of a string
+            searchFromStart: false,
+            // custom delimiter
+            delimiter: ';', //,
+            // custom placeholder text
+            placeholder: 'Artista', //false
+        });
+        $('#select_musicas').tokenize2({
+            // allow you to create custom tokens
+            tokensAllowCustom: true,
+            // specify if Tokenize2 will search from the begining of a string
+            searchFromStart: false,
+            // custom delimiter
+            delimiter: ';', //,
+            // custom placeholder text
+            placeholder: 'Música', //false
+        });
+        $('#select_tags').tokenize2({
+            // allow you to create custom tokens
+            tokensAllowCustom: true,
+            // specify if Tokenize2 will search from the begining of a string
+            searchFromStart: false,
+            // custom delimiter
+            delimiter: ';', //,
+            // custom placeholder text
+            placeholder: 'Tag', //false
+        });
+        $('#select_tipos').tokenize2({
+            // allow you to create custom tokens
+            tokensAllowCustom: true,
+            // specify if Tokenize2 will search from the begining of a string
+            searchFromStart: false,
+            // custom delimiter
+            delimiter: ';', //,
+            // custom placeholder text
+            placeholder: 'Tipos', //false
+        });
     });
 </script>
 <div class="modal fade" id="modal_form_video" role="dialog" tabindex="-1">
@@ -118,46 +156,23 @@
                 <div class="col-md-2">
                     <label style="display:block">Artistas</label>
                     @Html.DropDownListFor(model => Model.ListaArtistas,
-                    new SelectList(Model.ListaArtistas, "id", "nome", Model.ListaArtistas), "Artista", new { @id = "select_artistas", @class = "form-control campo_filtro" })
-                    <button type="button" class="btn btn-default add_artista" aria-label="Adicionar">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                    </button>
-                    <div id="lista_artistas"></div>
+                    new SelectList(Model.ListaArtistas, "id", "nome", Model.ListaArtistas), "Artista", new { @id = "select_artistas", @class = "form-control campo_filtro", @multiple = true })
                 </div>
                 <div class="col-md-2">
                     <label style="display:block">Músicas</label>
-                    <input type="text" name="musica" list="musicas" class="form-control campo_filtro" placeholder="Música">
-                    <datalist id="musicas">
-                        @foreach (var musica in Model.ListaMusicas) {
-                            <option value="@musica.titulo">@musica.titulo</option>
-                        }
-                    </datalist>
-                    <button type="button" class="btn btn-default add_musica" aria-label="Adicionar">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                    </button>
-                    <div id="lista_musicas"></div>
+                    @Html.DropDownListFor(model => Model.ListaMusicas,
+                    new SelectList(Model.ListaMusicas, "id", "titulo", Model.ListaMusicas), "Música", new { @id = "select_musicas", @class = "form-control campo_filtro", @multiple = true })
                 </div>
                 <div class="col-md-2">
                     <label style="display:block">Tags</label>
                     <input type="text" name="tag" list="tags" class="form-control campo_filtro" placeholder="Tag">
-                    <datalist id="tags">
-                        @foreach (var tag in Model.ListaTags) {
-                            <option value="@tag.nome">@tag.nome</option>
-                        }
-                    </datalist>
-                    <button type="button" class="btn btn-default add_tag" aria-label="Adicionar">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                    </button>
-                    <div id="lista_tags"></div>
+                    @Html.DropDownListFor(model => Model.ListaTags,
+                    new SelectList(Model.ListaTags, "id", "nome", Model.ListaTags), "Tag", new { @id = "select_tags", @class = "form-control campo_filtro", @multiple = true })
                 </div>
                 <div class="col-md-2">
                     <label style="display:block">Tipos</label>
                     @Html.DropDownListFor(model => Model.ListaTipos,
-                    new SelectList(Model.ListaTipos, "id", "descricao", Model.ListaTipos), "Tipo", new { @id = "select_tipos", @class = "form-control campo_filtro" })
-                    <button type="button" class="btn btn-default add_tipo" aria-label="Adicionar">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                    </button>
-                    <div id="lista_tipos"></div>
+                    new SelectList(Model.ListaTipos, "id", "descricao", Model.ListaTipos), "Tipo", new { @id = "select_tipos", @class = "form-control campo_filtro", @multiple = true })
                 </div>
                 <div class="col-md-2" style="margin-top: 25px">
                     <button type="button" class="btn btn-default filtrar" aria-label="Filtrar">
