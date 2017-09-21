@@ -49,7 +49,7 @@
             jQuery.each(array, function() {
                 json[this.name] = this.value || '';
             });
-
+            
             $.ajax({
                 url: '@Url.Action("FiltrarVideosJquery", "Jquery")',
                 type: 'POST',
@@ -67,7 +67,7 @@
             jQuery.each(array, function() {
                 json[this.name] = this.value || '';
             });
-
+            
             $.ajax({
                 url: '@Url.Action("GerarPlaylistJquery", "Jquery")',
                 type: 'POST',
@@ -156,23 +156,26 @@
                 <div class="col-md-2">
                     <label style="display:block">Artistas</label>
                     @Html.DropDownListFor(model => Model.ListaArtistas,
-                    new SelectList(Model.ListaArtistas, "id", "nome", Model.ListaArtistas), "Artista", new { @id = "select_artistas", @class = "form-control campo_filtro", @multiple = true })
+                    new SelectList(Model.ListaArtistas, "nome", "nome", Model.ListaArtistas), "Artista", new { @id = "select_artistas",
+                    @class = "form-control campo_filtro", @multiple = true })
                 </div>
                 <div class="col-md-2">
                     <label style="display:block">Músicas</label>
                     @Html.DropDownListFor(model => Model.ListaMusicas,
-                    new SelectList(Model.ListaMusicas, "id", "titulo", Model.ListaMusicas), "Música", new { @id = "select_musicas", @class = "form-control campo_filtro", @multiple = true })
+                    new SelectList(Model.ListaMusicas, "titulo", "titulo", Model.ListaMusicas), "Música", new { @id = "select_musicas",
+                    @class = "form-control campo_filtro", @multiple = true })
                 </div>
                 <div class="col-md-2">
                     <label style="display:block">Tags</label>
-                    <input type="text" name="tag" list="tags" class="form-control campo_filtro" placeholder="Tag">
                     @Html.DropDownListFor(model => Model.ListaTags,
-                    new SelectList(Model.ListaTags, "id", "nome", Model.ListaTags), "Tag", new { @id = "select_tags", @class = "form-control campo_filtro", @multiple = true })
+                    new SelectList(Model.ListaTags, "nome", "nome", Model.ListaTags), "Tag", new { @id = "select_tags",
+                    @class = "form-control campo_filtro", @multiple = true })
                 </div>
                 <div class="col-md-2">
                     <label style="display:block">Tipos</label>
                     @Html.DropDownListFor(model => Model.ListaTipos,
-                    new SelectList(Model.ListaTipos, "id", "descricao", Model.ListaTipos), "Tipo", new { @id = "select_tipos", @class = "form-control campo_filtro", @multiple = true })
+                    new SelectList(Model.ListaTipos, "descricao", "descricao", Model.ListaTipos), "Tipo", new { @id = "select_tipos",
+                    @class = "form-control campo_filtro", @multiple = true })
                 </div>
                 <div class="col-md-2" style="margin-top: 25px">
                     <button type="button" class="btn btn-default filtrar" aria-label="Filtrar">
