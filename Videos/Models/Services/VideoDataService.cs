@@ -16,25 +16,27 @@ namespace Videos.Models.Services {
         List<string> thumbs;
 
         public VideoDataService() {
-            view = new VideoDataView();
+            view = VideoDataView.GetVideoDataView();
         }
 
         public VideoDataView getVideoMetaData(int id) {
             VideoRepository videoRepository = new VideoRepository();
             video video = videoRepository.getVideoById(id);
 
-            var inputFile = new MediaFile { Filename = video.caminho };
+            if (File.Exists(video.caminho)) {
+                var inputFile = new MediaFile { Filename = video.caminho };
 
-            using (var engine = new Engine()) {
-                engine.GetMetadata(inputFile);
-                view.Id = id;
-                view.ArtistaPrincipal = video.video_artista.Where(a => a.principal = true).FirstOrDefault().artista.nome;
-                view.Duracao = inputFile.Metadata.Duration.ToString().Substring(0, 8);
-                view.Resolucao = inputFile.Metadata.VideoData.FrameSize;
-                view.FormatoVideo = inputFile.Metadata.VideoData.Format;
-                view.Fps = inputFile.Metadata.VideoData.Fps.ToString();
-                view.CanaisAudio = inputFile.Metadata.AudioData.ChannelOutput;
-                view.FormatoAudio = inputFile.Metadata.AudioData.Format;
+                using (var engine = new Engine()) {
+                    engine.GetMetadata(inputFile);
+                    view.Id = id;
+                    view.ArtistaPrincipal = video.video_artista.Where(a => a.principal = true).FirstOrDefault().artista.nome;
+                    view.Duracao = inputFile.Metadata.Duration.ToString().Substring(0, 8);
+                    view.Resolucao = inputFile.Metadata.VideoData.FrameSize;
+                    view.FormatoVideo = inputFile.Metadata.VideoData.Format;
+                    view.Fps = inputFile.Metadata.VideoData.Fps.ToString();
+                    view.CanaisAudio = inputFile.Metadata.AudioData.ChannelOutput;
+                    view.FormatoAudio = inputFile.Metadata.AudioData.Format;
+                }
             }
 
             return view;
@@ -60,19 +62,21 @@ namespace Videos.Models.Services {
         }
 
         private void GerarThumbs(video video) {
-            var inputFile = new MediaFile { Filename = video.caminho };
+            if (File.Exists(video.caminho)) {
+                var inputFile = new MediaFile { Filename = video.caminho };
 
-            using (var engine = new Engine()) {
-                engine.GetMetadata(inputFile);
-                string duracao = inputFile.Metadata.Duration.ToString().Substring(0, 8);
-                
-                double seconds = TimeSpan.Parse(duracao).TotalSeconds;
-                seconds = seconds * 90 / 100;
-                for (int i = 1; i <= 6; i++) {
-                    var outputFile = new MediaFile { Filename = view.pastaCapturas + video.id + @"_captura_" + seconds / i + ".jpg" };
-                    var options = new ConversionOptions { Seek = TimeSpan.FromSeconds(seconds / i) };
-                    engine.GetThumbnail(inputFile, outputFile, options);
-                    thumbs.Add(video.id + @"_captura_" + seconds / i + ".jpg");
+                using (var engine = new Engine()) {
+                    engine.GetMetadata(inputFile);
+                    string duracao = inputFile.Metadata.Duration.ToString().Substring(0, 8);
+
+                    double seconds = TimeSpan.Parse(duracao).TotalSeconds;
+                    seconds = seconds * 90 / 100;
+                    for (int i = 1; i <= 6; i++) {
+                        var outputFile = new MediaFile { Filename = view.pastaCapturas + video.id + @"_captura_" + seconds / i + ".jpg" };
+                        var options = new ConversionOptions { Seek = TimeSpan.FromSeconds(seconds / i) };
+                        engine.GetThumbnail(inputFile, outputFile, options);
+                        thumbs.Add(video.id + @"_captura_" + seconds / i + ".jpg");
+                    }
                 }
             }
         }

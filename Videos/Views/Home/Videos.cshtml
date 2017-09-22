@@ -59,22 +59,34 @@
                 }
             });
         });
+        $('#select_artista_principal').tokenize2({
+            searchFromStart: false,
+            delimiter: ';', //,
+            tokensMaxItems: 1,
+            placeholder: 'Artista Principal' //false
+        });
+        $('#select_artista_principal').on('tokenize:select', function (e, value) {
+            $(this).tokenize2().trigger('tokenize:search', [$(this).tokenize2().input.val()]);
+        });
         $('#select_artistas').tokenize2({
             searchFromStart: false,
             delimiter: ';', //,
             placeholder: 'Artista' //false
         });
         $('#select_artistas').on('tokenize:tokens:add', function (e, value, text) {
-            $.post('@Url.Action("AdicionarArtistaJquery", "Jquery")', { id: value, nome_artista: text },
+            $.post('@Url.Action("AdicionarArtistaJquery", "Jquery")', { id: value, nome_artista: text, model: "@Model.GetType().Name" },
             function (resposta) {
                 $("#div_filtros #lista_artistas").html(resposta);
             });
         });
         $('#select_artistas').on('tokenize:tokens:remove', function (e, value) {
-            $.post('@Url.Action("RemoverArtistaJquery", "Jquery")', { id: value },
+            $.post('@Url.Action("RemoverArtistaJquery", "Jquery")', { id: value, model: "@Model.GetType().Name" },
             function (resposta) {
                 $("#div_filtros #lista_artistas").html(resposta);
             });
+        });
+        $('#select_artistas').on('tokenize:select', function (e, value) {
+            $(this).tokenize2().trigger('tokenize:search', [$(this).tokenize2().input.val()]);
         });
         $('#select_musicas').tokenize2({
             searchFromStart: false,
@@ -82,13 +94,13 @@
             placeholder: 'Música' //false
         });
         $('#select_musicas').on('tokenize:tokens:add', function (e, value) {
-            $.post('@Url.Action("AdicionarMusicaJquery", "Jquery")', { titulo_musica: value },
+            $.post('@Url.Action("AdicionarMusicaJquery", "Jquery")', { titulo_musica: value, model: "@Model.GetType().Name" },
             function (resposta) {
                 $("#div_filtros #lista_musicas").html(resposta);
             });
         });
         $('#select_musicas').on('tokenize:tokens:remove', function (e, value) {
-            $.post('@Url.Action("RemoverMusicaJquery", "Jquery")', { id: value },
+            $.post('@Url.Action("RemoverMusicaJquery", "Jquery")', { id: value, model: "@Model.GetType().Name" },
             function (resposta) {
                 $("#div_filtros #lista_musicas").html(resposta);
             });
@@ -99,13 +111,13 @@
             placeholder: 'Tag' //false
         });
         $('#select_tags').on('tokenize:tokens:add', function (e, value) {
-            $.post('@Url.Action("AdicionarTagJquery", "Jquery")', { nome_tag: value },
+            $.post('@Url.Action("AdicionarTagJquery", "Jquery")', { nome_tag: value, model: "@Model.GetType().Name" },
             function (resposta) {
                 $("#div_filtros #lista_tags").html(resposta);
             });
         });
         $('#select_tags').on('tokenize:tokens:remove', function (e, value) {
-            $.post('@Url.Action("RemoverTagJquery", "Jquery")', { id: value },
+            $.post('@Url.Action("RemoverTagJquery", "Jquery")', { id: value, model: "@Model.GetType().Name" },
             function (resposta) {
                 $("#div_filtros #lista_tags").html(resposta);
             });
@@ -117,13 +129,13 @@
             placeholder: false
         });
         $('#select_tipos').on('tokenize:tokens:add', function (e, value, text) {
-            $.post('@Url.Action("AdicionarTipoJquery", "Jquery")', { id: value, descricao: text },
+            $.post('@Url.Action("AdicionarTipoJquery", "Jquery")', { id: value, descricao: text, model: "@Model.GetType().Name" },
             function (resposta) {
                 $("#div_filtros #lista_tipos").html(resposta);
             });
         });
         $('#select_tipos').on('tokenize:tokens:remove', function (e, value) {
-            $.post('@Url.Action("RemoverTipoJquery", "Jquery")', { id: value },
+            $.post('@Url.Action("RemoverTipoJquery", "Jquery")', { id: value, model: "@Model.GetType().Name" },
             function (resposta) {
                 $("#div_filtros #lista_tipos").html(resposta);
             });
@@ -156,12 +168,13 @@
                 <div class="col-md-4">
                     <label style="display:block">Artista principal</label>
                     @Html.DropDownListFor(model => Model.ArtistaPrincipal,
-                    new SelectList(Model.ListaArtistas, "id", "nome", Model.ListaArtistas), "Artista", new { @class = "form-control" })
+                    new SelectList(Model.ListaArtistas, "id", "nome", Model.ListaArtistas), null, new { @id = "select_artista_principal", @class = "form-control campo_filtro", @multiple = true })
                 </div>
                 <div class="col-md-4">
                     <label style="display:block">Artistas</label>
                     @Html.DropDownListFor(model => Model.ListaArtistas,
                     new SelectList(Model.ListaArtistas, "id", "nome", Model.ListaArtistas), null, new { @id = "select_artistas", @class = "form-control campo_filtro", @multiple = true })
+                    <div id="lista_artistas" style="display: none"></div>
                 </div>
                 <div class="col-md-4">
                     <label style="display:block">Tipos</label>

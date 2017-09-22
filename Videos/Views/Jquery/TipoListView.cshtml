@@ -1,4 +1,4 @@
-﻿@model Videos.Models.ViewModel.VideosView
+﻿@model Videos.Models.ViewModel.BaseVideoView
 @for (int i = 0; i < Model.Tipos.Count; i++) {
     <div>
         @Html.HiddenFor(model => Model.Tipos[i].id, new { @Value = Model.Tipos[i].id })

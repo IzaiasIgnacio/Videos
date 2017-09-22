@@ -50,66 +50,80 @@ namespace Videos.Controllers {
             return PartialView("FormVideoView", videoDataView);
         }
 
-        public ActionResult AdicionarArtistaJquery(int id, string nome_artista) {
-            VideoDataView videoDataView = VideoDataView.GetVideoDataView();
-            videoDataView.Artistas.Add(new artista { id = id, nome = nome_artista });
+        private BaseVideoView getView(string model) {
+            BaseVideoView view;
 
-            return PartialView("ArtistaListView", videoDataView);
+            if (model == "VideosView") {
+                view = VideosView.GetVideosView();
+            }
+            else {
+                view = VideoDataView.GetVideoDataView();
+            }
+
+            return view;
         }
 
-        public ActionResult RemoverArtistaJquery(int id) {
-            VideoDataView videoDataView = VideoDataView.GetVideoDataView();
-            videoDataView.Artistas.Remove(videoDataView.Artistas.Single(a => a.id == id));
+        public ActionResult AdicionarArtistaJquery(int id, string nome_artista, string model) {
+            BaseVideoView view = getView(model);
+            view.Artistas.Add(new artista { id = id, nome = nome_artista });
 
-            return PartialView("ArtistaListView", videoDataView);
+            return PartialView("ArtistaListView", view);
         }
 
-        public ActionResult AdicionarMusicaJquery(string titulo_musica) {
+        public ActionResult RemoverArtistaJquery(int id, string model) {
+            BaseVideoView view = getView(model);
+            view.Artistas.Remove(view.Artistas.Single(a => a.id == id));
+
+            return PartialView("ArtistaListView", view);
+        }
+
+        public ActionResult AdicionarMusicaJquery(string titulo_musica, string model) {
+            BaseVideoView view = getView(model);
+
             MusicaRepository musicaRepository = new MusicaRepository();
             musica musica = musicaRepository.GetMusicaByTitulo(titulo_musica);
+            
+            view.Musicas.Add(musica);
 
-            VideoDataView videoDataView = VideoDataView.GetVideoDataView();
-            videoDataView.Musicas.Add(musica);
-
-            return PartialView("MusicaListView", videoDataView);
+            return PartialView("MusicaListView", view);
         }
 
-        public ActionResult RemoverMusicaJquery(int id) {
-            VideoDataView videoDataView = VideoDataView.GetVideoDataView();
-            videoDataView.Musicas.Remove(videoDataView.Musicas.Single(m => m.id == id));
+        public ActionResult RemoverMusicaJquery(int id, string model) {
+            BaseVideoView view = getView(model);
+            view.Musicas.Remove(view.Musicas.Single(m => m.id == id));
 
-            return PartialView("MusicaListView", videoDataView);
+            return PartialView("MusicaListView", view);
         }
 
-        public ActionResult AdicionarTagJquery(string nome_tag) {
+        public ActionResult AdicionarTagJquery(string nome_tag, string model) {
+            BaseVideoView view = getView(model);
             TagRepository tagRepository = new TagRepository();
             tag tag = tagRepository.GetTagByNome(nome_tag);
 
-            VideoDataView videoDataView = VideoDataView.GetVideoDataView();
-            videoDataView.Tags.Add(tag);
+            view.Tags.Add(tag);
 
-            return PartialView("TagListView", videoDataView);
+            return PartialView("TagListView", view);
         }
 
-        public ActionResult RemoverTagJquery(int id) {
-            VideoDataView videoDataView = VideoDataView.GetVideoDataView();
-            videoDataView.Tags.Remove(videoDataView.Tags.Single(t => t.id == id));
+        public ActionResult RemoverTagJquery(int id, string model) {
+            BaseVideoView view = getView(model);
+            view.Tags.Remove(view.Tags.Single(t => t.id == id));
 
-            return PartialView("TagListView", videoDataView);
+            return PartialView("TagListView", view);
         }
 
         public ActionResult AdicionarTipoJquery(int id, string descricao) {
-            VideosView videosView = VideosView.GetVideosView();
-            videosView.Tipos.Add(new tipo { id = id, descricao = descricao });
+            BaseVideoView view = getView("VideosView");
+            view.Tipos.Add(new tipo { id = id, descricao = descricao });
 
-            return PartialView("TipoListView", videosView);
+            return PartialView("TipoListView", view);
         }
 
         public ActionResult RemoverTipoJquery(int id) {
-            VideosView videosView = VideosView.GetVideosView();
-            videosView.Tipos.Remove(videosView.Tipos.Single(t => t.id == id));
+            BaseVideoView view = getView("VideosView");
+            view.Tipos.Remove(view.Tipos.Single(t => t.id == id));
 
-            return PartialView("TipoListView", videosView);
+            return PartialView("TipoListView", view);
         }
 
         public void SalvarVideoJquery(VideoDataView dados) {
