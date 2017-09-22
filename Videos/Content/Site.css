@@ -68,3 +68,7 @@ textarea {
     float: right;
     margin-bottom: 5px;
 }
+
+#div_filtros .panel-body {
+    padding: 5px;
+}

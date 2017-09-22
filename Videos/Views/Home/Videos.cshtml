@@ -77,7 +77,6 @@
             });
         });
         $('#select_musicas').tokenize2({
-            tokensAllowCustom: true,
             searchFromStart: false,
             delimiter: ';', //,
             placeholder: 'Música' //false
@@ -95,7 +94,6 @@
             });
         });
         $('#select_tags').tokenize2({
-            tokensAllowCustom: true,
             searchFromStart: false,
             delimiter: ';', //,
             placeholder: 'Tag' //false
@@ -158,7 +156,7 @@
                 <div class="col-md-4">
                     <label style="display:block">Artista principal</label>
                     @Html.DropDownListFor(model => Model.ArtistaPrincipal,
-                    new SelectList(Model.ListaArtistas, "id", "nome", Model.ListaArtistas), null, new { @class = "form-control" })
+                    new SelectList(Model.ListaArtistas, "id", "nome", Model.ListaArtistas), "Artista", new { @class = "form-control" })
                 </div>
                 <div class="col-md-4">
                     <label style="display:block">Artistas</label>
@@ -175,13 +173,13 @@
                 <div class="col-md-4">
                     <label style="display:block">Músicas</label>
                     @Html.DropDownListFor(model => Model.ListaMusicas,
-                    new SelectList(Model.ListaMusicas, "id", "titulo", Model.ListaMusicas), null, new { @id = "select_musicas", @class = "form-control campo_filtro", @multiple = true })
+                    new SelectList(Model.ListaMusicas, "titulo", "titulo", Model.ListaMusicas), null, new { @id = "select_musicas", @class = "form-control campo_filtro", @multiple = true })
                     <div id="lista_musicas" style="display: none"></div>
                 </div>
                 <div class="col-md-4">
                     <label style="display:block">Tags</label>
                     @Html.DropDownListFor(model => Model.ListaTags,
-                    new SelectList(Model.ListaTags, "id", "nome", Model.ListaTags), null, new { @id = "select_tags", @class = "form-control campo_filtro", @multiple = true })
+                    new SelectList(Model.ListaTags, "nome", "nome", Model.ListaTags), null, new { @id = "select_tags", @class = "form-control campo_filtro", @multiple = true })
                     <div id="lista_tags" style="display: none"></div>
                 </div>
                 <div class="col-md-4" style="margin-top: 25px">
@@ -196,7 +194,6 @@
         </div>
     </div>
 </div>
-<br />
 <div id="tabela_videos">
     @{Html.RenderPartial("/Views/Jquery/VideoListView.cshtml",Model);}
 </div>
