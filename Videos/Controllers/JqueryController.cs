@@ -57,12 +57,26 @@ namespace Videos.Controllers {
             return PartialView("ArtistaListView", videoDataView);
         }
 
+        public ActionResult RemoverArtistaJquery(int id) {
+            VideoDataView videoDataView = VideoDataView.GetVideoDataView();
+            videoDataView.Artistas.Remove(videoDataView.Artistas.Single(a => a.id == id));
+
+            return PartialView("ArtistaListView", videoDataView);
+        }
+
         public ActionResult AdicionarMusicaJquery(string titulo_musica) {
             MusicaRepository musicaRepository = new MusicaRepository();
             musica musica = musicaRepository.GetMusicaByTitulo(titulo_musica);
 
             VideoDataView videoDataView = VideoDataView.GetVideoDataView();
             videoDataView.Musicas.Add(musica);
+
+            return PartialView("MusicaListView", videoDataView);
+        }
+
+        public ActionResult RemoverMusicaJquery(int id) {
+            VideoDataView videoDataView = VideoDataView.GetVideoDataView();
+            videoDataView.Musicas.Remove(videoDataView.Musicas.Single(m => m.id == id));
 
             return PartialView("MusicaListView", videoDataView);
         }
@@ -77,9 +91,23 @@ namespace Videos.Controllers {
             return PartialView("TagListView", videoDataView);
         }
 
+        public ActionResult RemoverTagJquery(int id) {
+            VideoDataView videoDataView = VideoDataView.GetVideoDataView();
+            videoDataView.Tags.Remove(videoDataView.Tags.Single(t => t.id == id));
+
+            return PartialView("TagListView", videoDataView);
+        }
+
         public ActionResult AdicionarTipoJquery(int id, string descricao) {
             VideosView videosView = VideosView.GetVideosView();
             videosView.Tipos.Add(new tipo { id = id, descricao = descricao });
+
+            return PartialView("TipoListView", videosView);
+        }
+
+        public ActionResult RemoverTipoJquery(int id) {
+            VideosView videosView = VideosView.GetVideosView();
+            videosView.Tipos.Remove(videosView.Tipos.Single(t => t.id == id));
 
             return PartialView("TipoListView", videosView);
         }

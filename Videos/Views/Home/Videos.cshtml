@@ -13,35 +13,6 @@
             var id = $(this).closest('td').find('.id_play').val();
             $.post('@Url.Action("PlayVideo", "Jquery")', { id: id });
         });
-        $("#div_filtros").on("click", ".add_artista", function() {
-            $.post('@Url.Action("AdicionarArtistaJquery", "Jquery")', {id: $("#select_artistas").val(),
-                nome_artista: $("#select_artistas option:selected").text()
-            },
-            function(resposta) {
-                $("#div_filtros #lista_artistas").html(resposta);
-            });
-        });
-        $("#div_filtros").on("click", ".add_musica", function() {
-            $.post('@Url.Action("AdicionarMusicaJquery", "Jquery")', { titulo_musica: $(this).closest('div').find("input[name=musica]").val() },
-            function(resposta) {
-                $("#div_filtros #lista_musicas").html(resposta);
-            });
-        });
-        $("#div_filtros").on("click", ".add_tag", function() {
-            $.post('@Url.Action("AdicionarTagJquery", "Jquery")', { nome_tag: $(this).closest('div').find("input[name=tag]").val() },
-            function(resposta) {
-                $("#div_filtros #lista_tags").html(resposta);
-            });
-        });
-        $("#div_filtros").on("click", ".add_tipo", function() {
-            $.post('@Url.Action("AdicionarTipoJquery", "Jquery")', {
-                id: $("#select_tipos").val(),
-                descricao: $("#select_tipos option:selected").text()
-            },
-            function(resposta) {
-                $("#div_filtros #lista_tipos").html(resposta);
-            });
-        });
         $("#div_filtros").on("click", ".filtrar", function() {
             var array = $("#filtro").serializeArray();
             var json = {};
@@ -49,7 +20,7 @@
             jQuery.each(array, function() {
                 json[this.name] = this.value || '';
             });
-            
+
             $.ajax({
                 url: '@Url.Action("FiltrarVideosJquery", "Jquery")',
                 type: 'POST',
@@ -67,7 +38,7 @@
             jQuery.each(array, function() {
                 json[this.name] = this.value || '';
             });
-            
+
             $.ajax({
                 url: '@Url.Action("GerarPlaylistJquery", "Jquery")',
                 type: 'POST',
@@ -89,42 +60,78 @@
             });
         });
         $('#select_artistas').tokenize2({
-            // specify if Tokenize2 will search from the begining of a string
             searchFromStart: false,
-            // custom delimiter
             delimiter: ';', //,
-            // custom placeholder text
-            placeholder: 'Artista', //false
+            placeholder: 'Artista' //false
+        });
+        $('#select_artistas').on('tokenize:tokens:add', function (e, value, text) {
+            $.post('@Url.Action("AdicionarArtistaJquery", "Jquery")', { id: value, nome_artista: text },
+            function (resposta) {
+                $("#div_filtros #lista_artistas").html(resposta);
+            });
+        });
+        $('#select_artistas').on('tokenize:tokens:remove', function (e, value) {
+            $.post('@Url.Action("RemoverArtistaJquery", "Jquery")', { id: value },
+            function (resposta) {
+                $("#div_filtros #lista_artistas").html(resposta);
+            });
         });
         $('#select_musicas').tokenize2({
-            // allow you to create custom tokens
             tokensAllowCustom: true,
-            // specify if Tokenize2 will search from the begining of a string
             searchFromStart: false,
-            // custom delimiter
             delimiter: ';', //,
-            // custom placeholder text
-            placeholder: 'Música', //false
+            placeholder: 'Música' //false
+        });
+        $('#select_musicas').on('tokenize:tokens:add', function (e, value) {
+            $.post('@Url.Action("AdicionarMusicaJquery", "Jquery")', { titulo_musica: value },
+            function (resposta) {
+                $("#div_filtros #lista_musicas").html(resposta);
+            });
+        });
+        $('#select_musicas').on('tokenize:tokens:remove', function (e, value) {
+            $.post('@Url.Action("RemoverMusicaJquery", "Jquery")', { id: value },
+            function (resposta) {
+                $("#div_filtros #lista_musicas").html(resposta);
+            });
         });
         $('#select_tags').tokenize2({
-            // allow you to create custom tokens
             tokensAllowCustom: true,
-            // specify if Tokenize2 will search from the begining of a string
             searchFromStart: false,
-            // custom delimiter
             delimiter: ';', //,
-            // custom placeholder text
-            placeholder: 'Tag', //false
+            placeholder: 'Tag' //false
+        });
+        $('#select_tags').on('tokenize:tokens:add', function (e, value) {
+            $.post('@Url.Action("AdicionarTagJquery", "Jquery")', { nome_tag: value },
+            function (resposta) {
+                $("#div_filtros #lista_tags").html(resposta);
+            });
+        });
+        $('#select_tags').on('tokenize:tokens:remove', function (e, value) {
+            $.post('@Url.Action("RemoverTagJquery", "Jquery")', { id: value },
+            function (resposta) {
+                $("#div_filtros #lista_tags").html(resposta);
+            });
         });
         $('#select_tipos').tokenize2({
-            // allow you to create custom tokens
-            tokensAllowCustom: true,
-            // specify if Tokenize2 will search from the begining of a string
+            tokensAllowCustom: false,
             searchFromStart: false,
-            // custom delimiter
             delimiter: ';', //,
-            // custom placeholder text
-            placeholder: 'Tipos', //false
+            placeholder: false
+        });
+        $('#select_tipos').on('tokenize:tokens:add', function (e, value, text) {
+            $.post('@Url.Action("AdicionarTipoJquery", "Jquery")', { id: value, descricao: text },
+            function (resposta) {
+                $("#div_filtros #lista_tipos").html(resposta);
+            });
+        });
+        $('#select_tipos').on('tokenize:tokens:remove', function (e, value) {
+            $.post('@Url.Action("RemoverTipoJquery", "Jquery")', { id: value },
+            function (resposta) {
+                $("#div_filtros #lista_tipos").html(resposta);
+            });
+        });
+        $('#select_tipos').on('tokenize:select', function (e, value) {
+            $(this).tokenize2().trigger('tokenize:search', [$(this).tokenize2().input.val()]);
         });
     });
 </script>
@@ -148,36 +155,36 @@
         <div class="panel-heading">Filtros</div>
         <div class="panel-body">
             <form id="filtro">
-                <div class="col-md-2">
+                <div class="col-md-4">
                     <label style="display:block">Artista principal</label>
                     @Html.DropDownListFor(model => Model.ArtistaPrincipal,
-                    new SelectList(Model.ListaArtistas, "id", "nome", Model.ListaArtistas), "Artista", new { @class = "form-control" })
+                    new SelectList(Model.ListaArtistas, "id", "nome", Model.ListaArtistas), null, new { @class = "form-control" })
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-4">
                     <label style="display:block">Artistas</label>
                     @Html.DropDownListFor(model => Model.ListaArtistas,
-                    new SelectList(Model.ListaArtistas, "nome", "nome", Model.ListaArtistas), "Artista", new { @id = "select_artistas",
-                    @class = "form-control campo_filtro", @multiple = true })
+                    new SelectList(Model.ListaArtistas, "id", "nome", Model.ListaArtistas), null, new { @id = "select_artistas", @class = "form-control campo_filtro", @multiple = true })
                 </div>
-                <div class="col-md-2">
-                    <label style="display:block">Músicas</label>
-                    @Html.DropDownListFor(model => Model.ListaMusicas,
-                    new SelectList(Model.ListaMusicas, "titulo", "titulo", Model.ListaMusicas), "Música", new { @id = "select_musicas",
-                    @class = "form-control campo_filtro", @multiple = true })
-                </div>
-                <div class="col-md-2">
-                    <label style="display:block">Tags</label>
-                    @Html.DropDownListFor(model => Model.ListaTags,
-                    new SelectList(Model.ListaTags, "nome", "nome", Model.ListaTags), "Tag", new { @id = "select_tags",
-                    @class = "form-control campo_filtro", @multiple = true })
-                </div>
-                <div class="col-md-2">
+                <div class="col-md-4">
                     <label style="display:block">Tipos</label>
                     @Html.DropDownListFor(model => Model.ListaTipos,
-                    new SelectList(Model.ListaTipos, "descricao", "descricao", Model.ListaTipos), "Tipo", new { @id = "select_tipos",
-                    @class = "form-control campo_filtro", @multiple = true })
+                    new SelectList(Model.ListaTipos, "id", "descricao", Model.ListaTipos), null, new { @id = "select_tipos", @class = "form-control campo_filtro", @multiple = true })
+                    <div id="lista_tipos" style="display: none"></div>
                 </div>
-                <div class="col-md-2" style="margin-top: 25px">
+                <div id="lista_artistas" style="display: none"></div>
+                <div class="col-md-4">
+                    <label style="display:block">Músicas</label>
+                    @Html.DropDownListFor(model => Model.ListaMusicas,
+                    new SelectList(Model.ListaMusicas, "id", "titulo", Model.ListaMusicas), null, new { @id = "select_musicas", @class = "form-control campo_filtro", @multiple = true })
+                    <div id="lista_musicas" style="display: none"></div>
+                </div>
+                <div class="col-md-4">
+                    <label style="display:block">Tags</label>
+                    @Html.DropDownListFor(model => Model.ListaTags,
+                    new SelectList(Model.ListaTags, "id", "nome", Model.ListaTags), null, new { @id = "select_tags", @class = "form-control campo_filtro", @multiple = true })
+                    <div id="lista_tags" style="display: none"></div>
+                </div>
+                <div class="col-md-4" style="margin-top: 25px">
                     <button type="button" class="btn btn-default filtrar" aria-label="Filtrar">
                         <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                     </button>
