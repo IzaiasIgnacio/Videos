@@ -1,28 +1,6 @@
 ﻿@model Videos.Models.ViewModel.VideoDataView
 <script>
     $(function() {
-        $("#modal_form_video").on("click", ".add_artista", function() {
-            $.post('@Url.Action("AdicionarArtistaJquery", "Jquery")', { id: $("#ListaArtistas").val(), nome_artista: $("#ListaArtistas option:selected").text(), model: "@Model.GetType().Name" },
-            function(resposta) {
-                $("#lista_artistas").html(resposta);
-            });
-        });
-        $("#modal_form_video").on("click", ".add_musica", function() {
-            var element = $(this).closest('div').find("input[name=musica]");
-            $.post('@Url.Action("AdicionarMusicaJquery", "Jquery")', { titulo_musica: $(this).closest('div').find("input[name=musica]").val(), model: "@Model.GetType().Name" },
-            function(resposta) {
-                $("#lista_musicas").html(resposta);
-                element.val('');
-            });
-        });
-        $("#modal_form_video").on("click", ".add_tag", function() {
-            var element = $(this).closest('div').find("input[name=tag]");
-            $.post('@Url.Action("AdicionarTagJquery", "Jquery")', { nome_tag: element.val(), model: "@Model.GetType().Name" },
-            function(resposta) {
-                $("#lista_tags").html(resposta);
-                element.val('');
-            });
-        });
         $("#modal_form_video").on("click", ".salvar", function() {
             var array = $("#form_video").serializeArray();
             var json = {};
@@ -50,78 +28,94 @@
         });
 
         $('#modal_form_video').on('show.bs.modal', function(e) {
-            $('#select_artistas').tokenize2({
-                searchFromStart: false,
-                delimiter: ';', //,
-                placeholder: 'Artista' //false
-            });
-            $('#select_musicas').tokenize2({
-                searchFromStart: false,
-                delimiter: ';', //,
-                placeholder: 'Música' //false
-            });
-            $('#select_tags').tokenize2({
-                searchFromStart: false,
-                delimiter: ';', //,
-                placeholder: 'Tag' //false
-            });
-        })
+            tokenize_init();
+        });
 
-        $('#select_artistas').tokenize2({
+        tokenize_init();
+    });
+
+    function tokenize_init() {
+        $('#form_video #select_artistas').tokenize2({
             searchFromStart: false,
+            dropdownMaxItems: 30,
             delimiter: ';', //,
             placeholder: 'Artista' //false
         });
-        $('#select_artistas').on('tokenize:tokens:add', function (e, value, text) {
+        $('#form_video #select_artistas').on('tokenize:tokens:add', function(e, value, text) {
             $.post('@Url.Action("AdicionarArtistaJquery", "Jquery")', { id: value, nome_artista: text, model: "@Model.GetType().Name" },
-            function (resposta) {
-                $("#lista_artistas").html(resposta);
+            function(resposta) {
+                $("#form_video #lista_artistas").html(resposta);
             });
         });
-        $('#select_artistas').on('tokenize:tokens:remove', function (e, value) {
+        $('#form_video #select_artistas').on('tokenize:tokens:remove', function(e, value) {
             $.post('@Url.Action("RemoverArtistaJquery", "Jquery")', { id: value, model: "@Model.GetType().Name" },
-            function (resposta) {
-                $("#lista_artistas").html(resposta);
+            function(resposta) {
+                $("#form_video #lista_artistas").html(resposta);
             });
         });
-        $('#select_artistas').on('tokenize:select', function (e, value) {
+        $('#form_video #select_artistas').on('tokenize:select', function(e, value) {
             $(this).tokenize2().trigger('tokenize:search', [$(this).tokenize2().input.val()]);
         });
-        $('#select_musicas').tokenize2({
+        $("#form_video #lista_artistas div").each(function() {
+            var id = $(this).find('input[type=hidden]').val();
+            var text = $(this).find('label').html();
+            $('#form_video #select_artistas').tokenize2().trigger('tokenize:tokens:add', [id, text, true]);
+        });
+        $('#form_video #select_musicas').tokenize2({
             searchFromStart: false,
+            tokensAllowCustom: true,
             delimiter: ';', //,
             placeholder: 'Música' //false
         });
-        $('#select_musicas').on('tokenize:tokens:add', function (e, value) {
-            $.post('@Url.Action("AdicionarMusicaJquery", "Jquery")', { titulo_musica: value, model: "@Model.GetType().Name" },
-            function (resposta) {
-                $("#lista_musicas").html(resposta);
+        $('#form_video #select_musicas').on('tokenize:tokens:add', function(e, value, text) {
+            var titulo = text;
+            if (titulo == undefined) {
+                titulo = value;
+            }
+            $.post('@Url.Action("AdicionarMusicaJquery", "Jquery")', { titulo_musica: titulo, model: "@Model.GetType().Name" },
+            function(resposta) {
+                $("#form_video #lista_musicas").html(resposta);
             });
         });
-        $('#select_musicas').on('tokenize:tokens:remove', function (e, value) {
+        $('#form_video #select_musicas').on('tokenize:tokens:remove', function(e, value) {
             $.post('@Url.Action("RemoverMusicaJquery", "Jquery")', { id: value, model: "@Model.GetType().Name" },
-            function (resposta) {
-                $("#lista_musicas").html(resposta);
+            function(resposta) {
+                $("#form_video #lista_musicas").html(resposta);
             });
         });
-        $('#select_tags').tokenize2({
+        $("#form_video #lista_musicas div").each(function() {
+            var id = $(this).find('input[type=hidden]').val();
+            var text = $(this).find('label').html();
+            $('#form_video #select_musicas').tokenize2().trigger('tokenize:tokens:add', [id, text, true]);
+        });
+        $('#form_video #select_tags').tokenize2({
             searchFromStart: false,
+            tokensAllowCustom: true,
             delimiter: ';', //,
             placeholder: 'Tag' //false
         });
-        $('#select_tags').on('tokenize:tokens:add', function (e, value) {
-            $.post('@Url.Action("AdicionarTagJquery", "Jquery")', { nome_tag: value, model: "@Model.GetType().Name" },
-            function (resposta) {
-                $("#lista_tags").html(resposta);
+        $('#form_video #select_tags').on('tokenize:tokens:add', function(e, value, text) {
+            var nome = text;
+            if (nome == undefined) {
+                nome = value;
+            }
+            $.post('@Url.Action("AdicionarTagJquery", "Jquery")', { nome_tag: nome, model: "@Model.GetType().Name" },
+            function(resposta) {
+                $("#form_video #lista_tags").html(resposta);
             });
         });
-        $('#select_tags').on('tokenize:tokens:remove', function (e, value) {
+        $('#form_video #select_tags').on('tokenize:tokens:remove', function(e, value) {
             $.post('@Url.Action("RemoverTagJquery", "Jquery")', { id: value, model: "@Model.GetType().Name" },
-            function (resposta) {
-                $("#lista_tags").html(resposta);
+            function(resposta) {
+                $("#form_video #lista_tags").html(resposta);
             });
         });
-    });
+        $("#form_video #lista_tags div").each(function() {
+            var id = $(this).find('input[type=hidden]').val();
+            var text = $(this).find('label').html();
+            $('#form_video #select_tags').tokenize2().trigger('tokenize:tokens:add', [id, text, true]);
+        });
+    }
 </script>
 <div class="modal-body row">
     <div class="col-md-12">
@@ -150,13 +144,20 @@
                 @Html.TextBoxFor(model => model.Titulo, new { @class = "form-control input_titulo", @placeholder = "Título", @Value = Model.Titulo })
             </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-4">
             <label for="artistas" style="display:block">Artistas</label>
             @Html.DropDownListFor(model => Model.ListaArtistas,
             new SelectList(Model.ListaArtistas, "id", "nome", Model.ListaArtistas), null, new { @id = "select_artistas", @class = "form-control campo_filtro", @multiple = true })
-            <div id="lista_artistas" style="display: none"></div>
+            <div id="lista_artistas" style="display: none">
+                @for (int i = 0; i < Model.Artistas.Count; i++) {
+                    <div>
+                        @Html.HiddenFor(model => Model.Artistas[i].id, new { @Value = Model.Artistas[i].id })
+                        <label>@Model.Artistas[i].nome</label>
+                    </div>
+                }
+            </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-4">
             <label for="musicas" style="display:block">Musicas</label>
             @Html.DropDownListFor(model => Model.ListaMusicas,
             new SelectList(Model.ListaMusicas, "id", "titulo", Model.ListaMusicas), null, new { @id = "select_musicas", @class = "form-control campo_filtro", @multiple = true })
@@ -169,7 +170,7 @@
                 }
             </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-4">
             <label for="tags" style="display:block">Tags</label>
             @Html.DropDownListFor(model => Model.ListaTags,
             new SelectList(Model.ListaTags, "id", "nome", Model.ListaTags), null, new { @id = "select_tags", @class = "form-control campo_filtro", @multiple = true })

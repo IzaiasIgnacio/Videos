@@ -81,14 +81,16 @@ namespace Videos.Models.Repository {
             db.Entry(video).State = EntityState.Modified;
 
             foreach (artista artista in dados.Artistas) {
-                db.video_artista.Add(new video_artista { id_artista = artista.id, id_video = video.id, principal = false });
+                if (!db.video_artista.Any(va => va.id_artista == artista.id && va.id_video == video.id)) {
+                    db.video_artista.Add(new video_artista { id_artista = artista.id, id_video = video.id, principal = false });
+                }
             }
 
             int[] artistas = dados.Artistas.Select(v => v.id).ToArray();
             List<video_artista> excluirArtistas = db.video_artista.
-                Where(v => !artistas.Contains(v.id)).
-                Where(v => v.id_video == video.id).
-                Where(v => v.principal == false).
+                Where(va => !artistas.Contains(va.id_artista)).
+                Where(va => va.id_video == video.id).
+                Where(va => va.principal == false).
                 ToList();
 
             foreach (video_artista va in excluirArtistas) {
@@ -97,16 +99,18 @@ namespace Videos.Models.Repository {
 
             MusicaRepository musicaRepository = new MusicaRepository();
             foreach (musica musica in dados.Musicas) {
-                db.video_musica.Add(new video_musica {
-                    id_musica = musica.id,
-                    id_video = video.id
-                });
+                if (!db.video_musica.Any(vm => vm.id_musica == musica.id && vm.id_video == video.id)) {
+                    db.video_musica.Add(new video_musica {
+                        id_musica = musica.id,
+                        id_video = video.id
+                    });
+                }
             }
 
             int[] musicas = dados.Musicas.Select(m => m.id).ToArray();
             List<video_musica> excluirMusicas = db.video_musica.
-                Where(v => !musicas.Contains(v.id)).
-                Where(v => v.id_video == video.id).
+                Where(vm => !musicas.Contains(vm.id_musica)).
+                Where(vm => vm.id_video == video.id).
                 ToList();
 
             foreach (video_musica vm in excluirMusicas) {
@@ -115,16 +119,18 @@ namespace Videos.Models.Repository {
 
             TagRepository tagRepository = new TagRepository();
             foreach (tag tag in dados.Tags) {
-                db.video_tag.Add(new video_tag {
-                    id_tag = tag.id,
-                    id_video = video.id
-                });
+                if (!db.video_tag.Any(vt => vt.id_tag == tag.id && vt.id_video == video.id)) {
+                    db.video_tag.Add(new video_tag {
+                        id_tag = tag.id,
+                        id_video = video.id
+                    });
+                }
             }
 
             int[] tags = dados.Tags.Select(t => t.id).ToArray();
             List<video_tag> excluirTags = db.video_tag.
-                Where(v => !tags.Contains(v.id)).
-                Where(v => v.id_video == video.id).
+                Where(vt => !tags.Contains(vt.id_tag)).
+                Where(vt => vt.id_video == video.id).
                 ToList();
 
             foreach (video_tag vt in excluirTags) {

@@ -26,6 +26,12 @@ namespace Videos.Controllers {
             videoDataView.ArtistaPrincipal = video.video_artista.Where(a => a.principal == true).FirstOrDefault().artista.nome;
             videoDataView.ListaArtistas = artistaRepository.Listar<artista>().OrderBy(a => a.nome).ToList();
             videoDataView.ListaMusicas = musicaRepository.Listar<musica>().OrderBy(m => m.titulo).ToList();
+            foreach (video_artista video_artista in video.video_artista.Where(va=>va.principal == false)) {
+                videoDataView.Artistas.Add(new artista {
+                    id = video_artista.artista.id,
+                    nome = video_artista.artista.nome
+                });
+            }
             foreach (video_musica video_musica in video.video_musica) {
                 videoDataView.Musicas.Add(new musica {
                     id = video_musica.musica.id,
@@ -65,14 +71,18 @@ namespace Videos.Controllers {
 
         public ActionResult AdicionarArtistaJquery(int id, string nome_artista, string model) {
             BaseVideoView view = getView(model);
-            view.Artistas.Add(new artista { id = id, nome = nome_artista });
+
+            if (!view.Artistas.Any(a => a.id == id)) {
+                view.Artistas.Add(new artista { id = id, nome = nome_artista });
+            }
 
             return PartialView("ArtistaListView", view);
         }
 
         public ActionResult RemoverArtistaJquery(int id, string model) {
             BaseVideoView view = getView(model);
-            view.Artistas.Remove(view.Artistas.Single(a => a.id == id));
+
+            view.Artistas.RemoveAll(a => a.id == id);
 
             return PartialView("ArtistaListView", view);
         }
@@ -82,15 +92,18 @@ namespace Videos.Controllers {
 
             MusicaRepository musicaRepository = new MusicaRepository();
             musica musica = musicaRepository.GetMusicaByTitulo(titulo_musica);
-            
-            view.Musicas.Add(musica);
+
+            if (!view.Musicas.Any(m => m.id == musica.id)) {
+                view.Musicas.Add(musica);
+            }
 
             return PartialView("MusicaListView", view);
         }
 
         public ActionResult RemoverMusicaJquery(int id, string model) {
             BaseVideoView view = getView(model);
-            view.Musicas.Remove(view.Musicas.Single(m => m.id == id));
+
+            view.Musicas.RemoveAll(m => m.id == id);
 
             return PartialView("MusicaListView", view);
         }
@@ -100,14 +113,17 @@ namespace Videos.Controllers {
             TagRepository tagRepository = new TagRepository();
             tag tag = tagRepository.GetTagByNome(nome_tag);
 
-            view.Tags.Add(tag);
+            if (!view.Tags.Any(t => t.id == tag.id)) {
+                view.Tags.Add(tag);
+            }
 
             return PartialView("TagListView", view);
         }
 
         public ActionResult RemoverTagJquery(int id, string model) {
             BaseVideoView view = getView(model);
-            view.Tags.Remove(view.Tags.Single(t => t.id == id));
+
+            view.Tags.RemoveAll(t => t.id == id);
 
             return PartialView("TagListView", view);
         }
@@ -207,6 +223,7 @@ namespace Videos.Controllers {
         public void PlayVideo(int id) {
             VideoRepository videoRepository = new VideoRepository();
             video video = videoRepository.getVideoById(id);
+
             System.Diagnostics.Process.Start(video.caminho);
         }
 
