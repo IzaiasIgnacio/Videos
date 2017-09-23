@@ -166,26 +166,13 @@ namespace Videos.Controllers {
         }
 
         public void GerarPlaylistJquery(VideosView view) {
+            List<int> ids = view.Playlist.Split(',').Select(Int32.Parse).ToList();
             VideoRepository videoRepository = new VideoRepository();
-            VideosView videosView = new VideosView();
+            
             var lista = new List<video>();
 
             lista = videoRepository.listarVideos();
-            if (!view.ArtistaPrincipal.Equals(0)) {
-                lista = lista.Where(v => v.video_artista.FirstOrDefault().id_artista == view.ArtistaPrincipal).ToList();
-            }
-            if (view.Artistas.Count > 0) {
-                lista = lista.Where(v => v.video_artista.Any(va => view.Artistas.Select(t => t.id).ToArray().Contains(va.id_artista))).ToList();
-            }
-            if (view.Musicas.Count > 0) {
-                lista = lista.Where(v => v.video_musica.Any(vm => view.Musicas.Select(t => t.id).ToArray().Contains(vm.id_musica))).ToList();
-            }
-            if (view.Tags.Count > 0) {
-                lista = lista.Where(v => v.video_tag.Any(vt => view.Tags.Select(t => t.id).ToArray().Contains(vt.id_tag))).ToList();
-            }
-            if (view.Tipos.Count > 0) {
-                lista = lista.Where(v => view.Tipos.Select(t => t.id).ToArray().Contains(v.id_tipo)).ToList();
-            }
+            lista = lista.Where(v => ids.Contains(v.id)).ToList();
             
             Random rnd = new Random();
             lista = lista.Distinct().OrderBy(v => rnd.Next()).ToList();

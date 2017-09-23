@@ -39,13 +39,22 @@
                 json[this.name] = this.value || '';
             });
 
+            var array_playlist = new Array();
+            $('.check_videos:checked').each(function() {
+                if (this.value != "undefined") {
+                    array_playlist.push(this.value);
+                }
+            });
+
+            json["Playlist"] = array_playlist.join();
+            console.log(json);
             $.ajax({
                 url: '@Url.Action("GerarPlaylistJquery", "Jquery")',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(json),
                 success: function(resposta) {
-                    alert('foi');
+                    //alert('foi');
                 }
             });
         });
@@ -55,7 +64,7 @@
                 type: 'POST',
                 contentType: 'application/json',
                 success: function(resposta) {
-                    alert('foi');
+                    //alert('foi');
                 }
             });
         });
@@ -208,5 +217,5 @@
     </div>
 </div>
 <div id="tabela_videos">
-    @{Html.RenderPartial("~/Views/Jquery/VideoListView.cshtml",Model);}
+    @{Html.RenderPartial("~/Views/Jquery/VideoListView.cshtml", Model);}
 </div>

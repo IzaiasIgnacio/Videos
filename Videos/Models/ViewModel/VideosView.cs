@@ -117,9 +117,9 @@ namespace Videos.Models.ViewModel {
 
             return view;
         }
-
-        public List<video> ListaVideos { get; set; }
         
+        public List<video> ListaVideos { get; set; }
+        public string Playlist { get; set; }
         public int ArtistaPrincipal { get; set; }
     }
 }

@@ -49,6 +49,24 @@
             });
         });
 
+        $('#modal_form_video').on('show.bs.modal', function(e) {
+            $('#select_artistas').tokenize2({
+                searchFromStart: false,
+                delimiter: ';', //,
+                placeholder: 'Artista' //false
+            });
+            $('#select_musicas').tokenize2({
+                searchFromStart: false,
+                delimiter: ';', //,
+                placeholder: 'Música' //false
+            });
+            $('#select_tags').tokenize2({
+                searchFromStart: false,
+                delimiter: ';', //,
+                placeholder: 'Tag' //false
+            });
+        })
+
         $('#select_artistas').tokenize2({
             searchFromStart: false,
             delimiter: ';', //,
