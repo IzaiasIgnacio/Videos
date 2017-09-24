@@ -35,7 +35,7 @@ namespace Videos.Controllers {
             VideosView videosView = VideosView.init();
             
             List<video> lista = videoRepository.listarVideos();
-            videosView.ListaVideos = lista.Distinct().OrderByDescending(v=>v.data).ToList();
+            videosView.ListaVideos = lista.Distinct().OrderByDescending(v=>v.id).ToList();
             videosView.ListaArtistas = videoRepository.Listar<artista>().OrderBy(a => a.nome).ToList();
             videosView.ListaMusicas = videoRepository.Listar<musica>().OrderBy(a => a.titulo).ToList();
             videosView.ListaTipos = videoRepository.Listar<tipo>().OrderBy(a => a.descricao).ToList();

@@ -32,6 +32,7 @@
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="descricao" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="pasta" Type="nvarchar" MaxLength="15" />
         </EntityType>
         <EntityType Name="video">
           <Key>
@@ -282,6 +283,7 @@
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="descricao" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="video" Relationship="VideosModel.FK_Video_ToTipo1" FromRole="tipo" ToRole="video" />
+          <Property Name="pasta" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="video">
           <Key>
@@ -464,6 +466,7 @@
           <EntitySetMapping Name="tipo1">
             <EntityTypeMapping TypeName="VideosModel.tipo">
               <MappingFragment StoreEntitySet="tipo">
+                <ScalarProperty Name="pasta" ColumnName="pasta" />
                 <ScalarProperty Name="descricao" ColumnName="descricao" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>

@@ -22,6 +22,7 @@ namespace Videos.Models.Entity
     
         public int id { get; set; }
         public string descricao { get; set; }
+        public string pasta { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<video> video { get; set; }

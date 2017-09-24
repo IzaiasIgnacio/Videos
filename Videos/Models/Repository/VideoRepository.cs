@@ -164,7 +164,7 @@ namespace Videos.Models.Repository {
             if (split.Length > 5) {
                 if (tipos.Contains(split[5])) {
                     string descricao = split[5];
-                    return db.tipo.Where(d => d.descricao == descricao).FirstOrDefault();
+                    return db.tipo.Where(d => d.pasta == descricao).FirstOrDefault();
                 }
             }
             return db.tipo.Where(d => d.descricao == "misc").FirstOrDefault();
