@@ -121,5 +121,14 @@ namespace Videos.Models.ViewModel {
         public List<video> ListaVideos { get; set; }
         public string Playlist { get; set; }
         public int ArtistaPrincipal { get; set; }
+        public string getLink(video video) {
+            string artista = video.video_artista.Where(a => a.principal == true).FirstOrDefault().artista.nome;
+            string tipo = video.tipo.descricao;
+            if (tipo.ToLower() == "live" || tipo.ToLower() == "mv") {
+                tipo += "s";
+            }
+            string arquivo = video.titulo + video.extensao;
+            return "http://127.0.0.1:8887/"+artista + "/" + tipo + "/" + arquivo;
+        }
     }
 }

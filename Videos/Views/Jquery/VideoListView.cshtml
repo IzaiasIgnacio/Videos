@@ -22,7 +22,7 @@
                 <td>
                     <input type="checkbox" class="check_videos" value="@video.id" checked="checked" />
                 </td>
-                <td width="12%">@video.video_artista.FirstOrDefault().artista.nome</td>
+                <td width="12%">@video.video_artista.Where(a=>a.principal == true).FirstOrDefault().artista.nome</td>
                 <td class="coluna_titulo">
                     <input type="hidden" class="id" value="@video.id" />
                     @video.titulo
@@ -36,10 +36,15 @@
                 <td>@video.tipo.descricao</td>
                 <td>@video.data.Value.ToShortDateString()</td>
                 <td>
-                    <input type="hidden" class="id_play" value="@video.id" />
+                    @if (video.extensao != ".ts" && video.extensao != ".tp") {
+                        <button type="button" class="btn btn-xs" onclick='window.open("@Model.getLink(video)")'>
+                            <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                        </button>
+                    }
+                    <!--<input type="hidden" class="id_play" value="@video.id" />
                     <button type="button" class="btn btn-xs play" aria-label="Play">
                         <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
-                    </button>
+                    </button>-->
                 </td>
             </tr>
         }
