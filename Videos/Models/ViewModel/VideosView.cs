@@ -10,6 +10,18 @@ namespace Videos.Models.ViewModel {
 
     public class BaseVideoView {
         public string pastaCapturas;
+        private List<artista> artistaPrincipal;
+        public List<artista> ArtistaPrincipal {
+            get {
+                if (artistaPrincipal == null) {
+                    artistaPrincipal = new List<artista>();
+                }
+                return artistaPrincipal;
+            }
+            set {
+                artistaPrincipal = value;
+            }
+        }
         public List<artista> ListaArtistas { get; set; }
         private List<artista> artistas;
         public List<artista> Artistas {
@@ -120,7 +132,7 @@ namespace Videos.Models.ViewModel {
         
         public List<video> ListaVideos { get; set; }
         public string Playlist { get; set; }
-        public int ArtistaPrincipal { get; set; }
+        //public int ArtistaPrincipal { get; set; }
         public string getLink(video video) {
             string artista = video.video_artista.Where(a => a.principal == true).FirstOrDefault().artista.nome;
             string tipo = video.tipo.descricao;

@@ -78,7 +78,7 @@
             });
         });
         $('#form_video #select_musicas').on('tokenize:tokens:remove', function(e, value) {
-            $.post('@Url.Action("RemoverMusicaJquery", "Jquery")', { id: value, model: "@Model.GetType().Name" },
+            $.post('@Url.Action("RemoverMusicaJquery", "Jquery")', { titulo_musica: value, model: "@Model.GetType().Name" },
             function(resposta) {
                 $("#form_video #lista_musicas").html(resposta);
             });
@@ -105,7 +105,7 @@
             });
         });
         $('#form_video #select_tags').on('tokenize:tokens:remove', function(e, value) {
-            $.post('@Url.Action("RemoverTagJquery", "Jquery")', { id: value, model: "@Model.GetType().Name" },
+            $.post('@Url.Action("RemoverTagJquery", "Jquery")', { nome_tag: value, model: "@Model.GetType().Name" },
             function(resposta) {
                 $("#form_video #lista_tags").html(resposta);
             });

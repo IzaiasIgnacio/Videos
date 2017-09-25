@@ -20,7 +20,7 @@
             jQuery.each(array, function() {
                 json[this.name] = this.value || '';
             });
-
+            
             $.ajax({
                 url: '@Url.Action("FiltrarVideosJquery", "Jquery")',
                 type: 'POST',
@@ -30,6 +30,18 @@
                     $("#tabela_videos").html(resposta);
                 }
             });
+        });
+        $("#tabela_videos").on("click", ".check_all", function () {
+            if ($(this).is(":checked")) {
+                $("#tabela_videos .check_videos").each(function () {
+                    $(this).prop("checked", true);
+                });
+            }
+            else {
+                $("#tabela_videos .check_videos").each(function () {
+                    $(this).prop("checked", false);
+                });
+            }
         });
         $("#div_filtros").on("click", ".playlist", function() {
             var array = $("#filtro").serializeArray();
@@ -72,8 +84,19 @@
             searchFromStart: false,
             dropdownMaxItems: 30,
             delimiter: ';', //,
-            tokensMaxItems: 1,
             placeholder: 'Artista Principal' //false
+        });
+        $('#div_filtros #select_artista_principal').on('tokenize:tokens:add', function (e, value, text) {
+            $.post('@Url.Action("AdicionarArtistaPrincipalJquery", "Jquery")', { id: value, nome_artista: text, model: "@Model.GetType().Name" },
+            function (resposta) {
+                $("#div_filtros #lista_artista_principal").html(resposta);
+            });
+        });
+        $('#div_filtros #select_artista_principal').on('tokenize:tokens:remove', function (e, value) {
+            $.post('@Url.Action("RemoverArtistaPrincipalJquery", "Jquery")', { id: value, model: "@Model.GetType().Name" },
+            function (resposta) {
+                $("#div_filtros #lista_artista_principal").html(resposta);
+            });
         });
         $('#div_filtros #select_artista_principal').on('tokenize:select', function(e, value) {
             $(this).tokenize2().trigger('tokenize:search', [$(this).tokenize2().input.val()]);
@@ -111,7 +134,7 @@
             });
         });
         $('#div_filtros #select_musicas').on('tokenize:tokens:remove', function(e, value) {
-            $.post('@Url.Action("RemoverMusicaJquery", "Jquery")', { id: value, model: "@Model.GetType().Name" },
+            $.post('@Url.Action("RemoverMusicaJquery", "Jquery")', { titulo_musica: value, model: "@Model.GetType().Name" },
             function (resposta) {
                 $("#div_filtros #lista_musicas").html(resposta);
             });
@@ -128,7 +151,7 @@
             });
         });
         $('#div_filtros #select_tags').on('tokenize:tokens:remove', function(e, value) {
-            $.post('@Url.Action("RemoverTagJquery", "Jquery")', { id: value, model: "@Model.GetType().Name" },
+            $.post('@Url.Action("RemoverTagJquery", "Jquery")', { nome_tag: value, model: "@Model.GetType().Name" },
             function (resposta) {
                 $("#div_filtros #lista_tags").html(resposta);
             });
@@ -178,8 +201,9 @@
             <form id="filtro">
                 <div class="col-md-4">
                     <label style="display:block">Artista principal</label>
-                    @Html.DropDownListFor(model => Model.ArtistaPrincipal,
+                    @Html.DropDownListFor(model => Model.ListaArtistas,
                     new SelectList(Model.ListaArtistas, "id", "nome", Model.ListaArtistas), null, new { @id = "select_artista_principal", @class = "form-control campo_filtro", @multiple = true })
+                    <div id="lista_artista_principal" style="display: none"></div>
                 </div>
                 <div class="col-md-4">
                     <label style="display:block">Artistas</label>

@@ -70,6 +70,24 @@ namespace Videos.Controllers {
             return view;
         }
 
+        public ActionResult AdicionarArtistaPrincipalJquery(int id, string nome_artista, string model) {
+            BaseVideoView view = getView(model);
+
+            if (!view.ArtistaPrincipal.Any(a => a.id == id)) {
+                view.ArtistaPrincipal.Add(new artista { id = id, nome = nome_artista });
+            }
+
+            return PartialView("ArtistaPrincipalListView", view);
+        }
+
+        public ActionResult RemoverArtistaPrincipalJquery(int id, string model) {
+            BaseVideoView view = getView(model);
+
+            view.ArtistaPrincipal.RemoveAll(a => a.id == id);
+
+            return PartialView("ArtistaPrincipalListView", view);
+        }
+
         public ActionResult AdicionarArtistaJquery(int id, string nome_artista, string model) {
             BaseVideoView view = getView(model);
 
@@ -101,16 +119,22 @@ namespace Videos.Controllers {
             return PartialView("MusicaListView", view);
         }
 
-        public ActionResult RemoverMusicaJquery(int id, string model) {
+        public ActionResult RemoverMusicaJquery(string titulo_musica, string model) {
             BaseVideoView view = getView(model);
 
-            view.Musicas.RemoveAll(m => m.id == id);
+            MusicaRepository musicaRepository = new MusicaRepository();
+            musica musica = musicaRepository.GetMusicaByTitulo(titulo_musica);
+
+            if (musica != null) {
+                view.Musicas.RemoveAll(m => m.id == musica.id);
+            }
 
             return PartialView("MusicaListView", view);
         }
 
         public ActionResult AdicionarTagJquery(string nome_tag, string model) {
             BaseVideoView view = getView(model);
+
             TagRepository tagRepository = new TagRepository();
             tag tag = tagRepository.GetTagByNome(nome_tag);
 
@@ -121,10 +145,14 @@ namespace Videos.Controllers {
             return PartialView("TagListView", view);
         }
 
-        public ActionResult RemoverTagJquery(int id, string model) {
+        public ActionResult RemoverTagJquery(string nome_tag, string model) {
             BaseVideoView view = getView(model);
+            TagRepository tagRepository = new TagRepository();
+            tag tag = tagRepository.GetTagByNome(nome_tag);
 
-            view.Tags.RemoveAll(t => t.id == id);
+            if (tag != null) {
+                view.Tags.RemoveAll(t => t.id == tag.id);
+            }
 
             return PartialView("TagListView", view);
         }
@@ -161,17 +189,23 @@ namespace Videos.Controllers {
             var lista = new List<video>();
 
             lista = videoRepository.listarVideos();
-            if (!view.ArtistaPrincipal.Equals(0)) {
-                lista = lista.Where(v => v.video_artista.FirstOrDefault().id_artista == view.ArtistaPrincipal).ToList();
+            if (view.ArtistaPrincipal.Count > 0) {
+                lista = lista.Where(v => v.video_artista.Any(va => view.ArtistaPrincipal.Select(t => t.id).ToArray().Contains(va.id_artista) && va.principal == true)).ToList();
             }
             if (view.Artistas.Count > 0) {
-                lista = lista.Where(v => v.video_artista.Any(va => view.Artistas.Select(t => t.id).ToArray().Contains(va.id_artista))).ToList();
+                foreach (var a in view.Artistas) {
+                    lista = lista.Where(v => v.video_artista.Any(ar => ar.id_artista == a.id && ar.principal == false)).ToList();
+                }
             }
             if (view.Musicas.Count > 0) {
-                lista = lista.Where(v => v.video_musica.Any(vm => view.Musicas.Select(t => t.id).ToArray().Contains(vm.id_musica))).ToList();
+                foreach (var m in view.Musicas) {
+                    lista = lista.Where(v => v.video_musica.Any(mu => mu.id_musica == m.id)).ToList();
+                }
             }
             if (view.Tags.Count > 0) {
-                lista = lista.Where(v => v.video_tag.Any(vt => view.Tags.Select(t => t.id).ToArray().Contains(vt.id_tag))).ToList();
+                foreach (var t in view.Tags) {
+                    lista = lista.Where(v => v.video_tag.Any(ta=>ta.id_tag == t.id)).ToList();
+                }
             }
             if (view.Tipos.Count > 0) {
                 lista = lista.Where(v => view.Tipos.Select(t=>t.id).ToArray().Contains(v.id_tipo)).ToList();

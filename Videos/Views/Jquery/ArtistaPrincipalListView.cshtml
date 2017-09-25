@@ -1,0 +1,7 @@
+﻿@model Videos.Models.ViewModel.BaseVideoView
+@for (int i = 0; i < Model.ArtistaPrincipal.Count; i++) {
+    <div>
+        @Html.HiddenFor(model => Model.ArtistaPrincipal[i].id, new { @Value = Model.ArtistaPrincipal[i].id })
+        <label>@Model.ArtistaPrincipal[i].nome</label>
+    </div>
+}
