@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System;
 using System.Diagnostics;
+using System.Text;
 
 namespace Videos.Controllers {
     public class JqueryController : Controller {
@@ -259,19 +260,12 @@ namespace Videos.Controllers {
             VideoRepository videoRepository = new VideoRepository();
             video video = videoRepository.getVideoById(id);
 
-            //System.Diagnostics.Process.Start(video.caminho);
-            var executablePath = @"C:\Program Files\DAUM\PotPlayer\PotPlayerMini64.exe";
-            var p = new Process();
-            p.StartInfo = new ProcessStartInfo(executablePath);
-            p.StartInfo.WorkingDirectory = Path.GetDirectoryName(executablePath);
-            p.StartInfo.FileName = "PotPlayerMini64.exe";
-            //p.StartInfo.Arguments = commandLineArgs;
-            p.StartInfo.CreateNoWindow = true;
-            p.StartInfo.ErrorDialog = false;
-            p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
-            p.StartInfo.CreateNoWindow = false;
-            p.StartInfo.UseShellExecute = true;
-            p.Start();
+            using (FileStream file = new FileStream(@"K:\\ICI\\Vídeos\\kpop\\play.m3u", FileMode.Create)) {
+                byte[] linha = Encoding.UTF8.GetBytes(Environment.NewLine);
+                byte[] bytes = Encoding.UTF8.GetBytes(video.caminho);
+                file.Write(bytes, 0, bytes.Length);
+                file.Write(linha, 0, linha.Length);
+            }
         }
 
     }

@@ -11,7 +11,11 @@
         });
         $("#tabela_videos").on("click", ".play", function() {
             var id = $(this).closest('td').find('.id_play').val();
-            $.post('@Url.Action("PlayVideo", "Jquery")', { id: id });
+            $.post('@Url.Action("PlayVideo", "Jquery")', { id: id },
+            function(resposta) {
+                var win = window.open("@HttpUtility.JavaScriptStringEncode("play:K:\\ICI\\Vídeos\\play.m3u")");
+                win.close();
+            });
         });
         $("#div_filtros").on("click", ".filtrar", function() {
             var array = $("#filtro").serializeArray();

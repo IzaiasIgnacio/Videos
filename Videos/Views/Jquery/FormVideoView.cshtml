@@ -84,9 +84,8 @@
             });
         });
         $("#form_video #lista_musicas div").each(function() {
-            var id = $(this).find('input[type=hidden]').val();
             var text = $(this).find('label').html();
-            $('#form_video #select_musicas').tokenize2().trigger('tokenize:tokens:add', [id, text, true]);
+            $('#form_video #select_musicas').tokenize2().trigger('tokenize:tokens:add', [text, text, true]);
         });
         $('#form_video #select_tags').tokenize2({
             searchFromStart: false,
@@ -111,9 +110,8 @@
             });
         });
         $("#form_video #lista_tags div").each(function() {
-            var id = $(this).find('input[type=hidden]').val();
             var text = $(this).find('label').html();
-            $('#form_video #select_tags').tokenize2().trigger('tokenize:tokens:add', [id, text, true]);
+            $('#form_video #select_tags').tokenize2().trigger('tokenize:tokens:add', [text, text, true]);
         });
     }
 </script>
@@ -160,7 +158,7 @@
         <div class="col-md-4">
             <label for="musicas" style="display:block">Musicas</label>
             @Html.DropDownListFor(model => Model.ListaMusicas,
-            new SelectList(Model.ListaMusicas, "id", "titulo", Model.ListaMusicas), null, new { @id = "select_musicas", @class = "form-control campo_filtro", @multiple = true })
+            new SelectList(Model.ListaMusicas, "titulo", "titulo", Model.ListaMusicas), null, new { @id = "select_musicas", @class = "form-control campo_filtro", @multiple = true })
             <div id="lista_musicas" style="display: none">
                 @for (int i = 0; i < Model.Musicas.Count; i++) {
                     <div>

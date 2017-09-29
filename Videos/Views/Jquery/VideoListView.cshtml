@@ -36,11 +36,10 @@
                 <td>@video.tipo.descricao</td>
                 <td>@video.data.Value.ToShortDateString()</td>
                 <td>
-                    @if (video.extensao != ".ts" && video.extensao != ".tp") {
-                        <button type="button" class="btn btn-xs" onclick='window.open("@Model.getLink(video)")'>
-                            <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
-                        </button>
-                    }
+                    <input type="hidden" class="id_play" value="@video.id" />
+                    <button type="button" class="btn btn-xs play" aria-label="Play">
+                          <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                    </button>
                 </td>
             </tr>
         }
