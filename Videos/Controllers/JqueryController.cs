@@ -229,7 +229,7 @@ namespace Videos.Controllers {
             Random rnd = new Random();
             lista = lista.Distinct().OrderBy(v => rnd.Next()).ToList();
 
-            System.IO.File.WriteAllLines(@"K:\\ICI\\Vídeos\\kpop\\playlist.m3u", lista.Select(l=>l.caminho).ToArray());
+            System.IO.File.WriteAllLines(@"K:\\ICI\\Vídeos\\kpop\\"+view.NomePlaylist+ ".m3u", lista.Select(l=>l.caminho).ToArray());
         }
 
         public void AtualizarVideosJquery() {

@@ -66,8 +66,19 @@ textarea {
 }
 
 .topo {
+    padding-bottom: 40px;
+}
+
+.botao_playlist {
+    float: left;
+}
+
+.total_videos {
     float: right;
-    margin-bottom: 5px;
+}
+
+.panel {
+    margin-bottom: 10px;
 }
 
 #div_filtros .panel-body {

@@ -14,7 +14,7 @@
             $.post('@Url.Action("PlayVideo", "Jquery")', { id: id },
             function(resposta) {
                 var win = window.open("@HttpUtility.JavaScriptStringEncode("play:K:\\ICI\\Vídeos\\play.m3u")");
-                win.close();
+                setTimeout(function() { win.close(); }, 2000);
             });
         });
         $("#div_filtros").on("click", ".filtrar", function() {
@@ -47,13 +47,12 @@
                 });
             }
         });
-        $("#div_filtros").on("click", ".playlist", function() {
-            var array = $("#filtro").serializeArray();
+        $("#tabela_videos").on("click", ".playlist", function() {
+            $("#span_nome_playlist").fadeIn();
+        });
+        
+        $("#tabela_videos").on("click", ".btn_gerar_playlist", function() {
             var json = {};
-
-            jQuery.each(array, function() {
-                json[this.name] = this.value || '';
-            });
 
             var array_playlist = new Array();
             $('.check_videos:checked').each(function() {
@@ -63,6 +62,7 @@
             });
 
             json["Playlist"] = array_playlist.join();
+            json["NomePlaylist"] = $("#nome_playlist").val();
 
             $.ajax({
                 url: '@Url.Action("GerarPlaylistJquery", "Jquery")',
@@ -237,9 +237,6 @@
                 <div class="col-md-4" style="margin-top: 25px">
                     <button type="button" class="btn btn-default filtrar" aria-label="Filtrar">
                         <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                    </button>
-                    <button type="button" class="btn btn-default playlist" aria-label="Gerar playlist">
-                        <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
                     </button>
                 </div>
             </form>

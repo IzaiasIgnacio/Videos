@@ -132,7 +132,7 @@ namespace Videos.Models.ViewModel {
         
         public List<video> ListaVideos { get; set; }
         public string Playlist { get; set; }
-        //public int ArtistaPrincipal { get; set; }
+        public string NomePlaylist { get; set; }
         public string getLink(video video) {
             string artista = video.video_artista.Where(a => a.principal == true).FirstOrDefault().artista.nome;
             string tipo = video.tipo.descricao;

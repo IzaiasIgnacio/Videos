@@ -1,9 +1,22 @@
 ﻿@model Videos.Models.ViewModel.VideosView
 <div class="topo">
-    <label>@Model.ListaVideos.Count Vídeos</label>
-    <button type="button" class="btn btn-default atualizar_videos" aria-label="Atualizar">
-        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
-    </button>
+    <div class="botao_playlist">
+        <button type="button" class="btn btn-default playlist" aria-label="Gerar playlist">
+            <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+        </button>
+        <span id="span_nome_playlist" style="display: none">
+            <input type="text" id="nome_playlist" />
+            <button type="button" class="btn btn-default btn_gerar_playlist" aria-label="Gerar playlist">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+            </button>
+        </span>
+    </div>
+    <div class="total_videos">
+        <label>@Model.ListaVideos.Count Vídeos</label>
+        <button type="button" class="btn btn-default atualizar_videos" aria-label="Atualizar">
+            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+        </button>
+    </div>
 </div>
 <table class="table table-striped table-hover table-condensed table-bordered">
     <thead>
