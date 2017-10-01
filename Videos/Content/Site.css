@@ -23,10 +23,6 @@ textarea {
     max-width: 280px;
 }
 
-.coluna_titulo {
-    cursor: pointer;
-}
-
 #modal_form_video .modal-dialog {
     width: 80%;
 }
@@ -52,10 +48,15 @@ textarea {
     margin-right: 5px;
 }
 
+.list_thumb {
+    max-width: 45px;
+}
+
 .campo_filtro {
     max-width: 70%;
     float: left;
     margin-right: 2px;
+    display: none;
 }
 
 #div_filtros {
@@ -87,4 +88,59 @@ textarea {
 
 .modal-footer {
     margin-top: 0;
+}
+
+.panel_tabela {
+    box-shadow: 3px 3px 10px rgba(255, 255, 255, 1);
+}
+
+.table td:first-child, .table td:nth-child(2), .table td:nth-child(3), .table td:nth-child(4) {
+   cursor: pointer;
+}
+
+.table tbody > tr > td {
+    vertical-align: middle;
+    height: 65px;
+}
+
+.table > thead > tr > th {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.table > tbody > tr > td {
+    font-size: 1.0em;
+    font-weight: bold;
+}
+
+.table thead th {
+    background-color: #DFDFE3;
+    color: #000;
+}
+
+.table > tbody {
+    color: #fff;
+}
+
+.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+   background-color: rgb(19, 90, 167);
+}
+
+.table-striped > tbody > tr:nth-child(2n) > td, .table-striped > tbody > tr:nth-child(2n) > th {
+   background-color: rgb(0, 4, 0)
+}
+
+.div_thumb {
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 1px;
+    box-shadow: 3px 3px 10px rgba(255, 0, 100, 1);
+}
+
+body {
+    background-color: rgb(58, 52, 53);
+}
+
+.td_checked {
+    background-color: rgb(164, 9, 157) !important;
 }

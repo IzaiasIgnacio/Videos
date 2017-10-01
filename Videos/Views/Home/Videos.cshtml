@@ -1,8 +1,8 @@
 ﻿@model Videos.Models.ViewModel.VideosView
 <script>
     $(function() {
-        $("#tabela_videos").on("click", ".coluna_titulo", function() {
-            var id = $(this).find(".id").val();
+        $("#tabela_videos").on("click", ".edit", function() {
+            var id = $(this).closest("td").find(".id").val();
             $.post('@Url.Action("ExibirFormVideo", "Jquery")', { id: id },
             function(resposta) {
                 $("#modal_form_video .modal-body").html(resposta);
@@ -37,30 +37,48 @@
         });
         $("#tabela_videos").on("click", ".check_all", function () {
             if ($(this).is(":checked")) {
-                $("#tabela_videos .check_videos").each(function () {
-                    $(this).prop("checked", true);
+                $("#tabela_videos").find("td").each(function() {
+                    $(this).removeClass("td_check");
+                    $(this).addClass("td_checked");
                 });
             }
             else {
-                $("#tabela_videos .check_videos").each(function () {
-                    $(this).prop("checked", false);
+                $("#tabela_videos").find("td").each(function() {
+                    $(this).removeClass("td_checked");
+                    $(this).addClass("td_check");
+                });
+            }
+        });
+        $("#tabela_videos").on("click", "td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4)", function() {
+            var tr = $(this).closest("tr");
+            if (tr.hasClass("tr_check")) {
+                tr.removeClass("tr_check");
+                tr.addClass("tr_checked");
+                $(tr).find("td").each(function() {
+                    $(this).removeClass("td_check");
+                    $(this).addClass("td_checked");
+                });
+            }
+            else {
+                tr.removeClass("tr_checked");
+                tr.addClass("tr_check");
+                $(tr).find("td").each(function() {
+                    $(this).removeClass("td_checked");
+                    $(this).addClass("td_check");
                 });
             }
         });
         $("#tabela_videos").on("click", ".playlist", function() {
-            $("#span_nome_playlist").fadeIn();
+            $("#span_nome_playlist").fadeToggle();
         });
-        
         $("#tabela_videos").on("click", ".btn_gerar_playlist", function() {
             var json = {};
 
             var array_playlist = new Array();
-            $('.check_videos:checked').each(function() {
-                if (this.value != "undefined") {
-                    array_playlist.push(this.value);
-                }
+            $('.tr_checked').each(function() {
+                array_playlist.push($(this).find(".check_videos").val());
             });
-
+            
             json["Playlist"] = array_playlist.join();
             json["NomePlaylist"] = $("#nome_playlist").val();
 
@@ -181,6 +199,9 @@
         $('#div_filtros #select_tipos').on('tokenize:select', function(e, value) {
             $(this).tokenize2().trigger('tokenize:search', [$(this).tokenize2().input.val()]);
         });
+
+        $("#div_filtros").fadeIn();
+        $("#tabela_videos").fadeIn();
     });
 </script>
 <div class="modal fade" id="modal_form_video" role="dialog" tabindex="-1">
@@ -198,7 +219,7 @@
         </div>
     </div>
 </div>
-<div class="col-md-12" id="div_filtros">
+<div class="col-md-12" id="div_filtros" style="display: none">
     <div class="panel panel-default">
         <div class="panel-heading">Filtros</div>
         <div class="panel-body">
@@ -243,6 +264,8 @@
         </div>
     </div>
 </div>
-<div id="tabela_videos">
-    @{Html.RenderPartial("~/Views/Jquery/VideoListView.cshtml", Model);}
+<div class="panel panel-default panel_tabela">
+    <div id="tabela_videos" style="display: none">
+        @{Html.RenderPartial("~/Views/Jquery/VideoListView.cshtml", Model);}
+    </div>
 </div>
