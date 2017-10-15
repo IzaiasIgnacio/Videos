@@ -108,6 +108,10 @@ textarea {
     font-weight: bold;
 }
 
+.table > thead > tr:first-child > th {
+    background-color: #aaa;
+}
+
 .table > tbody > tr > td {
     font-size: 1.0em;
     font-weight: bold;

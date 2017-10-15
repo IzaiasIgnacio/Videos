@@ -9,6 +9,7 @@ using System.IO;
 using System;
 using System.Diagnostics;
 using System.Text;
+using System.Runtime.Serialization;
 
 namespace Videos.Controllers {
     public class JqueryController : Controller {
@@ -231,7 +232,7 @@ namespace Videos.Controllers {
 
             System.IO.File.WriteAllLines(@"K:\\ICI\\Vídeos\\kpop\\"+view.NomePlaylist+ ".m3u", lista.Select(l=>l.caminho).ToArray());
         }
-
+        
         public void AtualizarVideosJquery() {
             List<string> listaArquivos = new List<string>();
             string caminho = @"K:\ICI\Vídeos\kpop";
@@ -246,12 +247,18 @@ namespace Videos.Controllers {
                     }
                 }
             }
-
+            
             VideoRepository videoRepository = new VideoRepository();
             foreach (var arquivo in listaArquivos) {
                 video video = videoRepository.findByCaminho(arquivo);
                 if (video == null) {
                     videoRepository.salvar(arquivo);
+                }
+            }
+
+            foreach (video video in videoRepository.Listar<video>()) {
+                if (!System.IO.File.Exists(video.caminho)) {
+                    videoRepository.excluir(video);
                 }
             }
         }
@@ -268,5 +275,20 @@ namespace Videos.Controllers {
             }
         }
 
+    }
+
+    [Serializable]
+    internal class OutOfEnergyException : Exception {
+        public OutOfEnergyException() {
+        }
+
+        public OutOfEnergyException(string message) : base(message) {
+        }
+
+        public OutOfEnergyException(string message, Exception innerException) : base(message, innerException) {
+        }
+
+        protected OutOfEnergyException(SerializationInfo info, StreamingContext context) : base(info, context) {
+        }
     }
 }

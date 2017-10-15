@@ -37,13 +37,21 @@
         });
         $("#tabela_videos").on("click", ".check_all", function () {
             if ($(this).is(":checked")) {
-                $("#tabela_videos").find("td").each(function() {
+                $("#tabela_videos tbody").find("tr").each(function() {
+                    $(this).removeClass("tr_check");
+                    $(this).addClass("tr_checked");
+                });
+                $("#tabela_videos tbody").find("td").each(function() {
                     $(this).removeClass("td_check");
                     $(this).addClass("td_checked");
                 });
             }
             else {
-                $("#tabela_videos").find("td").each(function() {
+                $("#tabela_videos tbody").find("tr").each(function() {
+                    $(this).removeClass("tr_checked");
+                    $(this).addClass("tr_check");
+                });
+                $("#tabela_videos tbody").find("td").each(function() {
                     $(this).removeClass("td_checked");
                     $(this).addClass("td_check");
                 });

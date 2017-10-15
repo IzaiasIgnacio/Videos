@@ -1,9 +1,9 @@
 ﻿@model Videos.Models.ViewModel.VideosView
-<table class="table table-striped table-hover">
+<table class="table table-striped table-hover sortable">
     <thead>
         <tr>
-            <th width="5px" style="text-align: center"><input type="checkbox" class="check_all" /></th>
-            <th colspan="2">
+            <th width="5px" style="text-align: center" data-defaultsort="disabled"><input type="checkbox" class="check_all" /></th>
+            <th colspan="2" data-defaultsort="disabled">
                 <div class="botao_playlist">
                     <button type="button" class="btn btn-default playlist" aria-label="Gerar playlist">
                         <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
@@ -16,20 +16,27 @@
                     </span>
                 </div>
             </th>
-            <th colspan="2" style="text-align: right; padding-right: 5px">
+            <th colspan="2" style="text-align: right; padding-right: 5px" data-defaultsort="disabled">
                 <label>@Model.ListaVideos.Count Vídeos</label>
             </th>
-            <th style="padding-left:0">
+            <th style="padding-left:0" data-defaultsort="disabled">
                 <button type="button" class="btn btn-default atualizar_videos" aria-label="Atualizar">
                     <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
                 </button>
             </th>
         </tr>
+        <tr>
+            <th width="5px" style="text-align: center"></th>
+            <th>Título</th>
+            <th style="padding-right: 5px" data-defaultsort="disabled">Tipo</th>
+            <th style="text-align: center">Data</th>
+            <th colspan="2" data-defaultsort="disabled" style="text-align: center">Ações</th>
+        </tr>
     </thead>
     <tbody>
         @foreach (var video in Model.ListaVideos) {
             <tr class="tr_check">
-                <td>
+                <td data-value="@video.video_artista.Where(a => a.principal == true).FirstOrDefault().artista.nome">
                     <input type="hidden" class="check_videos" value="@video.id" />
                     <div class="div_thumb">
                         @if (File.Exists(Model.pastaArtistas + "\\" + video.video_artista.Where(a => a.principal == true).FirstOrDefault().artista.id + ".png")) {
@@ -50,7 +57,7 @@
                     }
                 </td>
                 <td>@video.tipo.descricao</td>
-                <td>@video.data.Value.ToShortDateString()</td>
+                <td data-dateformat="DD/MM/YYYY">@video.data.Value.ToShortDateString()</td>
                 <td>
                     <input type="hidden" class="id_play" value="@video.id" />
                     <button type="button" class="btn btn-xs play" aria-label="Play">

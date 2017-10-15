@@ -186,6 +186,15 @@ namespace Videos.Models.Repository {
                 db.SaveChanges();
             }
         }
-        
+
+        public void excluir(video video) {
+            BaseVideoView view = new BaseVideoView();
+            List<string> arquivos = Directory.GetFiles(view.pastaCapturas, video.id + "_*").ToList();
+            foreach (string arquivo in arquivos) {
+                File.Delete(arquivo);
+            }
+            db.video.Remove(video);
+            db.SaveChanges();
+        }
     }
 }
