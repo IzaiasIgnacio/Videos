@@ -20,6 +20,9 @@
         <AssociationConnector Association="VideosModel.FK_video_artista_video" />
         <AssociationConnector Association="VideosModel.FK_video_musica_video" />
         <AssociationConnector Association="VideosModel.FK_video_tag_video" />
+        <EntityTypeShape EntityType="VideosModel.playlist" Width="1.5" PointX="6.375" PointY="8" />
+        <EntityTypeShape EntityType="VideosModel.playlist_filtros" Width="1.5" PointX="8.625" PointY="7.875" />
+        <AssociationConnector Association="VideosModel.FK_playlist_filtros_playlist" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

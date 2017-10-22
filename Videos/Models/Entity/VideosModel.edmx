@@ -19,6 +19,23 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="titulo" Type="varchar" MaxLength="100" />
         </EntityType>
+        <EntityType Name="playlist">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nome" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="tipo" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="playlist_filtros">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tipo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="valor" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="id_playlist" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="tag">
           <Key>
             <PropertyRef Name="id" />
@@ -76,6 +93,18 @@
           <Property Name="id_video" Type="int" Nullable="false" />
           <Property Name="id_tag" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="FK_playlist_filtros_playlist">
+          <End Role="playlist" Type="Self.playlist" Multiplicity="1" />
+          <End Role="playlist_filtros" Type="Self.playlist_filtros" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="playlist">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="playlist_filtros">
+              <PropertyRef Name="id_playlist" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_video_artista_artista">
           <End Role="artista" Type="Self.artista" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -175,12 +204,18 @@
         <EntityContainer Name="VideosModelStoreContainer">
           <EntitySet Name="artista" EntityType="Self.artista" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="musica" EntityType="Self.musica" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="playlist" EntityType="Self.playlist" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="playlist_filtros" EntityType="Self.playlist_filtros" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tag" EntityType="Self.tag" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tipo" EntityType="Self.tipo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="video" EntityType="Self.video" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="video_artista" EntityType="Self.video_artista" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="video_musica" EntityType="Self.video_musica" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="video_tag" EntityType="Self.video_tag" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_playlist_filtros_playlist" Association="Self.FK_playlist_filtros_playlist">
+            <End Role="playlist" EntitySet="playlist" />
+            <End Role="playlist_filtros" EntitySet="playlist_filtros" />
+          </AssociationSet>
           <AssociationSet Name="FK_video_artista_artista" Association="Self.FK_video_artista_artista">
             <End Role="artista" EntitySet="artista" />
             <End Role="video_artista" EntitySet="video_artista" />
@@ -250,6 +285,12 @@
           <AssociationSet Name="FK_video_tag_video" Association="VideosModel.FK_video_tag_video">
             <End Role="video" EntitySet="video1" />
             <End Role="video_tag" EntitySet="video_tag" />
+          </AssociationSet>
+          <EntitySet Name="playlist" EntityType="VideosModel.playlist" />
+          <EntitySet Name="playlist_filtros" EntityType="VideosModel.playlist_filtros" />
+          <AssociationSet Name="FK_playlist_filtros_playlist" Association="VideosModel.FK_playlist_filtros_playlist">
+            <End Role="playlist" EntitySet="playlist" />
+            <End Role="playlist_filtros" EntitySet="playlist_filtros" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="artista">
@@ -433,6 +474,37 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="playlist">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nome" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="tipo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="playlist_filtros" Relationship="VideosModel.FK_playlist_filtros_playlist" FromRole="playlist" ToRole="playlist_filtros" />
+        </EntityType>
+        <EntityType Name="playlist_filtros">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tipo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="valor" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="id_playlist" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="playlist" Relationship="VideosModel.FK_playlist_filtros_playlist" FromRole="playlist_filtros" ToRole="playlist" />
+        </EntityType>
+        <Association Name="FK_playlist_filtros_playlist">
+          <End Type="VideosModel.playlist" Role="playlist" Multiplicity="1" />
+          <End Type="VideosModel.playlist_filtros" Role="playlist_filtros" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="playlist">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="playlist_filtros">
+              <PropertyRef Name="id_playlist" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -514,6 +586,25 @@
               <MappingFragment StoreEntitySet="video_tag">
                 <ScalarProperty Name="id_tag" ColumnName="id_tag" />
                 <ScalarProperty Name="id_video" ColumnName="id_video" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="playlist">
+            <EntityTypeMapping TypeName="VideosModel.playlist">
+              <MappingFragment StoreEntitySet="playlist">
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="nome" ColumnName="nome" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="playlist_filtros">
+            <EntityTypeMapping TypeName="VideosModel.playlist_filtros">
+              <MappingFragment StoreEntitySet="playlist_filtros">
+                <ScalarProperty Name="id_playlist" ColumnName="id_playlist" />
+                <ScalarProperty Name="valor" ColumnName="valor" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

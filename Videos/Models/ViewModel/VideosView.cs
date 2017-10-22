@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -135,6 +136,12 @@ namespace Videos.Models.ViewModel {
                 return AppDomain.CurrentDomain.BaseDirectory.Replace("bin", "") + "artistas\\";
             }
         }
+        public string caminhoArtistas {
+            get {
+                return ConfigurationManager.AppSettings["pastaArtistas"];
+            }
+        }
+        
         public List<video> ListaVideos { get; set; }
         public string Playlist { get; set; }
         public string NomePlaylist { get; set; }

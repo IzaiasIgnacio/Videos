@@ -1,0 +1,24 @@
+﻿@model Videos.Models.ViewModel.PlaylistsView
+<script>
+    $(function() {
+        $(".att").click(function() {
+            var id = $(this).closest(".active").find(".id_playlist").val();
+            $.post('@Url.Action("AtualizarPlaylist", "Jquery")', { id: id },
+            function(resposta) {
+                
+            });
+        });
+    });
+</script>
+<ul class="list-group">
+    @foreach (var playlist in Model.ListaPlaylists) {
+        <li class="list-group-item list-group-item active">
+            @playlist.nome
+            <input type="hidden" class="id_playlist" value="@playlist.id" />
+            <span>
+                @playlist.tipo
+                <button class="btn btn-default att">Atualizar</button>
+            </span>
+        </li>
+    }
+</ul>

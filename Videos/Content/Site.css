@@ -148,3 +148,19 @@ body {
 .td_checked {
     background-color: rgb(164, 9, 157) !important;
 }
+
+.list-group {
+    width: 40%;
+    background-color: #aaa;
+}
+
+.list-group .active {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.list-group span {
+    float: right;
+    margin-top: -7px;
+    text-transform:capitalize;
+}

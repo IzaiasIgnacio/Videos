@@ -40,7 +40,7 @@
                     <input type="hidden" class="check_videos" value="@video.id" />
                     <div class="div_thumb">
                         @if (File.Exists(Model.pastaArtistas + "\\" + video.video_artista.Where(a => a.principal == true).FirstOrDefault().artista.id + ".png")) {
-                            <img class="img-rounded img-responsive list_thumb" src="@("/Videos/artistas/"+video.video_artista.Where(a => a.principal == true).FirstOrDefault().artista.id + ".png")">
+                            <img class="img-rounded img-responsive list_thumb" src="@(Model.caminhoArtistas+video.video_artista.Where(a => a.principal == true).FirstOrDefault().artista.id + ".png")">
                         }
                         else {
                             @video.video_artista.Where(a => a.principal == true).FirstOrDefault().artista.nome;

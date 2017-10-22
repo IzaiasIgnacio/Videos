@@ -275,20 +275,32 @@ namespace Videos.Controllers {
             }
         }
 
+        public void AtualizarPlaylist(int id) {
+            VideoRepository videoRepository = new VideoRepository();
+            PlaylistRepository playlistRepository = new PlaylistRepository();
+            var playlist = playlistRepository.getPlaylistById(id);
+            
+            var lista = videoRepository.listarVideos();
+
+            var tags = playlist.playlist_filtros.Where(f => f.tipo == "tag").ToList();
+            if (tags.Count > 0) {
+                foreach (var tag in tags) {
+                    lista = lista.Where(v => v.video_tag.Any(ta => ta.id_tag == Int32.Parse(tag.valor))).ToList();
+                }
+            }
+
+            var tipos = playlist.playlist_filtros.Where(f => f.tipo == "tipo").ToList();
+            if (tipos.Count > 0) {
+                lista = lista.Where(v => tipos.Select(t => Int32.Parse(t.valor)).ToArray().Contains(v.id_tipo)).ToList();
+            }
+
+            List<int> ids = lista.Select(v =>v.id).ToList();
+
+            Random rnd = new Random();
+            lista = lista.Distinct().OrderBy(v => rnd.Next()).ToList();
+
+            System.IO.File.WriteAllLines(@"K:\\ICI\\Vídeos\\kpop\\" + playlist.nome + ".m3u", lista.Select(l => l.caminho).ToArray());
+        }
     }
-
-    [Serializable]
-    internal class OutOfEnergyException : Exception {
-        public OutOfEnergyException() {
-        }
-
-        public OutOfEnergyException(string message) : base(message) {
-        }
-
-        public OutOfEnergyException(string message, Exception innerException) : base(message, innerException) {
-        }
-
-        protected OutOfEnergyException(SerializationInfo info, StreamingContext context) : base(info, context) {
-        }
-    }
+    
 }

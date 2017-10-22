@@ -192,6 +192,12 @@
     <Compile Include="Models\Entity\musica.cs">
       <DependentUpon>VideosModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entity\playlist.cs">
+      <DependentUpon>VideosModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entity\playlist_filtros.cs">
+      <DependentUpon>VideosModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Entity\tag.cs">
       <DependentUpon>VideosModel.tt</DependentUpon>
     </Compile>
@@ -214,9 +220,11 @@
     <Compile Include="Models\Repository\BaseRepository.cs" />
     <Compile Include="Models\Repository\TagRepository.cs" />
     <Compile Include="Models\Repository\MusicaRepository.cs" />
+    <Compile Include="Models\Repository\PlaylistRepository.cs" />
     <Compile Include="Models\Repository\TipoRepository.cs" />
     <Compile Include="Models\Services\VideoDataService.cs" />
     <Compile Include="Models\ViewModel\ArtistasView.cs" />
+    <Compile Include="Models\ViewModel\PlaylistsView.cs" />
     <Compile Include="Models\ViewModel\VideosView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Repository\VideoRepository.cs" />
@@ -308,6 +316,7 @@
     <Content Include="Views\Jquery\VideoListView.cshtml" />
     <Content Include="Views\Jquery\TipoListView.cshtml" />
     <Content Include="Views\Jquery\ArtistaPrincipalListView.cshtml" />
+    <Content Include="Views\Home\Playlists.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
