@@ -282,6 +282,18 @@ namespace Videos.Controllers {
             
             var lista = videoRepository.listarVideos();
 
+            var artistas = playlist.playlist_filtros.Where(f => f.tipo == "artista").ToList();
+            if (artistas.Count > 0) {
+                lista = lista.Where(v => v.video_artista.Any(va => artistas.Select(t => Int32.Parse(t.valor)).ToArray().Contains(va.id_artista) && va.principal == true)).ToList();
+            }
+
+            var musicas = playlist.playlist_filtros.Where(f => f.tipo == "musica").ToList();
+            if (musicas.Count > 0) {
+                foreach (var m in musicas) {
+                    lista = lista.Where(v => v.video_musica.Any(mu => mu.id_musica == Int32.Parse(m.valor))).ToList();
+                }
+            }
+
             var tags = playlist.playlist_filtros.Where(f => f.tipo == "tag").ToList();
             if (tags.Count > 0) {
                 foreach (var tag in tags) {
