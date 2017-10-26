@@ -214,6 +214,7 @@ namespace Videos.Controllers {
             }
 
             videosView.ListaVideos = lista.Distinct().OrderBy(v => v.titulo).ToList();
+            videosView.totalVideos = videosView.ListaVideos.Count();
 
             return PartialView("VideoListView", videosView);
         }
@@ -312,6 +313,11 @@ namespace Videos.Controllers {
             lista = lista.Distinct().OrderBy(v => rnd.Next()).ToList();
 
             System.IO.File.WriteAllLines(@"K:\\ICI\\Vídeos\\kpop\\" + playlist.nome + ".m3u", lista.Select(l => l.caminho).ToArray());
+        }
+
+        public void SetVideoFavorito(int id, bool favorito) {
+            VideoRepository videoRepository = new VideoRepository();
+            videoRepository.setFavorito(id, !favorito);
         }
     }
     

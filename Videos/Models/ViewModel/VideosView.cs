@@ -141,7 +141,9 @@ namespace Videos.Models.ViewModel {
                 return ConfigurationManager.AppSettings["pastaArtistas"];
             }
         }
-        
+
+        public int totalVideos { get; set; }
+        public bool favorito { get; set; }
         public List<video> ListaVideos { get; set; }
         public string Playlist { get; set; }
         public string NomePlaylist { get; set; }

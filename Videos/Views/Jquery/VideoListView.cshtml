@@ -16,8 +16,8 @@
                     </span>
                 </div>
             </th>
-            <th colspan="2" style="text-align: right; padding-right: 5px" data-defaultsort="disabled">
-                <label>@Model.ListaVideos.Count Vídeos</label>
+            <th colspan="3" style="text-align: right; padding-right: 5px" data-defaultsort="disabled">
+                <label>@Model.totalVideos Vídeos</label>
             </th>
             <th style="padding-left:0" data-defaultsort="disabled">
                 <button type="button" class="btn btn-default atualizar_videos" aria-label="Atualizar">
@@ -30,7 +30,7 @@
             <th>Título</th>
             <th style="padding-right: 5px" data-defaultsort="disabled">Tipo</th>
             <th style="text-align: center">Data</th>
-            <th colspan="2" data-defaultsort="disabled" style="text-align: center">Ações</th>
+            <th colspan="3" data-defaultsort="disabled" style="text-align: center">Ações</th>
         </tr>
     </thead>
     <tbody>
@@ -68,6 +68,17 @@
                     <input type="hidden" class="id" value="@video.id" />
                     <button type="button" class="btn btn-xs edit" aria-label="Editar">
                         <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                    </button>
+                </td>
+                <td>
+                    <input type="hidden" class="id_favorito" value="@video.id" />
+                    <button type="button" class="btn btn-xs favorito" aria-label="Favorito">
+                        @if (video.favorito == false) {
+                            <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+                        }
+                        else {
+                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                        }
                     </button>
                 </td>
             </tr>

@@ -12,6 +12,10 @@ namespace Videos.Models.Repository {
         public video getVideoById(int id) {
             return db.video.Where(v => v.id == id).FirstOrDefault();
         }
+
+        public int getTotalVideos() {
+            return db.video.Count();
+        }
         
         public List<video> listarVideos() {
             List<video> listaVideos;
@@ -194,6 +198,12 @@ namespace Videos.Models.Repository {
                 File.Delete(arquivo);
             }
             db.video.Remove(video);
+            db.SaveChanges();
+        }
+
+        public void setFavorito(int id, bool favorito) {
+            video video = db.video.Find(id);
+            video.favorito = favorito;
             db.SaveChanges();
         }
     }

@@ -17,6 +17,15 @@
                 setTimeout(function() { win.close(); }, 2000);
             });
         });
+        $("#tabela_videos").on("click", ".favorito", function() {
+            var botao = $(this).find('span');
+            var id = $(this).closest('td').find('.id_favorito').val();
+            $.post('@Url.Action("SetVideoFavorito", "Jquery")', { id: id, favorito: botao.hasClass('glyphicon-star') },
+            function(resposta) {
+                botao.toggleClass("glyphicon-star");
+                botao.toggleClass("glyphicon-star-empty");
+            });
+        });
         $("#div_filtros").on("click", ".filtrar", function() {
             var array = $("#filtro").serializeArray();
             var json = {};
@@ -24,7 +33,7 @@
             jQuery.each(array, function() {
                 json[this.name] = this.value || '';
             });
-            
+
             $.ajax({
                 url: '@Url.Action("FiltrarVideosJquery", "Jquery")',
                 type: 'POST',
@@ -86,7 +95,7 @@
             $('.tr_checked').each(function() {
                 array_playlist.push($(this).find(".check_videos").val());
             });
-            
+
             json["Playlist"] = array_playlist.join();
             json["NomePlaylist"] = $("#nome_playlist").val();
 

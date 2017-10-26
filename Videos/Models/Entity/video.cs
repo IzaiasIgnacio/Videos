@@ -34,6 +34,7 @@ namespace Videos.Models.Entity
         public string fps { get; set; }
         public string canais_audio { get; set; }
         public string formato_audio { get; set; }
+        public bool favorito { get; set; }
     
         public virtual tipo tipo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
