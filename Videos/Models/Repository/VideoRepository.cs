@@ -201,6 +201,10 @@ namespace Videos.Models.Repository {
             db.SaveChanges();
         }
 
+        public void excluirArquivo(video video) {
+            File.Delete(video.caminho);
+        }
+
         public void setFavorito(int id, bool favorito) {
             video video = db.video.Find(id);
             video.favorito = favorito;

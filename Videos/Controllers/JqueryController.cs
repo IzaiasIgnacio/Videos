@@ -200,9 +200,7 @@ namespace Videos.Controllers {
                 }
             }
             if (view.Musicas.Count > 0) {
-                foreach (var m in view.Musicas) {
-                    lista = lista.Where(v => v.video_musica.Any(mu => mu.id_musica == m.id)).ToList();
-                }
+                lista = lista.Where(v => v.video_musica.Any(vm => view.Musicas.Select(t => t.id).ToArray().Contains(vm.id_musica))).ToList();
             }
             if (view.Tags.Count > 0) {
                 foreach (var t in view.Tags) {
@@ -213,7 +211,7 @@ namespace Videos.Controllers {
                 lista = lista.Where(v => view.Tipos.Select(t=>t.id).ToArray().Contains(v.id_tipo)).ToList();
             }
 
-            videosView.ListaVideos = lista.Distinct().OrderBy(v => v.titulo).ToList();
+            videosView.ListaVideos = lista.Distinct().OrderByDescending(v => v.id).ToList();
             videosView.totalVideos = videosView.ListaVideos.Count();
 
             return PartialView("VideoListView", videosView);
@@ -264,6 +262,13 @@ namespace Videos.Controllers {
             }
         }
 
+        public void ExcluirVideoJquery(int id) {
+            VideoRepository videoRepository = new VideoRepository();
+            video video = videoRepository.getVideoById(id);
+            videoRepository.excluirArquivo(video);
+            videoRepository.excluir(video);
+        }
+
         public void PlayVideo(int id) {
             VideoRepository videoRepository = new VideoRepository();
             video video = videoRepository.getVideoById(id);
@@ -283,32 +288,37 @@ namespace Videos.Controllers {
             
             var lista = videoRepository.listarVideos();
 
-            var artistas = playlist.playlist_filtros.Where(f => f.tipo == "artista").ToList();
-            if (artistas.Count > 0) {
-                lista = lista.Where(v => v.video_artista.Any(va => artistas.Select(t => Int32.Parse(t.valor)).ToArray().Contains(va.id_artista) && va.principal == true)).ToList();
+            switch (playlist.tipo) {
+                case "auto":
+                    var artistas = playlist.playlist_filtros.Where(f => f.tipo == "artista").ToList();
+                    if (artistas.Count > 0) {
+                        lista = lista.Where(v => v.video_artista.Any(va => artistas.Select(t => Int32.Parse(t.valor)).ToArray().Contains(va.id_artista) && va.principal == true)).ToList();
+                    }
+
+                    var musicas = playlist.playlist_filtros.Where(f => f.tipo == "musica").ToList();
+                    if (musicas.Count > 0) {
+                        foreach (var m in musicas) {
+                            lista = lista.Where(v => v.video_musica.Any(mu => mu.id_musica == Int32.Parse(m.valor))).ToList();
+                        }
+                    }
+
+                    var tags = playlist.playlist_filtros.Where(f => f.tipo == "tag").ToList();
+                    if (tags.Count > 0) {
+                        foreach (var tag in tags) {
+                            lista = lista.Where(v => v.video_tag.Any(ta => ta.id_tag == Int32.Parse(tag.valor))).ToList();
+                        }
+                    }
+
+                    var tipos = playlist.playlist_filtros.Where(f => f.tipo == "tipo").ToList();
+                    if (tipos.Count > 0) {
+                        lista = lista.Where(v => tipos.Select(t => Int32.Parse(t.valor)).ToArray().Contains(v.id_tipo)).ToList();
+                    }
+                break;
+                case "favoritos":
+                    lista = lista.Where(v => v.favorito == true).ToList();
+                break;
             }
-
-            var musicas = playlist.playlist_filtros.Where(f => f.tipo == "musica").ToList();
-            if (musicas.Count > 0) {
-                foreach (var m in musicas) {
-                    lista = lista.Where(v => v.video_musica.Any(mu => mu.id_musica == Int32.Parse(m.valor))).ToList();
-                }
-            }
-
-            var tags = playlist.playlist_filtros.Where(f => f.tipo == "tag").ToList();
-            if (tags.Count > 0) {
-                foreach (var tag in tags) {
-                    lista = lista.Where(v => v.video_tag.Any(ta => ta.id_tag == Int32.Parse(tag.valor))).ToList();
-                }
-            }
-
-            var tipos = playlist.playlist_filtros.Where(f => f.tipo == "tipo").ToList();
-            if (tipos.Count > 0) {
-                lista = lista.Where(v => tipos.Select(t => Int32.Parse(t.valor)).ToArray().Contains(v.id_tipo)).ToList();
-            }
-
-            List<int> ids = lista.Select(v =>v.id).ToList();
-
+            
             Random rnd = new Random();
             lista = lista.Distinct().OrderBy(v => rnd.Next()).ToList();
 

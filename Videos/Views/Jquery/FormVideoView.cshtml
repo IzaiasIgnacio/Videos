@@ -20,6 +20,20 @@
             });
         });
 
+        $("#modal_form_video").on("click", ".excluir", function() {
+            var id = $("#form_video").find("#Id").val();
+            console.log(id);
+            $.ajax({
+                url: '@Url.Action("ExcluirVideoJquery", "Jquery")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: '{ "id": '+id+' }',
+                success: function(resposta) {
+                    $("#modal_form_video").modal('hide');
+                }
+            });
+        });
+
         $("#modal_form_video").on("click", ".atualizar_metadata", function() {
             $.post('@Url.Action("AtualizarMetadataJquery", "Jquery")', { id: $(this).closest('div').find("#Id").val() },
             function(resposta) {
