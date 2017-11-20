@@ -2,23 +2,48 @@
 <script>
     $(function() {
         $(".att").click(function() {
-            var id = $(this).closest(".active").find(".id_playlist").val();
+            var id = $('#div_filtros #select_playlists').val();
             $.post('@Url.Action("AtualizarPlaylist", "Jquery")', { id: id },
             function(resposta) {
-                
+                alert('foi');
             });
+        });
+
+        $('#div_filtros #select_playlists').tokenize2({
+            searchFromStart: false,
+            dropdownMaxItems: 30,
+            delimiter: ';', //,
+            tokensMaxItems: 1,
+            placeholder: 'Playlists' //false
+        });
+        $('#div_filtros #select_playlists').on('tokenize:tokens:add', function(e, value, text) {
+            $(".dismiss").hide();
+            $(".acoes").fadeIn();
+        });
+        $('#div_filtros #select_playlists').on('tokenize:select', function(e, value) {
+            $(this).tokenize2().clear();
+            $(this).tokenize2().trigger('tokenize:search', [$(this).tokenize2().input.val()]);
+        });
+        $('#div_filtros #select_playlists').on('tokenize:tokens:remove', function(e, value) {
+            $(".acoes").fadeOut();
         });
     });
 </script>
-<ul class="list-group">
-    @foreach (var playlist in Model.ListaPlaylists) {
-        <li class="list-group-item list-group-item active">
-            @playlist.nome
-            <input type="hidden" class="id_playlist" value="@playlist.id" />
-            <span>
-                @playlist.tipo
-                <button class="btn btn-default att">Atualizar</button>
-            </span>
-        </li>
-    }
-</ul>
+<div class="col-md-12" id="div_filtros">
+    <div class="panel panel-default">
+        <div class="panel-heading"><b>Playlists</b></div>
+        <div class="panel-body" style="margin-top: 10px">
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => Model.ListaPlaylists,
+                    new SelectList(Model.ListaPlaylists, "id", "nome", Model.ListaPlaylists), null, new { @id = "select_playlists", @class = "form-control campo_filtro", @multiple = true })
+                </div>
+                <div class="col-md-4">
+                    <div class="acoes" style="display: none">
+                        <button class="btn btn-default att">Atualizar</button>
+                        <button class="btn btn-default rename">Renomear</button>
+                        <button class="btn btn-default excluir">Excluir</button>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
