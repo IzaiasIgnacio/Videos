@@ -240,7 +240,7 @@ namespace Videos.Controllers {
                 string[] arquivos = Directory.GetFiles(pasta);
                 foreach (string arquivo in arquivos) {
                     FileInfo dados = new FileInfo(arquivo);
-                    string[] extensoes = { ".mp4", ".mkv", ".ts", ".tp", ".avi", ".vob" };
+                    string[] extensoes = { ".mp4", ".mkv", ".ts", ".tp", ".avi", ".vob", ".m2t" };
                     if (extensoes.Contains(dados.Extension.ToLower())) {
                         listaArquivos.Add(arquivo);
                     }
@@ -316,6 +316,12 @@ namespace Videos.Controllers {
                 break;
                 case "favoritos":
                     lista = lista.Where(v => v.favorito == true).ToList();
+                break;
+                case "recentes":
+                    lista = lista
+                            .Where(v => v.id_tipo == 1 || v.id_tipo == 2)
+                            .Where(v => DateTime.Compare(v.data.Value, DateTime.Today.AddMonths(-6)) >= 0)
+                            .ToList();
                 break;
             }
             
