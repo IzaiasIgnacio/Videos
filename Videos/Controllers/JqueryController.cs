@@ -229,12 +229,12 @@ namespace Videos.Controllers {
             Random rnd = new Random();
             lista = lista.Distinct().OrderBy(v => rnd.Next()).ToList();
 
-            System.IO.File.WriteAllLines(@"K:\\ICI\\Vídeos\\kpop\\"+view.NomePlaylist+ ".m3u", lista.Select(l=>l.caminho).ToArray());
+            System.IO.File.WriteAllLines(@"K:\\Vídeos\\kpop\\"+view.NomePlaylist+ ".m3u", lista.Select(l=>l.caminho).ToArray());
         }
         
         public void AtualizarVideosJquery() {
             List<string> listaArquivos = new List<string>();
-            string caminho = @"K:\ICI\Vídeos\kpop";
+            string caminho = @"K:\Vídeos\kpop";
             string[] pastas = Directory.GetDirectories(caminho, "*", System.IO.SearchOption.AllDirectories);
             foreach (string pasta in pastas) {
                 string[] arquivos = Directory.GetFiles(pasta);
@@ -273,7 +273,7 @@ namespace Videos.Controllers {
             VideoRepository videoRepository = new VideoRepository();
             video video = videoRepository.getVideoById(id);
 
-            using (FileStream file = new FileStream(@"K:\\ICI\\Vídeos\\kpop\\play.m3u", FileMode.Create)) {
+            using (FileStream file = new FileStream(@"K:\\Vídeos\\kpop\\play.m3u", FileMode.Create)) {
                 byte[] linha = Encoding.UTF8.GetBytes(Environment.NewLine);
                 byte[] bytes = Encoding.UTF8.GetBytes(video.caminho);
                 file.Write(bytes, 0, bytes.Length);
@@ -328,7 +328,7 @@ namespace Videos.Controllers {
             Random rnd = new Random();
             lista = lista.Distinct().OrderBy(v => rnd.Next()).ToList();
 
-            System.IO.File.WriteAllLines(@"K:\\ICI\\Vídeos\\kpop\\" + playlist.nome + ".m3u", lista.Select(l => l.caminho).ToArray());
+            System.IO.File.WriteAllLines(@"K:\\Vídeos\\kpop\\" + playlist.nome + ".m3u", lista.Select(l => l.caminho).ToArray());
         }
 
         public void SetVideoFavorito(int id, bool favorito) {

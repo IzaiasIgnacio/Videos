@@ -165,9 +165,9 @@ namespace Videos.Models.Repository {
         private tipo getTipoByCaminho(string caminho) {
             string[] split = caminho.Split('\\');
             string[] tipos = { "Lives", "MVs" };
-            if (split.Length > 5) {
-                if (tipos.Contains(split[5])) {
-                    string descricao = split[5];
+            if (split.Length > 4) {
+                if (tipos.Contains(split[4])) {
+                    string descricao = split[4];
                     return db.tipo.Where(d => d.pasta == descricao).FirstOrDefault();
                 }
             }
@@ -175,7 +175,7 @@ namespace Videos.Models.Repository {
         }
 
         private artista getArtistaByCaminho(string caminho) {
-            string split = caminho.Split('\\')[4];
+            string split = caminho.Split('\\')[3];
             return db.artista.Where(n => n.nome == split).FirstOrDefault();
         }
 
