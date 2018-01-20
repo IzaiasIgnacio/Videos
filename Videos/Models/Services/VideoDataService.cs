@@ -37,6 +37,9 @@ namespace Videos.Models.Services {
                     view.CanaisAudio = inputFile.Metadata.AudioData.ChannelOutput;
                     view.FormatoAudio = inputFile.Metadata.AudioData.Format;
                 }
+                
+                FileInfo fi = new FileInfo(video.caminho);
+                view.Tamanho = (Convert.ToInt32(fi.Length) / 1024 / 1024);
             }
 
             return view;

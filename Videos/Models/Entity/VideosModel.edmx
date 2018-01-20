@@ -66,6 +66,7 @@
           <Property Name="fps" Type="nvarchar" MaxLength="20" />
           <Property Name="canais_audio" Type="nvarchar" MaxLength="20" />
           <Property Name="formato_audio" Type="nvarchar" MaxLength="100" />
+          <Property Name="tamanho" Type="int" />
           <Property Name="favorito" Type="bit" Nullable="false" />
           <Property Name="id_tipo" Type="int" Nullable="false" />
         </EntityType>
@@ -348,6 +349,7 @@
           <Property Name="canais_audio" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="formato_audio" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="favorito" Type="Boolean" Nullable="false" />
+          <Property Name="tamanho" Type="Int32" />
         </EntityType>
         <EntityType Name="video_artista">
           <Key>
@@ -549,6 +551,7 @@
           <EntitySetMapping Name="video1">
             <EntityTypeMapping TypeName="VideosModel.video">
               <MappingFragment StoreEntitySet="video">
+                <ScalarProperty Name="tamanho" ColumnName="tamanho" />
                 <ScalarProperty Name="favorito" ColumnName="favorito" />
                 <ScalarProperty Name="formato_audio" ColumnName="formato_audio" />
                 <ScalarProperty Name="canais_audio" ColumnName="canais_audio" />
