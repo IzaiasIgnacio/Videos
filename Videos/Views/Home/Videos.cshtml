@@ -13,8 +13,7 @@
             var id = $(this).closest('td').find('.id_play').val();
             $.post('@Url.Action("PlayVideo", "Jquery")', { id: id },
             function(resposta) {
-                var win = window.open("@HttpUtility.JavaScriptStringEncode("play:K:\\Vídeos\\play.m3u")");
-                setTimeout(function() { win.close(); }, 2000);
+                window.location = "play:K:\\Vídeos\\play.m3u";
             });
         });
         $("#tabela_videos").on("click", ".favorito", function() {

@@ -8,6 +8,10 @@
                 alert('foi');
             });
         });
+        $(".play").click(function() {
+            var playlist = $('#div_filtros #select_playlists option:selected').text();
+            window.location = "play:K:\\Vídeos\\"+playlist+".m3u";
+        });
 
         $('#div_filtros #select_playlists').tokenize2({
             searchFromStart: false,
@@ -39,6 +43,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="acoes" style="display: none">
+                        <button class="btn btn-default play">Play</button>
                         <button class="btn btn-default att">Atualizar</button>
                         <button class="btn btn-default rename">Renomear</button>
                         <button class="btn btn-default excluir">Excluir</button>

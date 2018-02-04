@@ -50,6 +50,7 @@ namespace Videos.Controllers {
             }
             videoDataView.Duracao = video.duracao;
             videoDataView.Resolucao = video.resolucao;
+            videoDataView.Tamanho = Convert.ToInt32(video.tamanho);
             videoDataView.FormatoVideo = video.formato_video;
             videoDataView.Fps = video.fps;
             videoDataView.CanaisAudio = video.canais_audio;
