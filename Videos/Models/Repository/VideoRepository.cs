@@ -77,7 +77,7 @@ namespace Videos.Models.Repository {
             }
             video.duracao = dados.Duracao;
             video.resolucao = dados.Resolucao;
-            video.tamanho= dados.Tamanho;
+            video.tamanho = dados.Tamanho;
             video.formato_video = dados.FormatoVideo;
             video.fps = dados.Fps;
             video.canais_audio = dados.CanaisAudio;

@@ -106,7 +106,7 @@ namespace Videos.Models.ViewModel {
         public string Fps { get; set; }
         public string CanaisAudio { get; set; }
         public string FormatoAudio { get; set; }
-        public int Tamanho { get; set; }
+        public long Tamanho { get; set; }
         public List<string> Thumbs { get; set; }
         public new string ArtistaPrincipal { get; set; }
     }

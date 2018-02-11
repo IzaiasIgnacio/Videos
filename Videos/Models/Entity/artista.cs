@@ -7,17 +7,15 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Videos.Models.Entity
-{
-    using System;
+namespace Videos.Models.Entity {
     using System.Collections.Generic;
-    
+
     public partial class artista
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public artista()
         {
-            this.video_artista = new HashSet<video_artista>();
+            video_artista = new HashSet<video_artista>();
         }
     
         public int id { get; set; }

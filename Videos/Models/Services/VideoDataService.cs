@@ -39,7 +39,7 @@ namespace Videos.Models.Services {
                 }
                 
                 FileInfo fi = new FileInfo(video.caminho);
-                view.Tamanho = (Convert.ToInt32(fi.Length) / 1024 / 1024);
+                view.Tamanho = (Convert.ToInt64(fi.Length) / 1024 / 1024);
             }
 
             return view;
