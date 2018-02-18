@@ -40,6 +40,7 @@
                 data: JSON.stringify(json),
                 success: function(resposta) {
                     $("#tabela_videos").html(resposta);
+                    $.bootstrapSortable(true);
                 }
             });
         });
