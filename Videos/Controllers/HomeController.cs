@@ -13,18 +13,7 @@ namespace Videos.Controllers {
         public ActionResult Index() {
             return View();
         }
-
-        public ActionResult Download(string titulo, string path, string audio) {
-            using (var client = new WebClient()) {
-                string c = System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(path));
-                client.DownloadFile(c, "C:/Users/Izaias/Downloads/teste.mp4");
-                string a = System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(audio));
-                client.DownloadFile(a, "C:/Users/Izaias/Downloads/audio.mp4");
-                Process.Start("ffmpeg -i teste.mp4 -i audio.mp4 -c copy merged_output.mp4");
-            }
-            return null;
-        }
-
+        
         public ActionResult Artistas(string id) {
             ArtistaRepository artistaRepository = new ArtistaRepository();
 

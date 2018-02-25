@@ -241,7 +241,7 @@ namespace Videos.Controllers {
                 string[] arquivos = Directory.GetFiles(pasta);
                 foreach (string arquivo in arquivos) {
                     FileInfo dados = new FileInfo(arquivo);
-                    string[] extensoes = { ".mp4", ".mkv", ".ts", ".tp", ".avi", ".vob", ".m2t" };
+                    string[] extensoes = { ".mp4", ".mkv", ".ts", ".tp", ".avi", ".vob", ".m2t", ".m2ts" };
                     if (extensoes.Contains(dados.Extension.ToLower())) {
                         listaArquivos.Add(arquivo);
                     }
