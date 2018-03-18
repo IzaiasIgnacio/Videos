@@ -158,19 +158,6 @@
             </div>
         </div>
         <div class="col-md-4">
-            <label for="artistas" style="display:block">Artistas</label>
-            @Html.DropDownListFor(model => Model.ListaArtistas,
-            new SelectList(Model.ListaArtistas, "id", "nome", Model.ListaArtistas), null, new { @id = "select_artistas", @class = "form-control campo_filtro", @multiple = true })
-            <div id="lista_artistas" style="display: none">
-                @for (int i = 0; i < Model.Artistas.Count; i++) {
-                    <div>
-                        @Html.HiddenFor(model => Model.Artistas[i].id, new { @Value = Model.Artistas[i].id })
-                        <label>@Model.Artistas[i].nome</label>
-                    </div>
-                }
-            </div>
-        </div>
-        <div class="col-md-4">
             <label for="musicas" style="display:block">Musicas</label>
             @Html.DropDownListFor(model => Model.ListaMusicas,
             new SelectList(Model.ListaMusicas, "titulo", "titulo", Model.ListaMusicas), null, new { @id = "select_musicas", @class = "form-control campo_filtro", @multiple = true })
@@ -192,6 +179,19 @@
                     <div>
                         @Html.HiddenFor(model => Model.Tags[i].id, new { @Value = Model.Tags[i].id })
                         <label>@Model.Tags[i].nome</label>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-md-4">
+            <label for="artistas" style="display:block">Artistas</label>
+            @Html.DropDownListFor(model => Model.ListaArtistas,
+            new SelectList(Model.ListaArtistas, "id", "nome", Model.ListaArtistas), null, new { @id = "select_artistas", @class = "form-control campo_filtro", @multiple = true })
+            <div id="lista_artistas" style="display: none">
+                @for (int i = 0; i < Model.Artistas.Count; i++) {
+                    <div>
+                        @Html.HiddenFor(model => Model.Artistas[i].id, new { @Value = Model.Artistas[i].id })
+                        <label>@Model.Artistas[i].nome</label>
                     </div>
                 }
             </div>

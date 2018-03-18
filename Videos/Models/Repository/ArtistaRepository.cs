@@ -15,7 +15,7 @@ namespace Videos.Models.Repository {
 
         public List<String> listarPastasArtistas() {
             List<String> listaPastas = new List<string>();
-            string caminho = @"K:\ICI\Vídeos\kpop";
+            string caminho = @"K:\Vídeos\kpop";
             string[] pastas = Directory.GetDirectories(caminho);
 
             foreach (var pasta in pastas) {
