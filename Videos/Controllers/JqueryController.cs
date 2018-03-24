@@ -334,6 +334,12 @@ namespace Videos.Controllers {
                             .Where(v => DateTime.Compare(v.data.Value, DateTime.Today.AddMonths(-6)) >= 0)
                             .ToList();
                 break;
+                case "custom":
+                    var videos = playlist.playlist_filtros.Where(f => f.tipo == "video").ToList();
+                    if (videos.Count > 0) {
+                        lista = lista.Where(v => videos.Select(t => Int32.Parse(t.valor)).ToArray().Contains(v.id)).ToList();
+                    }
+                break;
                 default:
                     return;
             }
