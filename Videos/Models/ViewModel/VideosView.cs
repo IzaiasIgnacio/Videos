@@ -109,6 +109,7 @@ namespace Videos.Models.ViewModel {
         public long Tamanho { get; set; }
         public List<string> Thumbs { get; set; }
         public new string ArtistaPrincipal { get; set; }
+        public bool favorito { get; set; }
     }
 
     public class VideoInfoView {

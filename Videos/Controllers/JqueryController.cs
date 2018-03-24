@@ -25,6 +25,7 @@ namespace Videos.Controllers {
             video video = videoRepository.getVideoById(id);
 
             videoDataView.Id = id;
+            videoDataView.favorito = video.favorito;
             videoDataView.Titulo = video.titulo;
             videoDataView.ArtistaPrincipal = video.video_artista.Where(a => a.principal == true).FirstOrDefault().artista.nome;
             videoDataView.ListaArtistas = artistaRepository.Listar<artista>().OrderBy(a => a.nome).ToList();
@@ -56,7 +57,7 @@ namespace Videos.Controllers {
             videoDataView.CanaisAudio = video.canais_audio;
             videoDataView.FormatoAudio = video.formato_audio;
             videoDataView.Thumbs = videoDataService.getThumbs(video.id);
-
+            
             return PartialView("FormVideoView", videoDataView);
         }
 
