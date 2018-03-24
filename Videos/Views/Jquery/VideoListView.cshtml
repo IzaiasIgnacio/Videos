@@ -3,7 +3,7 @@
     <thead>
         <tr>
             <th width="5px" style="text-align: center" data-defaultsort="disabled"><input type="checkbox" class="check_all" /></th>
-            <th colspan="2" data-defaultsort="disabled">
+            <th colspan="3" data-defaultsort="disabled">
                 <div class="botao_playlist">
                     <button type="button" class="btn btn-default playlist" aria-label="Gerar playlist">
                         <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
@@ -30,7 +30,7 @@
             <th>Título</th>
             <th style="padding-right: 5px" data-defaultsort="disabled">Tipo</th>
             <th style="text-align: center">Data</th>
-            <th colspan="3" data-defaultsort="disabled" style="text-align: center">Ações</th>
+            <th colspan="4" data-defaultsort="disabled" style="text-align: center">Ações</th>
         </tr>
     </thead>
     <tbody>
@@ -82,6 +82,12 @@
                         else {
                             <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                         }
+                    </button>
+                </td>
+                <td>
+                    <input type="hidden" class="id_video_playlist" value="@video.id" />
+                    <button type="button" class="btn btn-xs add_playlist" aria-label="Playlist">
+                        <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
                     </button>
                 </td>
             </tr>

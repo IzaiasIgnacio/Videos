@@ -317,6 +317,7 @@
     <Content Include="Views\Jquery\TipoListView.cshtml" />
     <Content Include="Views\Jquery\ArtistaPrincipalListView.cshtml" />
     <Content Include="Views\Home\Playlists.cshtml" />
+    <Content Include="Views\Jquery\ModalPlaylistsView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -351,7 +352,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>11598</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:11598/</IISUrl>
+          <IISUrl>http://localhost:11160/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

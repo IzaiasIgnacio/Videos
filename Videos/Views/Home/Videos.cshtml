@@ -25,6 +25,22 @@
                 botao.toggleClass("glyphicon-star-empty");
             });
         });
+        $("#tabela_videos").on("click", ".add_playlist", function() {
+            var id = $(this).closest("td").find(".id_video_playlist").val();
+            $.post('@Url.Action("ExibirModalPlaylists", "Jquery")', { id: id },
+            function(resposta) {
+                $("#modal_playlists .modal-body").html(resposta);
+                $("#modal_playlists").modal('show');
+            });
+        });
+        $("#modal_playlists").on("click", ".linha_modal_playlist", function() {
+            var id_playlist = $(this).find(".id_modal_playlist").val();
+            var id_video = $(this).find(".id_modal_video").val();
+            $.post('@Url.Action("AdicionarVideoPlaylist", "Jquery")', { id_playlist: id_playlist, id_video: id_video },
+            function(resposta) {
+                $("#modal_playlists").modal('hide');
+            });
+        });
         $("#div_filtros").on("click", ".filtrar", function() {
             var array = $("#filtro").serializeArray();
             var json = {};
@@ -230,8 +246,22 @@
             </div>
             <div class="modal-body row"></div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger excluir pull-left">Excluir</button>
+                <button type="button" class="btn btn-danger excluir pull-left" tabindex="-1">Excluir</button>
                 <button type="button" class="btn btn-primary salvar">Salvar</button>
+                <button type="button" class="btn btn-primary cancelar" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal_playlists" role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Playlists</h4>
+            </div>
+            <div class="modal-body row"></div>
+            <div class="modal-footer">
                 <button type="button" class="btn btn-primary cancelar" data-dismiss="modal">Cancelar</button>
             </div>
         </div>
@@ -249,17 +279,12 @@
                     <div id="lista_artista_principal" style="display: none"></div>
                 </div>
                 <div class="col-md-4">
-                    <label style="display:block">Artistas</label>
-                    @Html.DropDownListFor(model => Model.ListaArtistas,
-                    new SelectList(Model.ListaArtistas, "id", "nome", Model.ListaArtistas), null, new { @id = "select_artistas", @class = "form-control campo_filtro", @multiple = true })
-                    <div id="lista_artistas" style="display: none"></div>
-                </div>
-                <div class="col-md-4">
                     <label style="display:block">Tipos</label>
                     @Html.DropDownListFor(model => Model.ListaTipos,
                     new SelectList(Model.ListaTipos, "id", "descricao", Model.ListaTipos), null, new { @id = "select_tipos", @class = "form-control campo_filtro", @multiple = true })
                     <div id="lista_tipos" style="display: none"></div>
                 </div>
+                <div style="width: 100%" class="col-md-4"></div>
                 <div id="lista_artistas" style="display: none"></div>
                 <div class="col-md-4">
                     <label style="display:block">Músicas</label>

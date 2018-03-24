@@ -60,6 +60,16 @@ namespace Videos.Controllers {
             return PartialView("FormVideoView", videoDataView);
         }
 
+        public ActionResult ExibirModalPlaylists(int id) {
+            PlaylistRepository playlistRepository = new PlaylistRepository();
+            PlaylistsView playlistsView = new PlaylistsView();
+
+            playlistsView.ListaPlaylists = playlistRepository.Listar<playlist>().Where(pl => pl.tipo == "custom").ToList();
+            playlistsView.id_video = id;
+
+            return PartialView("ModalPlaylistsView", playlistsView);
+        }
+
         private BaseVideoView getView(string model) {
             BaseVideoView view;
 
@@ -324,6 +334,8 @@ namespace Videos.Controllers {
                             .Where(v => DateTime.Compare(v.data.Value, DateTime.Today.AddMonths(-6)) >= 0)
                             .ToList();
                 break;
+                default:
+                    return;
             }
             
             Random rnd = new Random();
@@ -336,6 +348,12 @@ namespace Videos.Controllers {
             VideoRepository videoRepository = new VideoRepository();
             videoRepository.setFavorito(id, !favorito);
         }
+
+        public void AdicionarVideoPlaylist(int id_playlist, int id_video) {
+            PlaylistRepository playlistRepository = new PlaylistRepository();
+            playlistRepository.AdicionarVideoPlaylist(id_playlist, id_video);
+        }
+
     }
     
 }
