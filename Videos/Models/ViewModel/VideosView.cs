@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using Videos.Models.Entity;
 using Videos.Models.Repository;
@@ -110,6 +111,19 @@ namespace Videos.Models.ViewModel {
         public List<string> Thumbs { get; set; }
         public new string ArtistaPrincipal { get; set; }
         public bool favorito { get; set; }
+
+        public string TrataTitulo(string titulo) {
+            Regex rgx = new Regex(@"[^a-zA-Z0-9 (\(|\)) (\[|\]) _ -]");
+            titulo = rgx.Replace(titulo, "");
+            Regex regex = new Regex("[ ]{2,}");
+            titulo = regex.Replace(titulo, " ");
+            titulo = titulo.Replace("  ", " ");
+            titulo = titulo.Replace("()", "");
+            titulo = titulo.Replace("( )", "");
+            titulo = titulo.Replace("[]", "");
+            titulo = titulo.Replace("[ ]", "");
+            return titulo;
+        }
     }
 
     public class VideoInfoView {

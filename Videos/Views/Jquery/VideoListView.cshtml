@@ -35,7 +35,7 @@
     </thead>
     <tbody>
         @foreach (var video in Model.ListaVideos) {
-            <tr class="tr_check">
+            <tr class="tr_check" id="linha_@video.id">
                 <td data-value="@video.video_artista.Where(a => a.principal == true).FirstOrDefault().artista.nome">
                     <input type="hidden" class="check_videos" value="@video.id" />
                     <div class="div_thumb">

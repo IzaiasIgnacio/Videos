@@ -1,6 +1,13 @@
 ﻿@model Videos.Models.ViewModel.VideoDataView
 <script>
     $(function() {
+        $("#modal_form_video").on("click", ".play", function() {
+            var id = $(this).closest('div').find('.id_play').val();
+            $.post('@Url.Action("PlayVideo", "Jquery")', { id: id },
+            function(resposta) {
+                window.location = "play:K:\\Vídeos\\play.m3u";
+            });
+        });
         $("#modal_form_video").on("click", ".add_playlist", function() {
             var id = $(this).closest("div").find(".id_video_playlist").val();
             $.post('@Url.Action("ExibirModalPlaylists", "Jquery")', { id: id },
@@ -33,6 +40,9 @@
                 data: JSON.stringify(json),
                 success: function (resposta) {
                     $("#modal_form_video").modal('hide');
+                    var linha = $("#Id").val();
+                    alert($("#form_video").find("#Titulo").val());
+                    $("#linha_"+linha).find('td:eq(1)').html($("#form_video").find("#Titulo").val());
                 }
             });
         });
@@ -213,7 +223,11 @@
             </div>
         </div>
         <div class="col-md-4">
-            <label for="playlists" style="display:block">Playlists</label>
+            <label for="acoes" style="display:block">Ações</label>
+            <input type="hidden" class="id_play" value="@Model.Id" />
+            <button type="button" class="btn btn-md play" aria-label="Play">
+                <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+            </button>
             <input type="hidden" class="id_video_playlist" value="@Model.Id" />
             <button type="button" class="btn btn-md add_playlist" aria-label="Playlist">
                 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>

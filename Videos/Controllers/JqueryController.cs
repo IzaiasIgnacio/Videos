@@ -26,7 +26,7 @@ namespace Videos.Controllers {
 
             videoDataView.Id = id;
             videoDataView.favorito = video.favorito;
-            videoDataView.Titulo = video.titulo;
+            videoDataView.Titulo = videoDataView.TrataTitulo(video.titulo);
             videoDataView.ArtistaPrincipal = video.video_artista.Where(a => a.principal == true).FirstOrDefault().artista.nome;
             videoDataView.ListaArtistas = artistaRepository.Listar<artista>().OrderBy(a => a.nome).ToList();
             videoDataView.ListaMusicas = musicaRepository.Listar<musica>().OrderBy(m => m.titulo).ToList();

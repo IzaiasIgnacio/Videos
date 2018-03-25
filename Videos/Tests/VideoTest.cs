@@ -11,11 +11,30 @@ using MediaToolkit.Model;
 using MediaToolkit;
 using MediaToolkit.Options;
 using Videos.Models.Services;
+using System.Text.RegularExpressions;
 
 namespace Videos.Tests {
 
     [TestClass]
     public class VideoTest {
+
+        [TestMethod]
+        public void testeCaracteres() {
+            VideoRepository v = new VideoRepository();
+            video vi = v.Listar<video>().Where(vd => vd.id == 7362).FirstOrDefault();
+
+            Regex rgx = new Regex(@"[^a-zA-Z0-9 (\(|\)) (\[|\]) _ -]");
+            string s = rgx.Replace(vi.titulo, "");
+            Regex regex = new Regex("[ ]{2,}");
+            s = regex.Replace(s, " ");
+            s = s.Replace("  ", " ");
+            s = s.Replace("()", "");
+            s = s.Replace("( )", "");
+            s = s.Replace("[]", "");
+            s = s.Replace("[ ]", "");
+
+            System.Diagnostics.Debug.WriteLine(vi.titulo + " " + s);
+        }
 
         /*[TestMethod]
         public void testeListaArquivos() {
