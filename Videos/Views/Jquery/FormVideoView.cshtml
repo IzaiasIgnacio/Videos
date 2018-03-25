@@ -41,7 +41,6 @@
                 success: function (resposta) {
                     $("#modal_form_video").modal('hide');
                     var linha = $("#Id").val();
-                    alert($("#form_video").find("#Titulo").val());
                     $("#linha_"+linha).find('td:eq(1)').html($("#form_video").find("#Titulo").val());
                 }
             });

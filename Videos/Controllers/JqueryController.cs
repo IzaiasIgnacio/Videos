@@ -42,6 +42,18 @@ namespace Videos.Controllers {
                     titulo = video_musica.musica.titulo
                 });
             }
+            if (videoDataView.Musicas.Count == 0) {
+                List<musica> musicas = musicaRepository.Listar<musica>().Where(m => m.titulo.Length > 2).ToList();
+                List<musica> resultado = musicas.Where(m => video.titulo.ToLower().Contains(m.titulo.ToLower())).ToList();
+                if (resultado != null) {
+                    foreach (musica m in resultado) {
+                        videoDataView.Musicas.Add(new musica {
+                            id = m.id,
+                            titulo = m.titulo
+                        });
+                    }
+                }
+            }
             videoDataView.ListaTags = tagRepository.Listar<tag>().OrderBy(a => a.nome).ToList();
             foreach (video_tag video_tag in video.video_tag) {
                 videoDataView.Tags.Add(new tag {

@@ -205,13 +205,13 @@ namespace Videos.Tests {
             MusicaRepository musicaRepository = new MusicaRepository();
             VideosView view = new VideosView();
 
-            List<musica> musicas = musicaRepository.Listar<musica>().Where(m => m.titulo.Length > 2).ToList();
+            List<musica> musicas = musicaRepository.Listar<musica>().Where(mu => mu.titulo.Length > 2).ToList();
             List<video> lista = videoRepository.listarVideos();
             foreach (video video in lista.Distinct().ToList()) {
                 List<musica> resultado = musicas.Where(m => video.titulo.ToLower().Contains(m.titulo.ToLower())).ToList();
                 if (resultado != null) {
                     foreach (musica m in resultado) {
-                        videoRepository.adicionarVideoMusica(video.id, m.id);
+                        //videoRepository.adicionarVideoMusica(video.id, m.id);
                         System.Diagnostics.Debug.WriteLine(video.caminho + " " + m.titulo);
                     }
                 }
