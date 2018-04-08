@@ -44,7 +44,7 @@ namespace Videos.Controllers {
             }
             if (videoDataView.Musicas.Count == 0) {
                 List<musica> musicas = musicaRepository.Listar<musica>().Where(m => m.titulo.Length > 2).ToList();
-                List<musica> resultado = musicas.Where(m => video.titulo.ToLower().Contains(m.titulo.ToLower())).ToList();
+                List<musica> resultado = musicas.Where(m => videoDataView.Titulo.ToLower().Contains(m.titulo.ToLower())).ToList();
                 if (resultado != null) {
                     foreach (musica m in resultado) {
                         videoDataView.Musicas.Add(new musica {
@@ -60,6 +60,28 @@ namespace Videos.Controllers {
                     id = video_tag.tag.id,
                     nome = video_tag.tag.nome
                 });
+            }
+            if (videoDataView.Tags.Count == 0) {
+                List<tag> tags = tagRepository.Listar<tag>().ToList().Where(t => t.nome != "Concert").ToList();
+                List<tag> resultado = tags.Where(t => videoDataView.Titulo.ToLower().Contains(t.nome.ToLower())).ToList();
+                if (resultado != null) {
+                    foreach (tag t in resultado) {
+                        videoDataView.Tags.Add(new tag {
+                            id = t.id,
+                            nome = t.nome
+                        });
+                    }
+                }
+            }
+            
+            VideoDataView metadata = videoDataService.getVideoMetaData(id);
+            if (metadata.Resolucao.Contains("2160") || metadata.Resolucao.Contains("3840")) {
+                tag res = tagRepository.GetTagByNome("4k");
+                videoDataView.Tags.Add(res);
+            }
+            if (metadata.Fps.Equals("60") || Int32.Parse(metadata.Fps) > 5000) {
+                tag fps = tagRepository.GetTagByNome("60fps");
+                videoDataView.Tags.Add(fps);
             }
             videoDataView.Duracao = video.duracao;
             videoDataView.Resolucao = video.resolucao;

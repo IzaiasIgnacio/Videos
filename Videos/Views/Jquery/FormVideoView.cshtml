@@ -23,6 +23,15 @@
             function(resposta) {
                 botao.toggleClass("glyphicon-star");
                 botao.toggleClass("glyphicon-star-empty");
+                var html = '<input type="hidden" class="id_favorito" value="'+id+'" />';
+                if (botao.hasClass('glyphicon-star')) {
+                    html += '<button type="button" class="btn btn-xs favorito" aria-label="Favorito"><span class="glyphicon glyphicon-star" aria-hidden="true"></span></button>';
+                }
+                else {
+                    html += '<button type="button" class="btn btn-xs favorito" aria-label="Favorito"><span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span></button>';
+                }
+                var linha = $("#Id").val();
+                $("#linha_" + linha).find('td:eq(6)').html(html);
             });
         });
         $("#modal_form_video").on("click", ".salvar", function() {

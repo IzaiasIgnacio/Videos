@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -113,7 +114,12 @@ namespace Videos.Models.ViewModel {
         public bool favorito { get; set; }
 
         public string TrataTitulo(string titulo) {
-            Regex rgx = new Regex(@"[^a-zA-Z0-9 (\(|\)) (\[|\]) _ -]");
+            titulo = TrataTag(titulo, "슬기", "Seulgi");
+            titulo = TrataTag(titulo, "아이린", "Irene");
+            titulo = TrataTag(titulo, "조이", "Joy");
+            titulo = TrataTag(titulo, "웬디", "Wendy");
+            titulo = TrataTag(titulo, "직캠", "Fancam");
+            Regex rgx = new Regex(@"[^a-zA-Z0-9 (\(|\)) (\[|\]) .+_ -]");
             titulo = rgx.Replace(titulo, "");
             Regex regex = new Regex("[ ]{2,}");
             titulo = regex.Replace(titulo, " ");
@@ -122,6 +128,17 @@ namespace Videos.Models.ViewModel {
             titulo = titulo.Replace("( )", "");
             titulo = titulo.Replace("[]", "");
             titulo = titulo.Replace("[ ]", "");
+            return titulo;
+        }
+
+        private string TrataTag(string titulo, string hangul, string tag) {
+            if (!titulo.ToLower().Contains(tag.ToLower())) {
+                titulo = titulo.Replace(hangul, tag);
+            }
+            else {
+                titulo = titulo.Replace(tag.ToUpper(), CultureInfo.CurrentCulture.TextInfo.ToTitleCase(tag.ToLower()));
+                titulo = titulo.Replace(tag.ToLower(), CultureInfo.CurrentCulture.TextInfo.ToTitleCase(tag.ToLower()));
+            }
             return titulo;
         }
     }
