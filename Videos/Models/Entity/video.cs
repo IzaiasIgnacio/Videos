@@ -35,7 +35,8 @@ namespace Videos.Models.Entity
         public string canais_audio { get; set; }
         public string formato_audio { get; set; }
         public bool favorito { get; set; }
-        public long? tamanho { get; set; }
+        public Nullable<long> tamanho { get; set; }
+        public int id_categoria { get; set; }
     
         public virtual tipo tipo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -44,5 +45,6 @@ namespace Videos.Models.Entity
         public virtual ICollection<video_musica> video_musica { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<video_tag> video_tag { get; set; }
+        public virtual categoria categoria { get; set; }
     }
 }

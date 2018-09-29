@@ -35,5 +35,6 @@ namespace Videos.Models.Entity
         public virtual DbSet<video_tag> video_tag { get; set; }
         public virtual DbSet<playlist> playlist { get; set; }
         public virtual DbSet<playlist_filtros> playlist_filtros { get; set; }
+        public virtual DbSet<categoria> categoria { get; set; }
     }
 }

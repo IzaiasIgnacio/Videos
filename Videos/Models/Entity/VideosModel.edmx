@@ -12,6 +12,14 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="nome" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="categoria">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="descricao" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="pasta" Type="varchar" MaxLength="15" />
+        </EntityType>
         <EntityType Name="musica">
           <Key>
             <PropertyRef Name="id" />
@@ -69,6 +77,7 @@
           <Property Name="tamanho" Type="bigint" />
           <Property Name="favorito" Type="bit" Nullable="false" />
           <Property Name="id_tipo" Type="int" Nullable="false" />
+          <Property Name="id_categoria" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="video_artista">
           <Key>
@@ -132,6 +141,18 @@
             </Principal>
             <Dependent Role="video_artista">
               <PropertyRef Name="id_video" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_video_id_categoria">
+          <End Role="categoria" Type="Self.categoria" Multiplicity="1" />
+          <End Role="video" Type="Self.video" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categoria">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="video">
+              <PropertyRef Name="id_categoria" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -205,6 +226,7 @@
         </Association>
         <EntityContainer Name="VideosModelStoreContainer">
           <EntitySet Name="artista" EntityType="Self.artista" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="categoria" EntityType="Self.categoria" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="musica" EntityType="Self.musica" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="playlist" EntityType="Self.playlist" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="playlist_filtros" EntityType="Self.playlist_filtros" Schema="dbo" store:Type="Tables" />
@@ -225,6 +247,10 @@
           <AssociationSet Name="FK_video_artista_video" Association="Self.FK_video_artista_video">
             <End Role="video" EntitySet="video" />
             <End Role="video_artista" EntitySet="video_artista" />
+          </AssociationSet>
+          <AssociationSet Name="FK_video_id_categoria" Association="Self.FK_video_id_categoria">
+            <End Role="categoria" EntitySet="categoria" />
+            <End Role="video" EntitySet="video" />
           </AssociationSet>
           <AssociationSet Name="FK_video_musica_musica" Association="Self.FK_video_musica_musica">
             <End Role="musica" EntitySet="musica" />
@@ -294,6 +320,11 @@
             <End Role="playlist" EntitySet="playlist" />
             <End Role="playlist_filtros" EntitySet="playlist_filtros" />
           </AssociationSet>
+          <EntitySet Name="categoria" EntityType="VideosModel.categoria" />
+          <AssociationSet Name="FK_video_id_categoria" Association="VideosModel.FK_video_id_categoria">
+            <End Role="categoria" EntitySet="categoria" />
+            <End Role="video" EntitySet="video1" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="artista">
           <Key>
@@ -350,6 +381,8 @@
           <Property Name="formato_audio" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="favorito" Type="Boolean" Nullable="false" />
           <Property Name="tamanho" Type="Int64" />
+          <Property Name="id_categoria" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="categoria" Relationship="VideosModel.FK_video_id_categoria" FromRole="video" ToRole="categoria" />
         </EntityType>
         <EntityType Name="video_artista">
           <Key>
@@ -509,6 +542,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="categoria">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="descricao" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="pasta" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="video" Relationship="VideosModel.FK_video_id_categoria" FromRole="categoria" ToRole="video" />
+        </EntityType>
+        <Association Name="FK_video_id_categoria">
+          <End Type="VideosModel.categoria" Role="categoria" Multiplicity="1" />
+          <End Type="VideosModel.video" Role="video" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categoria">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="video">
+              <PropertyRef Name="id_categoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -551,6 +605,7 @@
           <EntitySetMapping Name="video1">
             <EntityTypeMapping TypeName="VideosModel.video">
               <MappingFragment StoreEntitySet="video">
+                <ScalarProperty Name="id_categoria" ColumnName="id_categoria" />
                 <ScalarProperty Name="tamanho" ColumnName="tamanho" />
                 <ScalarProperty Name="favorito" ColumnName="favorito" />
                 <ScalarProperty Name="formato_audio" ColumnName="formato_audio" />
@@ -611,6 +666,15 @@
                 <ScalarProperty Name="id_playlist" ColumnName="id_playlist" />
                 <ScalarProperty Name="valor" ColumnName="valor" />
                 <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="categoria">
+            <EntityTypeMapping TypeName="VideosModel.categoria">
+              <MappingFragment StoreEntitySet="categoria">
+                <ScalarProperty Name="pasta" ColumnName="pasta" />
+                <ScalarProperty Name="descricao" ColumnName="descricao" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

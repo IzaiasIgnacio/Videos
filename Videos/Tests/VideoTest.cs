@@ -73,7 +73,7 @@ namespace Videos.Tests {
         [TestMethod]
         public void testeAtualizarVideos() {
             List<string> listaArquivos = new List<string>();
-            string caminho = @"K:\ICI\Vídeos\kpop";
+            string caminho = @"K:\Vídeos\music";
             string[] pastas = Directory.GetDirectories(caminho, "*", System.IO.SearchOption.AllDirectories);
             foreach (string pasta in pastas) {
                 string[] arquivos = Directory.GetFiles(pasta);
@@ -163,14 +163,14 @@ namespace Videos.Tests {
             VideoRepository videoRepository = new VideoRepository();
             List<video> listaVideos = videoRepository.VideosPlaylist(new int[] { 2013, 2009 }, new int[] { 1 }, new int[] { 1 });
 
-            using (FileStream file = new FileStream("playlist.m3u", FileMode.Create)) {
+            /*using (FileStream file = new FileStream("playlist.m3u", FileMode.Create)) {
                 byte[] linha = Encoding.UTF8.GetBytes(Environment.NewLine);
                 foreach (video video in listaVideos) {
                     byte[] bytes = Encoding.UTF8.GetBytes(video.caminho);
                     file.Write(bytes, 0, bytes.Length);
                     file.Write(linha,0,linha.Length);
                 }
-            }
+            }*/
         }
 
         [TestMethod]
@@ -179,7 +179,7 @@ namespace Videos.Tests {
             VideosView view = new VideosView();
 
             List<video> lista = videoRepository.listarVideos();
-            foreach (video video in lista) {
+            /*foreach (video video in lista) {
                 var inputFile = new MediaFile { Filename = video.caminho };
 
                 using (var engine = new Engine()) {
@@ -196,7 +196,7 @@ namespace Videos.Tests {
                         engine.GetThumbnail(inputFile, outputFile, options);
                     }
                 }
-            }
+            }*/
         }
 
         [TestMethod]

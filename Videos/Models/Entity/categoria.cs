@@ -12,18 +12,19 @@ namespace Videos.Models.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class artista
+    public partial class categoria
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public artista()
+        public categoria()
         {
-            this.video_artista = new HashSet<video_artista>();
+            this.video = new HashSet<video>();
         }
     
         public int id { get; set; }
-        public string nome { get; set; }
+        public string descricao { get; set; }
+        public string pasta { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<video_artista> video_artista { get; set; }
+        public virtual ICollection<video> video { get; set; }
     }
 }

@@ -154,6 +154,7 @@ namespace Videos.Models.Repository {
             video.data = dados.LastWriteTime;
             video.extensao = dados.Extension;
             video.tipo = getTipoByCaminho(arquivo);
+            video.categoria = getCategoriaByCaminho(arquivo);
             video.video_artista = new List<video_artista>();
             video.video_artista.Add(new video_artista { artista = getArtistaByCaminho(arquivo), video = video, principal = true });
 
@@ -166,17 +167,29 @@ namespace Videos.Models.Repository {
         private tipo getTipoByCaminho(string caminho) {
             string[] split = caminho.Split('\\');
             string[] tipos = { "Lives", "MVs" };
-            if (split.Length > 4) {
-                if (tipos.Contains(split[4])) {
-                    string descricao = split[4];
+            if (split.Length > 5) {
+                if (tipos.Contains(split[5])) {
+                    string descricao = split[5];
                     return db.tipo.Where(d => d.pasta == descricao).FirstOrDefault();
                 }
             }
             return db.tipo.Where(d => d.descricao == "misc").FirstOrDefault();
         }
 
+        private categoria getCategoriaByCaminho(string caminho) {
+            string[] split = caminho.Split('\\');
+            string[] categorias = { "kpop", "jpop", "western" };
+            if (split.Length > 3) {
+                if (categorias.Contains(split[3])) {
+                    string descricao = split[3];
+                    return db.categoria.Where(c => c.pasta == descricao).FirstOrDefault();
+                }
+            }
+            return null;
+        }
+
         private artista getArtistaByCaminho(string caminho) {
-            string split = caminho.Split('\\')[3];
+            string split = caminho.Split('\\')[4];
             return db.artista.Where(n => n.nome == split).FirstOrDefault();
         }
 

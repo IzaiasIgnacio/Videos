@@ -242,3 +242,4 @@ ModelManifest.xml
 .fake/
 /Videos/capturas
 /Videos/artistas
+.vscode/settings.json
