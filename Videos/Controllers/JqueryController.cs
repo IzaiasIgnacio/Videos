@@ -43,7 +43,7 @@ namespace Videos.Controllers {
                 });
             }
             if (videoDataView.Musicas.Count == 0) {
-                List<musica> musicas = musicaRepository.Listar<musica>().Where(m => m.titulo.Length > 2).ToList();
+                List<musica> musicas = musicaRepository.Listar<musica>().Where(m => m.titulo.Length > 3).ToList();
                 List<musica> resultado = musicas.Where(m => videoDataView.Titulo.ToLower().Contains(m.titulo.ToLower())).ToList();
                 if (resultado != null) {
                     foreach (musica m in resultado) {

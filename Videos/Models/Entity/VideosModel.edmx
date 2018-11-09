@@ -17,8 +17,8 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="descricao" Type="varchar" MaxLength="15" Nullable="false" />
-          <Property Name="pasta" Type="varchar" MaxLength="15" />
+          <Property Name="descricao" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="pasta" Type="nvarchar" MaxLength="15" />
         </EntityType>
         <EntityType Name="musica">
           <Key>
@@ -547,8 +547,8 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="descricao" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="pasta" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="descricao" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="pasta" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="video" Relationship="VideosModel.FK_video_id_categoria" FromRole="categoria" ToRole="video" />
         </EntityType>
         <Association Name="FK_video_id_categoria">

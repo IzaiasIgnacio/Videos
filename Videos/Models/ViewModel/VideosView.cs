@@ -120,7 +120,7 @@ namespace Videos.Models.ViewModel {
             titulo = TrataTag(titulo, "웬디", "Wendy");
             titulo = TrataTag(titulo, "직캠", "Fancam");
             titulo = TrataTag(titulo, "태연", "Taeyeon");
-            Regex rgx = new Regex(@"[^a-zA-Z0-9 (\(|\)) (\[|\]) .+_&@ -]");
+            Regex rgx = new Regex(@"[^a-zA-Z0-9 (\(|\)) (\[|\]) .+_&@ -']");
             titulo = rgx.Replace(titulo, "");
             Regex regex = new Regex("[ ]{2,}");
             titulo = regex.Replace(titulo, " ");
