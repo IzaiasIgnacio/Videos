@@ -190,7 +190,16 @@ namespace Videos.Models.Repository {
 
         private artista getArtistaByCaminho(string caminho) {
             string split = caminho.Split('\\')[4];
-            return db.artista.Where(n => n.nome == split).FirstOrDefault();
+            artista artista = db.artista.Where(n => n.nome == split).FirstOrDefault();
+
+            if (artista == null) {
+                ArtistaRepository artistaRepository = new ArtistaRepository();
+                artistaRepository.inserirArtista(split);
+
+                artista = db.artista.Where(n => n.nome == split).FirstOrDefault();
+            }
+
+            return artista;
         }
 
         public video findByCaminho(string caminho) {
